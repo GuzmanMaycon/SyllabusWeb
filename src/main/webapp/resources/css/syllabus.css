@@ -1,0 +1,149 @@
+.clickable {
+    cursor: pointer;
+}
+.unidad-selected {}
+.semana-selected {}
+.ref-selected {
+    background: black;
+    color: white;
+}
+#unidades, #semanas {
+    margin-top: 15px;
+    text-align: center;
+}
+#unidades .unidad{
+    margin: 0 auto;
+}
+#semanas .semana {
+    margin: 0 auto;
+}
+#temas .tema {
+    margin: 0 auto;
+}
+.unidad p, .semana p, .tema p {
+    line-height: 40px;
+    margin: 0px;
+}
+.unidad-selected p {
+    display: inline-block;
+    background-color:  #d6dac6;
+    color: #000;
+    width: 70%;
+}
+.semana-selected p {
+    display: inline-block;
+    background: #95d5e4;
+    color: #000;
+    width: 70%;
+}
+.tema-selected p {
+    display: inline-block;
+    background: #e4e3e6;
+    color: #000;
+    width: 100%;
+}
+.input-text {
+    padding: 5px;
+    width: 70%;
+    margin-top: 15px;
+    border: 0px;
+    border-bottom: 1px solid;
+    outline: none;
+    background: inherit;
+}
+.input-text::-webkit-input-placeholder { text-align: center; }
+/* Firefox 18- */
+.input-text:-moz-placeholder { text-align: center; }
+/* Firefox 19+ */
+.input-text::-moz-placeholder { text-align: center; }
+.input-text:-ms-input-placeholder { text-align: center; }
+
+.input-ref {
+    border: 0px;
+    padding: 5px;
+    width: 80%;
+    border-bottom: 1px solid;
+    outline: none;
+    background: inherit;
+}
+.btn {
+    border-radius: 0;
+}
+.btn-danger {
+    height: 40px;
+}
+.btn-danger > .glyphicon {
+    top: 3px;
+}
+h1,h2,h3,h4,h5,h6 { cursor: default; }
+hr {
+    width: 90%;
+    border-top: 2px solid #eeeeee;
+}
+.row {
+    margin: 0;
+}
+.row-ref {
+    margin-bottom: 10px;
+}
+.label-ref {
+    line-height: 33px;
+    margin-top: 5px;
+}
+.add-ref-container {
+    margin-top: 20px;
+}
+.float-right {
+    float: right;
+}
+.table > tbody > tr > td {
+    vertical-align: middle;
+}
+.column {
+    border-bottom: #0a0909 solid 1px;
+    padding-bottom: 15px;
+}
+.column:last-child {
+    border-bottom: 0px;
+    min-height: inherit;
+}
+@media(min-width:768px) {
+    .input-text {
+        width: 60%;
+    }
+    .column {
+        min-height: 360px;
+    }
+    #column-center {
+        border-left: #0a0909 solid 1px;
+    }
+    .input-ref {
+        margin-right: 10px;
+        width: 100%;
+    }
+    .add-ref-container {
+        margin-top: 0px;
+    }
+    .tema-selected p {
+        width: 80%;
+    }
+}
+@media(min-width: 992px) {
+    .column:last-child {
+        height: 360px;
+        border-bottom: #0a0909 solid 1px;
+        overflow-y: auto;
+    }
+    #column-center {
+        border-right: #0a0909 solid 1px;
+    }
+}
+@media(min-width:1200px) {
+    #unidades .unidad {
+        width: 70%;
+    }
+    #semanas .semana {
+        width: 80%;
+    }
+}
+[v-cloak] { display:none; }
