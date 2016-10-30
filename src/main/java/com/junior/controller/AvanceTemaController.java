@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.junior.to.Tema;
 
@@ -33,12 +34,20 @@ public class AvanceTemaController {
     }
 
     @RequestMapping(value = "/avance", method = RequestMethod.POST)
-    public String store(ModelMap map, @RequestParam(value = "temas[]") List temas)
+    public String store(ModelMap map,
+            @RequestParam(value = "temas[]", required = false) List<Integer> temas,
+            RedirectAttributes redirectAttrs)
     {
-        for(Object t: temas)
-            System.out.println(t);
+        if(temas != null) {
+            for(Object t: temas)
+                System.out.println(t);
 
-        return "temas/registrar_avance_ok";
+            redirectAttrs.addFlashAttribute("mensajeOk", "Avance de temas registrados");
+            return "redirect:/grupos/index";
+        }
+
+        map.addAttribute("mensajeError", "No ingreso ningun tema.");
+        return "temas/registrar_avance";
     }
 
 }

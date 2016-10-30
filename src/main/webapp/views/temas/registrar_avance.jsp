@@ -17,6 +17,11 @@
 </head>
 <body id="app">
 	<div class="container">
+		<c:if test="${not empty mensajeError}">
+		<div class="alert alert-danger">
+			<p>${mensajeError}</p>
+		</div>
+		</c:if>
 		<form method="POST">
 		<div class="row">
 			<h2>Registro de avance del Curso de ${ course_name }</h2>
