@@ -40,9 +40,9 @@
 				<tbody>
 					<c:forEach var="tema" items="${temaList}">
 					<tr>
-						<td>1</td> 
-						<td>${tema.semanaId}</td>
-						<td>${tema.name}</td>
+						<td>${tema.unidad}</td>
+						<td>${tema.semana}</td>
+						<td>${tema.descripcion}</td>
 						<td>
 							<div class="checkbox">
 								<label>
@@ -61,6 +61,35 @@
 			</table>
 		</div>
 		
+		<div class="row">
+			<div class="text-center">
+				<div class="checkbox">
+					<label>
+						<input id="hay-tema-extra"
+							   type="checkbox"
+							   @click="hay_temas_extras = !(hay_temas_extras)">
+						<span id="hay-tema-extra">¿Se ha dictado temas adicionales que no están en el syllabus?</span>
+					</label>
+				</div>
+			</div>
+		</div>
+
+		<div class="row" v-show="hay_temas_extras">
+			<ul>
+				<li v-for="tema in temas_extras">{{ tema }}</li>
+			</ul>
+			<div class="col-xs-12">
+				<div class="form-group">
+					<input class="form-control"
+						   type="text"
+						   name="temas_extra[]"
+						   v-model="nuevo_tema_extra"
+						   placeholder="Ingrese el nuevo tema"
+						   @keydown.enter.prevent="agregar_tema_extra()">
+				</div>
+			</div>
+		</div>
+
 		<div class="row">
 			<div class="text-center">
 				<a href="#" type="button" class="btn btn-default">Regresar</a>
