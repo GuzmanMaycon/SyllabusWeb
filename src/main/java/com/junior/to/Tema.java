@@ -4,40 +4,59 @@ public class Tema {
 
     private Integer id;
 
-    private String name;
+    private String descripcion;
 
-    private Integer semanaId;
+    private Integer semana;
+
+    private Integer unidad;
 
     public Tema() {}
 
-    public Tema(Integer id, String name, Integer semanaId)
+    public Tema(Integer id, String descripcion, Integer semana, Integer unidad)
     {
         this.id = id;
-        this.name = name;
-        this.semanaId = semanaId;
+        this.descripcion = descripcion;
+        this.semana = semana;
+        this.unidad = unidad;
     }
 
-    public Integer getId() {
+    public Integer getId()
+    {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Integer id)
+    {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getDescripcion()
+    {
+        return descripcion;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setDescripcion(String descripcion)
+    {
+        this.descripcion = descripcion;
     }
 
-    public Integer getSemanaId() {
-        return semanaId;
+    public Integer getSemana()
+    {
+        return semana;
     }
 
-    public void setSemanaId(Integer semanaId) {
-        this.semanaId = semanaId;
+    public void setSemana(Integer semana)
+    {
+        this.semana = semana;
+    }
+
+    public Integer getUnidad()
+    {
+        return unidad;
+    }
+
+    public void setUnidad(Integer unidad)
+    {
+        this.unidad = unidad;
     }
 }
