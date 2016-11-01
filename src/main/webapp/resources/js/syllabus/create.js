@@ -30,10 +30,14 @@ var vm = new Vue(
         new_ref_autor: '',
         new_ref_anio: '',
         new_ref_titulo: '',
+        new_ref_editorial: '',
+        new_ref_isbn: '',
 
         edit_ref_autor: '',
         edit_ref_anio: '',
         edit_ref_titulo: '',
+        edit_ref_editorial: '',
+        edit_ref_isbn: '',
 
         tema_title: '',
     },
@@ -148,7 +152,7 @@ var vm = new Vue(
                 var len_semanas_por_unidad = this.semanas.reduce(function(total,semana){
                     return semana.unidadId == unidad.id ? total+1 : total
                 }, 0)
-                console.info(len_semanas_por_unidad)
+
                 if (len_semanas_por_unidad < this.max_semanas_por_unidad) {
                     this.semanas.push({
                         id: new_id,
@@ -226,13 +230,12 @@ var vm = new Vue(
             this.edit_tema = tema.name
         },
         add_binding_ref: function(ref) {
-            document.getElementById('edit-ref-autor').dataset.id = ref.id
-            document.getElementById('edit-ref-titulo').dataset.id = ref.id
-            document.getElementById('edit-ref-anio').dataset.id = ref.id
             this.select_ref(ref)
             this.edit_ref_autor = ref.author
             this.edit_ref_anio = ref.year
             this.edit_ref_titulo = ref.title
+            this.edit_ref_editorial = ref.editorial
+            this.edit_ref_isbn = ref.isbn
         },
         actualizar_tema: function(tema) {
             var tema_filtered = this.temas.filter(function(elemento){
@@ -258,10 +261,14 @@ var vm = new Vue(
                     author: this.new_ref_autor,
                     year: this.new_ref_anio,
                     title: this.new_ref_titulo,
+                    editorial: this.new_ref_editorial,
+                    isbn: this.new_ref_isbn,
                 })
                 this.new_ref_autor = ''
                 this.new_ref_anio = ''
                 this.new_ref_titulo = ''
+                this.new_ref_editorial = ''
+                this.new_ref_isbn = ''
                 document.getElementById('new_ref_autor').focus();
             } else {
                 alert("Ingrese campos validos")
@@ -280,9 +287,13 @@ var vm = new Vue(
             ref_filtered.year = this.edit_ref_anio
             ref_filtered.author = this.edit_ref_autor
             ref_filtered.title = this.edit_ref_titulo
+            ref_filtered.editorial = this.edit_ref_editorial
+            ref_filtered.isbn = this.edit_ref_isbn
             this.edit_ref_autor = ''
             this.edit_ref_titulo = ''
             this.edit_ref_anio = ''
+            this.edit_ref_editorial = ''
+            this.edit_ref_isbn = ''
             this.cancelar_actualizar_ref()
         },
         cancelar_actualizar_ref: function(ref) {
