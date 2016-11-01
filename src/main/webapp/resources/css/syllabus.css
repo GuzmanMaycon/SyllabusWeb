@@ -28,13 +28,13 @@
     display: inline-block;
     background-color:  #d6dac6;
     color: #000;
-    width: 70%;
+    width: 90%;
 }
 .semana-selected p {
     display: inline-block;
     background: #95d5e4;
     color: #000;
-    width: 70%;
+    width: 90%;
 }
 .tema-selected p {
     display: inline-block;
@@ -108,9 +108,6 @@ hr {
     min-height: inherit;
 }
 @media(min-width:768px) {
-    .input-text {
-        width: 60%;
-    }
     .column {
         min-height: 360px;
     }

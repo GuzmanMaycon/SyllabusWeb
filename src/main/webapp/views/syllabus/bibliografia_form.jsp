@@ -74,10 +74,10 @@
         </div>
     </div>
 
-    <div class="col-xs-12 col-sm-5 col-lg-3">
+    <div class="col-xs-12 col-sm-5 col-lg-4">
         <div class="col-xs-4">
             <div class="text-center">
-                <label class="label-ref">ISBN-13</label>
+                <label class="label-ref">ISBN</label>
             </div>
         </div>
         <div class="col-xs-8">

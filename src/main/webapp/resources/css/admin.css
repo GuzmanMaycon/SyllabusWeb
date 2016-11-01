@@ -61,24 +61,20 @@ h3 {
         text-align: left;
     }
 }
-.content {
-    margin-right: 15px;
-    margin-left: 15px;
-    padding: 10px 20px 0px 20px;
-}
+.content {  }
 @media(min-width:768px) {
     .sidebar {
         z-index: 1;
         position: absolute;
-        width: 235px;
+        width: 160px;
         border-right-width: 1px;
         border-right-style: solid;
     }
     .content {
-        margin: 0px 15px 0px 250px;
+        margin: 0px 15px 0px 160px;
         position: absolute;
         height: calc(100% - 51px);
-        width: calc(100% - 265px);
+        width: calc(100% - 160px);
         padding: 20px 40px 0px 40px;
     }
     .row-hover:hover {
