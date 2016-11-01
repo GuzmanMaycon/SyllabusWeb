@@ -1,4 +1,4 @@
-<div class="row row-ref" v-cloak>
+<div class="row" v-cloak>
     <div class="col-xs-12 col-sm-4 col-lg-5">
         <div class="col-xs-4">
             <div class="text-center">
@@ -55,7 +55,7 @@
     </div>
 </div>
 
-<div class="row" v-cloak>
+<div class="row row-ref" v-cloak>
     <div class="col-xs-12 col-sm-4 col-lg-4">
         <div class="col-xs-4">
             <div class="text-center">
