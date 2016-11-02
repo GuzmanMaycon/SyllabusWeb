@@ -6,20 +6,23 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.junior.dao.component.AsignaturaAperturadaDao;
+import com.junior.dao.design.IAsignaturaAperturadaDao;
+
 @Controller
-@RequestMapping("/curso/{cursoAbiertoId}/syllabus")
+@RequestMapping("/asignatura/{asignaturaAperturadaId}/syllabus")
 public class SyllabusController {
 
     @RequestMapping(value = "/create", method = RequestMethod.GET)
-    public String create(ModelMap map, @PathVariable(value="cursoAbiertoId") String id)
+    public String create(ModelMap map, @PathVariable(value="asignaturaAperturadaId") Integer id)
     {
-        //Obtener curso de la bd y poner el nombre
-        if (Integer.parseInt(id) == 1)
-            map.addAttribute("course_name", "Programacion I");
-        else if (Integer.parseInt(id) == 2)
-            map.addAttribute("course_name", "Programacion II");
-        else
-            map.addAttribute("course_name", "Otro curso");
+        IAsignaturaAperturadaDao asignaturaAperturadaDao = new AsignaturaAperturadaDao();
+        String nombreCurso = asignaturaAperturadaDao.obtenerNombreDeAsignaturaPorId(id);
+        if (nombreCurso == null) {
+            //Redirigir indicando que el id de la asignatura aperturada no es correcta
+            //To-do
+        }
+        map.addAttribute("course_name", nombreCurso);
 
         return "syllabus/create";
     }
