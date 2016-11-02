@@ -8,18 +8,20 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
 
 	<context:component-scan base-package="com.junior.controller" />
-	
+
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-	
-		<property name="prefix">
-			<value>/views/</value>
-		</property>
-		
-		<property name="suffix">
-			<value>.jsp</value>
-		</property>
-	</bean>
-	
-	<mvc:resources location="/resources/" mapping="/resources/**"/>
-	<mvc:annotation-driven/>
+      <property name="prefix">
+        <value>/views/</value>
+      </property>
+
+      <property name="suffix">
+        <value>.jsp</value>
+      </property>
+    </bean>
+
+    <!-- Including beans -->
+    <import resource="beans.xml" />
+
+    <mvc:resources location="/resources/" mapping="/resources/**"/>
+    <mvc:annotation-driven/>
 </beans>
