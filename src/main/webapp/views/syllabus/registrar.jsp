@@ -22,7 +22,7 @@
             <div class="row">
                 <div class="col-xs-12">
                     <div class="text-center">
-                        <h1>Registrar Syllabus del curso de ${ course_name }</h1>
+                        <h1>Registrar Syllabus del curso de ${ nombreAsignatura }</h1>
                     </div>
                 </div>
             </div>

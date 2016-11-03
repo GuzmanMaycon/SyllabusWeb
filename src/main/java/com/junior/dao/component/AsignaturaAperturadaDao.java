@@ -2,8 +2,8 @@ package com.junior.dao.component;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 
 import com.junior.conexion.AccesoDB;
 import com.junior.dao.design.IAsignaturaAperturadaDao;
@@ -21,17 +21,19 @@ public class AsignaturaAperturadaDao implements IAsignaturaAperturadaDao{
     public String obtenerNombreDeAsignaturaPorId(Integer id)
     {
         String nombre = null;
-        String procedimiento_almacenado = "{}";
+        String procedimiento_almacenado = "{ ? = call DEVUELVE_NOMBRE(?,?)}";
         Connection cn = db.getConnection();
 
         if (cn != null) {
             try {
-                CallableStatement cs = cn.prepareCall(procedimiento_almacenado);
-                ResultSet rs = cs.executeQuery();
+                CallableStatement proc = cn.prepareCall(procedimiento_almacenado);
+                proc.registerOutParameter(1, Types.VARCHAR);
 
-                if (rs.next()) {
-                    nombre = rs.getString("nombre");
-                }
+                proc.setString(2, "ASIG_APERT");
+                proc.setString(3, id.toString());
+                proc.executeQuery();
+
+                nombre = proc.getString(1);
             } catch(SQLException ex) {
                 System.err.println(ex.getMessage());
             } finally {
