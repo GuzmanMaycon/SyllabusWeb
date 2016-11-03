@@ -6,7 +6,7 @@
          @click="select_semana(semana)"
     >
         <p>
-            <span>{{ semana.name }}</span>
+            <span>Semana {{ semana.number }}</span>
             <a type="button"
                class="btn btn-danger float-right"
                v-show="semana_selected == semana"

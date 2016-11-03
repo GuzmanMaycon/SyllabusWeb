@@ -43,7 +43,8 @@ var vm = new Vue(
     },
 
     methods: {
-        select_unidad: function(unidad) {
+       //Unidades
+       select_unidad: function(unidad) {
             var last_unidad = document.getElementById('unidad_' + this.unidad_selected.id)
             var unidad_element = document.getElementById('unidad_' + unidad.id)
 
@@ -63,6 +64,33 @@ var vm = new Vue(
             this.semana_selected = {}
             this.tema_selected = {}
         },
+        add_unidad: function() {
+            var new_id = ++this.last_unidad_id
+            var len_unidades = this.unidades.length
+            if (len_unidades < this.max_unidades)
+                this.unidades.push({
+                    id: new_id,
+                    number: (len_unidades + 1),
+                })
+            else
+                alert("Muchas unidades")
+        },
+        delete_unidad: function(unidad) {
+            this.semanasUnidadSeledted(unidad).forEach(function(semana, index){
+                vm.delete_semana(semana)
+            })
+            this.unidades.forEach(function(elemento, index, array){
+                if (elemento.id == unidad.id)
+                    array.splice(index, 1)
+            })
+
+            this.unidades.forEach(function(elemento, index){
+                elemento.number = (index + 1)
+            })
+
+            this.unidad_selected = {}
+        },
+        //Semanas
         select_semana: function(semana) {
             var last_semana = document.getElementById('semana_' + this.semana_selected.id)
             var semana_element = document.getElementById('semana_' + semana.id)
@@ -82,68 +110,6 @@ var vm = new Vue(
             }
             this.tema_selected = {}
         },
-        select_tema: function(tema) {
-            var last_tema = document.getElementById('tema_div_' + this.tema_selected.id)
-            var tema_element = document.getElementById('tema_div_' + tema.id)
-
-            if (this.tema_selected.id == undefined) {
-                tema_element.className += ' tema-selected'
-                this.tema_selected = tema
-            } else {
-                if (this.tema_selected.id == tema.id) {
-                    tema_element.className = 'clickable tema'
-                    this.tema_selected = {}
-                } else {
-                    last_tema.className = 'clickable tema'
-                    tema_element.className += ' tema-selected'
-                    this.tema_selected = tema
-                }
-            }
-        },
-        select_ref: function(ref) {
-            var last_ref = document.getElementById('ref_' + this.ref_selected.id)
-            var ref_element = document.getElementById('ref_' + ref.id)
-
-            if (this.ref_selected.id == undefined) {
-                ref_element.className += ' ref-selected'
-                this.ref_selected = ref
-            } else {
-                if (this.ref_selected.id == ref.id) {
-                    ref_element.className = 'clickable ref'
-                    this.ref_selected = {}
-                } else {
-                    last_ref.className = 'clickable ref'
-                    ref_element.className += ' ref-selected'
-                    this.ref_selected = ref
-                }
-            }
-        },
-        add_unidad: function() {
-            var new_id = ++this.last_unidad_id
-            var len_unidades = this.unidades.length
-            if (len_unidades < this.max_unidades)
-                this.unidades.push({
-                    id: new_id,
-                    name: 'Unidad ' + (len_unidades + 1)
-                })
-            else
-                alert("Muchas unidades")
-        },
-        delete_unidad: function(unidad) {
-            this.semanasUnidadSeledted(unidad).forEach(function(semana, index){
-                vm.delete_semana(semana)
-            })
-            this.unidades.forEach(function(elemento, index, array){
-                if (elemento.id == unidad.id)
-                    array.splice(index, 1)
-            })
-
-            this.unidades.forEach(function(elemento, index){
-                elemento.name = 'Unidad ' + (index + 1)
-            })
-
-            this.unidad_selected = {}
-        },
         add_semana: function() {
             var new_id = ++this.last_semana_id
             var len_semanas = this.semanas.length
@@ -156,7 +122,7 @@ var vm = new Vue(
                 if (len_semanas_por_unidad < this.max_semanas_por_unidad) {
                     this.semanas.push({
                         id: new_id,
-                        name: 'Semana ' + (len_semanas + 1),
+                        number: (len_semanas + 1),
                         unidadId: this.unidad_selected.id
                     })
 
@@ -192,16 +158,37 @@ var vm = new Vue(
             })
 
             this.semanas.forEach(function(elemento, index){
-                elemento.name = 'Semana ' + (index + 1)
+                elemento.number = (index + 1)
             })
 
             this.semana_selected = {}
+        },
+        //Temas
+        select_tema: function(tema) {
+            var last_tema = document.getElementById('tema_div_' + this.tema_selected.id)
+            var tema_element = document.getElementById('tema_div_' + tema.id)
+
+            if (this.tema_selected.id == undefined) {
+                tema_element.className += ' tema-selected'
+                this.tema_selected = tema
+            } else {
+                if (this.tema_selected.id == tema.id) {
+                    tema_element.className = 'clickable tema'
+                    this.tema_selected = {}
+                } else {
+                    last_tema.className = 'clickable tema'
+                    tema_element.className += ' tema-selected'
+                    this.tema_selected = tema
+                }
+            }
         },
         add_tema: function() {
             this.temas.push({
                 id: ++this.last_tema_id,
                 name: this.new_tema,
                 semanaId: this.semana_selected.id,
+                semana: this.semana_selected.number,
+                unidad: this.unidad_selected.number,
             })
             this.new_tema = ''
             document.getElementById('new-tema').focus();
@@ -228,6 +215,25 @@ var vm = new Vue(
             document.getElementById('edit-tema').dataset.id = tema.id
             this.select_tema(tema)
             this.edit_tema = tema.name
+        },
+        //Bibliografia
+        select_ref: function(ref) {
+            var last_ref = document.getElementById('ref_' + this.ref_selected.id)
+            var ref_element = document.getElementById('ref_' + ref.id)
+
+            if (this.ref_selected.id == undefined) {
+                ref_element.className += ' ref-selected'
+                this.ref_selected = ref
+            } else {
+                if (this.ref_selected.id == ref.id) {
+                    ref_element.className = 'clickable ref'
+                    this.ref_selected = {}
+                } else {
+                    last_ref.className = 'clickable ref'
+                    ref_element.className += ' ref-selected'
+                    this.ref_selected = ref
+                }
+            }
         },
         add_binding_ref: function(ref) {
             this.select_ref(ref)
@@ -331,7 +337,7 @@ var vm = new Vue(
             if (newValue.id == undefined)
                 this.tema_title = ''
             else
-                this.tema_title = 'Temas - ' + this.unidad_selected.name + ' - ' + this.semana_selected.name
+                this.tema_title = 'Temas - Unidad ' + this.unidad_selected.number + ' - Semana' + this.semana_selected.number
         }
     },
 });

@@ -5,7 +5,7 @@
         @click="select_unidad(unidad)"
     >
         <p>
-            <span>{{ unidad.name }}</span>
+            <span>Unidad {{ unidad.number }}</span>
             <a type="button"
                class="btn btn-danger float-right"
                v-show="unidad_selected == unidad"
