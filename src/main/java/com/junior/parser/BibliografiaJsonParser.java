@@ -16,6 +16,7 @@ public class BibliografiaJsonParser implements JsonParser<Bibliografia>{
         nuevoLibro.setEditorial(object.getString("editorial"));
         nuevoLibro.setTitulo(object.getString("title"));
         nuevoLibro.setIsbn(object.getString("isbn"));
+        nuevoLibro.setLugarPublicacion(object.getString("lugar"));
 
         return nuevoLibro;
     }

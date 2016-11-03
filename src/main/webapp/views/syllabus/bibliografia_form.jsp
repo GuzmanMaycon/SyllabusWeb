@@ -5,6 +5,7 @@
                 <label class="label-ref">Autor(es)</label>
             </div>
         </div>
+
         <div class="col-xs-8">
             <input class="input-ref"
                    v-model="new_ref_autor"
@@ -24,6 +25,7 @@
                 <label class="label-ref">Año</label>
             </div>
         </div>
+
         <div class="col-xs-8">
             <input class="input-ref"
                    v-model="new_ref_anio"
@@ -42,6 +44,7 @@
                 <label class="label-ref">Título</label>
             </div>
         </div>
+
         <div class="col-xs-8">
             <input class="input-ref"
                    v-model="new_ref_titulo"
@@ -56,12 +59,13 @@
 </div>
 
 <div class="row row-ref" v-cloak>
-    <div class="col-xs-12 col-sm-4 col-lg-4">
+    <div class="col-xs-12 col-sm-4 col-lg-3">
         <div class="col-xs-4">
             <div class="text-center">
                 <label class="label-ref">Editorial</label>
             </div>
         </div>
+
         <div class="col-xs-8">
             <input class="input-ref"
                    v-model="new_ref_editorial"
@@ -80,6 +84,7 @@
                 <label class="label-ref">ISBN</label>
             </div>
         </div>
+
         <div class="col-xs-8">
             <input class="input-ref"
                    v-model="new_ref_isbn"
@@ -91,6 +96,25 @@
                    v-show="ref_selected.id">
         </div>
     </div>
+
+	<div class="col-xs-12 col-sm-4 col-lg-3">
+		<div class="col-xs-4">
+			<div class="text-center">
+				<label class="label-ref">Lugar</label>
+			</div>
+		</div>
+
+		<div class="col-xs-8">
+			<input class="input-ref"
+                   v-model="new_ref_lugar"
+                   id="new-ref-lugar"
+                   v-show="!(ref_selected.id)">
+            <input class="input-ref"
+                   v-model="edit_ref_lugar"
+                   id="edit-ref-lugar"
+                   v-show="ref_selected.id">
+		</div>
+	</div>
 
     <div class="col-xs-12 col-sm-3 col-lg-2">
         <div class="text-center add-ref-container">

@@ -6,6 +6,8 @@
         <th>Título</th>
         <th class="hidden-xs hidden-sm">Editorial</th>
         <th class="hidden-xs hidden-sm">ISBN-13</th>
+        <th class="hidden-xs hidden-sm">Lugar de publicación</th>
+        <th class="visible-xs visible-sm">Lugar</th>
         <th></th>
     </thead>
     <tbody>
@@ -18,6 +20,7 @@
             <td>{{ ref.title }}</td>
             <td class="hidden-xs hidden-sm">{{ ref.editorial }}</td>
             <td class="hidden-xs hidden-sm">{{ ref.isbn }}</td>
+            <td class="hidden-xs hidden-sm">{{ ref.lugar }}</td>
             <td>
                 <a class="btn btn-danger"
                    title="Eliminar"

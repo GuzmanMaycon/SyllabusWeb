@@ -32,12 +32,14 @@ var vm = new Vue(
         new_ref_titulo: '',
         new_ref_editorial: '',
         new_ref_isbn: '',
+        new_ref_lugar: '',
 
         edit_ref_autor: '',
         edit_ref_anio: '',
         edit_ref_titulo: '',
         edit_ref_editorial: '',
         edit_ref_isbn: '',
+        edit_ref_lugar: '',
 
         tema_title: '',
     },
@@ -201,6 +203,18 @@ var vm = new Vue(
 
             this.tema_selected = {}
         },
+        actualizar_tema: function(tema) {
+           var tema_filtered = this.temas.filter(function(elemento){
+               return tema.id == elemento.id
+           })[0]
+           tema_filtered.name = this.edit_tema
+           this.edit_tema = ''
+           this.cancelar_actualizar()
+        },
+        cancelar_actualizar: function() {
+           this.select_tema(this.tema_selected)
+           this.tema_selected = {}
+        },
         semanasUnidadSeledted: function(unidad) {
             return this.semanas.filter(function(semana){
                 return semana.unidadId == unidad.id
@@ -242,18 +256,7 @@ var vm = new Vue(
             this.edit_ref_titulo = ref.title
             this.edit_ref_editorial = ref.editorial
             this.edit_ref_isbn = ref.isbn
-        },
-        actualizar_tema: function(tema) {
-            var tema_filtered = this.temas.filter(function(elemento){
-                return tema.id == elemento.id
-            })[0]
-            tema_filtered.name = this.edit_tema
-            this.edit_tema = ''
-            this.cancelar_actualizar()
-        },
-        cancelar_actualizar: function() {
-            this.select_tema(this.tema_selected)
-            this.tema_selected = {}
+            this.edit_ref_lugar = ref.lugar
         },
         add_ref_bibliografica: function() {
             if (this.new_ref_autor != "" &&
@@ -269,12 +272,14 @@ var vm = new Vue(
                     title: this.new_ref_titulo,
                     editorial: this.new_ref_editorial,
                     isbn: this.new_ref_isbn,
+                    lugar: this.new_ref_lugar,
                 })
                 this.new_ref_autor = ''
                 this.new_ref_anio = ''
                 this.new_ref_titulo = ''
                 this.new_ref_editorial = ''
                 this.new_ref_isbn = ''
+                this.new_ref_lugar = ''
                 document.getElementById('new_ref_autor').focus();
             } else {
                 alert("Ingrese campos validos")
@@ -295,17 +300,20 @@ var vm = new Vue(
             ref_filtered.title = this.edit_ref_titulo
             ref_filtered.editorial = this.edit_ref_editorial
             ref_filtered.isbn = this.edit_ref_isbn
+            ref_filtered.lugar = this.edit_ref_lugar
             this.edit_ref_autor = ''
             this.edit_ref_titulo = ''
             this.edit_ref_anio = ''
             this.edit_ref_editorial = ''
             this.edit_ref_isbn = ''
+            this.edit_ref_lugar = ''
             this.cancelar_actualizar_ref()
         },
         cancelar_actualizar_ref: function(ref) {
             this.select_ref(this.ref_selected)
             this.ref_selected = {}
         },
+        //Submit
         onSubmit: function() {
            var form = document.getElementById("syllabusForm")
 

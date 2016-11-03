@@ -61,7 +61,7 @@ public class SyllabusController {
             //Agregar como data de sesion el mensaje de error
             redirectAttrs.addFlashAttribute("mensajeError","Asignatura no encontrada en la Base de Datos");
             //Redirigir indicando que el id de la asignatura aperturada no es correcta
-            //return "redirect:/asignatura_aperturada/index";
+            return "redirect:/asignatura_aperturada/index";
         }
         //Agregar al modelo el nombre de la asignatura
         model.addAttribute("nombreAsignatura", nombreAsignatura);
@@ -80,6 +80,7 @@ public class SyllabusController {
     @RequestMapping(value = "/registrar", method = RequestMethod.POST)
     public String store(ModelMap model,
             RedirectAttributes redirectAttributes,
+            @PathVariable(value="asignaturaAperturadaId") Integer id,
             @RequestParam(value = "temas[]") String[] temas,
             @RequestParam(value = "bibliografia[]") String[] bibliografia)
     {
@@ -106,8 +107,13 @@ public class SyllabusController {
         } catch (JSONException e)
         {
             //Enviar mensaje de mal formato de json
-            //TO-DO
+            redirectAttributes.addFlashAttribute("mensajeError","Error en el formulario.");
+            //Redirigir al crear syllabus
+            return "redirect:/asignatura/"+id+"/syllabus/registrar";
         }
-        return "";
+        //Agregar como data de sesion el mensaje de exito
+        redirectAttributes.addFlashAttribute("mensajeOk", "El syllabus fue correctamente registrado.");
+        //Redirigir al indice
+        return "redirect:/asignatura_aperturada/index";
     }
 }
