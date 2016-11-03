@@ -10,6 +10,11 @@
 </head>
 <body>
 	<div class="container">
+		<c:if test="${not empty mensajeError}">
+		<div class="alert alert-danger">
+			<p>${mensajeError}</p>
+		</div>
+		</c:if>
 		<c:if test="${not empty mensajeOk}">
 		<div class="alert alert-success">
 			<p>${mensajeOk}</p>
