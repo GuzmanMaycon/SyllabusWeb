@@ -301,25 +301,27 @@ var vm = new Vue(
             this.ref_selected = {}
         },
         onSubmit: function() {
-            this.$http.post('/SyllabusWS/syllabus/create',
-                {
-                    unidades: this.unidades,
-                    semanas: this.semanas,
-                    temas: this.temas,
-                    bibliografia: this.ref_bibliografica,
-                },
-                {
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    dataType: 'json',
-                }
-            ).then((response) => {
-                console.info(response.data)
-            }, (response) => {
+           var form = document.getElementById("syllabusForm")
 
-            })
+           this.temas.forEach(function(tema, index){
+              var input = document.createElement("input")
+              input.type = "hidden"
+              input.name = "temas[]"
+              input.value = JSON.stringify(tema)
+
+              form.appendChild(input)
+           })
+
+           this.ref_bibliografica.forEach(function(ref, index){
+              var input = document.createElement("input")
+              input.type = "hidden"
+              input.name = "bibliografia[]"
+              input.value = JSON.stringify(ref)
+
+              form.appendChild(input)
+           })
+
+           form.submit()
         }
     },
 

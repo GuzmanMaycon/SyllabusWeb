@@ -14,6 +14,8 @@ public class Bibliografia {
 
     private String editorial;
 
+    private String isbn;
+
     public Bibliografia(){}
 
     public Bibliografia(
@@ -91,5 +93,15 @@ public class Bibliografia {
     public void setEditorial(String editorial)
     {
         this.editorial = editorial;
+    }
+
+    public String getIsbn()
+    {
+        return isbn;
+    }
+
+    public void setIsbn(String isbn)
+    {
+        this.isbn = isbn;
     }
 }
