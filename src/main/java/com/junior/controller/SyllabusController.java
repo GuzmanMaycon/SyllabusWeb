@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.junior.dao.design.IAsignaturaAperturadaDao;
+import com.junior.parser.BibliografiaJsonParser;
+import com.junior.parser.JsonParser;
+import com.junior.parser.TemaJsonParser;
 import com.junior.to.Bibliografia;
 import com.junior.to.EstadoSyllabus;
 import com.junior.to.Syllabus;
@@ -23,7 +26,7 @@ import com.junior.to.Tema;
 /**
  *  Controlador para el manejo de syllabus
  *  @author Junior Claudio
- *  @version 1.1.1, 02/11/16
+ *  @version 1.1.2, 03/11/16
  *  @see com.junior.dao.component.AsignaturaAperturadaDao#obtenerNombreDeAsignaturaPorId obtenerNombreDeAsignatura
  */
 
@@ -66,6 +69,14 @@ public class SyllabusController {
         return "syllabus/registrar";
     }
 
+    /**
+     *
+     * @param model
+     * @param redirectAttributes
+     * @param temas
+     * @param bibliografia
+     * @return
+     */
     @RequestMapping(value = "/registrar", method = RequestMethod.POST)
     public String store(ModelMap model,
             RedirectAttributes redirectAttributes,
@@ -79,22 +90,13 @@ public class SyllabusController {
         try
         {
             for (String tema: temas) {
-                JSONObject jsonObject = new JSONObject(tema);
-                Tema nuevoTema = new Tema();
-                nuevoTema.setDescripcion(jsonObject.getString("name"));
-                //TO-DO otros atributos
-                listaTemas.add(nuevoTema);
+                JsonParser<Tema> temaParser = new TemaJsonParser();
+                listaTemas.add(temaParser.parse(new JSONObject(tema)));
             }
 
             for (String libro: bibliografia) {
-                JSONObject jsonObject = new JSONObject(libro);
-                Bibliografia nuevoLibro = new Bibliografia();
-                nuevoLibro.setAnioPublicacion(jsonObject.getInt("year"));
-                nuevoLibro.setAutor(jsonObject.getString("author"));
-                nuevoLibro.setEditorial(jsonObject.getString("editorial"));
-                nuevoLibro.setTitulo(jsonObject.getString("title"));
-                nuevoLibro.setIsbn(jsonObject.getString("isbn"));
-                listaLibros.add(nuevoLibro);
+                JsonParser<Bibliografia> biblioParser = new BibliografiaJsonParser();
+                listaLibros.add(biblioParser.parse(new JSONObject(libro)));
             }
 
             syllabus.setTemas(listaTemas);
@@ -103,8 +105,8 @@ public class SyllabusController {
             syllabus.setFechaEntrega(new Date());
         } catch (JSONException e)
         {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            //Enviar mensaje de mal formato de json
+            //TO-DO
         }
         return "";
     }
