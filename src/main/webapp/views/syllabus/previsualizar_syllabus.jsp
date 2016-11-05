@@ -8,9 +8,9 @@
 <div class="row preview" >
     <div class="col-sm-6">
         <div v-for="unidad in unidades">
-            <h2>{{ unidad.name }}</h2>
+            <h2>Unidad {{ unidad.number }}</h2>
             <div class="col-sm-offset-1" v-for="semana in semanasUnidadSeledted(unidad)">
-                <h3>{{ semana.name }}</h3>
+                <h3>Semana {{ semana.number}}</h3>
                 <div class="col-sm-offset-1" v-for="tema in temasSemanaSelected(semana)">
                     <h4>{{ tema.name }}</h4>
                 </div>
