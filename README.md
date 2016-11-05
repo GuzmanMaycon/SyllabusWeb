@@ -1,13 +1,10 @@
 # SyllabusWeb
 
-Desde STS (Spring Tool Suite)
-- Seleccionar Importar
-- En Git, Repositorio de GitHub (Repositories from GitHub)
-- Escribir "SyllabusWeb" y Buscar
-- Seleccionar el unico que hay e importar
+## Deploy
+Clonar el proyecto en tu workspace.
 
 Desde STS, si no aparece en el workspace (a mi me paso asi :'v)
-- Seleccionar Importar 
+- Seleccionar Importar
 - En General, Proyecto en el workspace(Existing projects into Workspace)
 - Seleccionar la carpeta donde esta el proyecto.
 
@@ -24,3 +21,7 @@ Una vez corra en el servidor, detienen el servidor y vuelven a correr el servido
 Les deberia mandar a su navegador, por default el de eclipse, en el index que sale Hello World. Intenta ingresar a la ruta de abajo
 
 http://localhost:8080/SyllabusWeb/asignatura_aperturada/index
+
+## DB
+
+En com.junior.conexion.AccesoDB poner las credenciales de la base de datos (esto se cambiara)
