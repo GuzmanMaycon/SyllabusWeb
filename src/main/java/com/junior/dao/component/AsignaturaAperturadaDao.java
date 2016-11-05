@@ -5,16 +5,19 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Types;
 
-import com.junior.conexion.AccesoDB;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.junior.conexion.IAccesoDB;
 import com.junior.dao.design.IAsignaturaAperturadaDao;
 
 public class AsignaturaAperturadaDao implements IAsignaturaAperturadaDao{
 
-    protected AccesoDB db;
+    @Autowired
+    protected IAccesoDB db;
 
-    public AsignaturaAperturadaDao()
+    public void setDb(IAccesoDB db)
     {
-        db = new AccesoDB();
+        this.db = db;
     }
 
     @Override
@@ -22,7 +25,7 @@ public class AsignaturaAperturadaDao implements IAsignaturaAperturadaDao{
     {
         String nombre = null;
         String procedimiento_almacenado = "{ ? = call DEVUELVE_NOMBRE(?,?)}";
-        Connection cn = db.getConnection();
+        Connection cn = this.db.getConnection();
 
         if (cn != null) {
             try {
