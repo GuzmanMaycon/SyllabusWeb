@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -76,19 +77,19 @@ public class SyllabusController {
      */
     @RequestMapping(value = "/registrar", method = RequestMethod.GET)
     public String create(ModelMap model,
-            @PathVariable(value="asignaturaAperturadaId") Integer id,
+            @PathVariable(value = "asignaturaAperturadaId") Integer id,
             RedirectAttributes redirectAttrs)
     {
-        //Obtener el nombre de la asignatura a partir del id de la asignatura aperturada
+        // Obtener el nombre de la asignatura a partir del id de la asignatura aperturada
         String nombreAsignatura = this.asignaturaAperturadaDao.obtenerNombreDeAsignaturaPorId(id);
-        //Verificar si la asignatura es valida
+        // Verificar si la asignatura es valida
         if (nombreAsignatura == null) {
-            //Agregar como data de sesion el mensaje de error
+            // Agregar como data de sesion el mensaje de error
             redirectAttrs.addFlashAttribute("mensajeError","Asignatura no encontrada en la Base de Datos");
-            //Redirigir indicando que el id de la asignatura aperturada no es correcta
+            // Redirigir indicando que el id de la asignatura aperturada no es correcta
             return "redirect:/asignatura_aperturada/index";
         }
-        //Agregar al modelo el nombre de la asignatura
+        // Agregar al modelo el nombre de la asignatura
         model.addAttribute("nombreAsignatura", nombreAsignatura);
 
         return "syllabus/registrar";
@@ -105,7 +106,7 @@ public class SyllabusController {
     @RequestMapping(value = "/registrar", method = RequestMethod.POST)
     public String store(ModelMap model,
             RedirectAttributes redirectAttributes,
-            @PathVariable(value="asignaturaAperturadaId") Integer id,
+            @PathVariable(value = "asignaturaAperturadaId") Integer id,
             @RequestParam(value = "temas[]") String[] temas,
             @RequestParam(value = "bibliografia[]") String[] bibliografia)
     {
@@ -113,28 +114,47 @@ public class SyllabusController {
 
         try
         {
-            for (String tema: temas) {
-                syllabus.addTema(this.temaParser.parse(new JSONObject(tema)));
+            // Recorrer el arreglo de temas y agregarlos al syllabus
+            try {
+                for (String tema : temas) {
+                    Tema nuevoTema = this.temaParser.parse( new JSONObject(tema) );
+                    syllabus.addTema(nuevoTema);
+                }
+            } catch(JSONException e) {
+                /**
+                 * Cuando llega solo 1 tema, ocurre un problema y divide al tema en varias partes
+                 * Se toma toda el arreglo como un tema, porque asi lo maneja Java
+                 */
+                Tema nuevoTema = this.temaParser.parse( new JSONObject(StringUtils.arrayToCommaDelimitedString(temas)) );
+                syllabus.addTema(nuevoTema);
             }
 
-            for (String libro: bibliografia) {
-                syllabus.addLibro(this.biblioParser.parse(new JSONObject(libro)));
+            // Recorrer el arreglo de libros y agregarlos al syllabus
+            try {
+                for (String libro : bibliografia) {
+                    Bibliografia nuevoLibro = this.biblioParser.parse( new JSONObject(libro) );
+                    syllabus.addLibro(nuevoLibro);
+                }
+            } catch(JSONException e) {
+                /**
+                 * Cuando llega solo 1 libro, ocurre un problema y divide al tema en varias partes
+                 * Se toma toda el arreglo como un libro, porque asi lo maneja Java
+                 */
+                Bibliografia nuevoLibro = this.biblioParser.parse(new JSONObject(StringUtils.arrayToCommaDelimitedString(bibliografia)));
+                syllabus.addLibro(nuevoLibro);
             }
 
             syllabus.setEstado(EstadoSyllabus.EN_ESPERA);
             syllabus.setFechaEntrega(new Date());
-        } catch (JSONException e)
-        {
-            //Enviar mensaje de mal formato de json
+        } catch (JSONException e) {
+            // Agregar como data de sesion el mensaje de error
             redirectAttributes.addFlashAttribute("mensajeError","Error en el formulario.");
-            //Redirigir al crear syllabus
+            // Redirigir al crear syllabus
             return "redirect:/asignatura/"+id+"/syllabus/registrar";
         }
-        //Enviar al dao de syllabus
-        //To-DO
-        //Agregar como data de sesion el mensaje de exito
+        // Agregar como data de sesion el mensaje de exito
         redirectAttributes.addFlashAttribute("mensajeOk", "El syllabus fue correctamente registrado.");
-        //Redirigir al indice
+        // Redirigir al indice
         return "redirect:/asignatura_aperturada/index";
     }
 }
