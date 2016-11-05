@@ -24,7 +24,7 @@ import com.junior.to.Tema;
 /**
  *  Controlador para el manejo de syllabus
  *  @author Junior Claudio
- *  @version 1.1.3, 05/11/16
+ *  @version 1.1.4, 05/11/16
  *  @see com.junior.dao.component.AsignaturaAperturadaDao#obtenerNombreDeAsignaturaPorId obtenerNombreDeAsignatura
  *  @see com.junior.parser.TemaJsonParser#parse(JSONObject) temaParser
  *  @see com.junior.parser.BibliografiaJsonParser#parse(JSONObject) biblioParser
@@ -73,6 +73,7 @@ public class SyllabusController {
      * la ventana anterior con un mensaje de error
      * @param model Modelo para usar data del controlador en la vista
      * @param id Id de la Asignatura Aperturada
+     * @param redirectAttrs Objeto utilizado para almacenar data de sesion para manejar los mensajes en la vista
      * @return la vista de registrar si el id es valido sino redireccionar
      */
     @RequestMapping(value = "/registrar", method = RequestMethod.GET)
@@ -96,11 +97,13 @@ public class SyllabusController {
     }
 
     /**
-     *
-     * @param model
-     * @param redirectAttributes
-     * @param temas
-     * @param bibliografia
+     * Agregar al objeto Syllabus los temas y libros ingresados por el usuario
+     * Enviar el syllabus a su DAO correspondiente para almacenarlo
+     * Enviar un correo al decano para notificar que el coordinador del curso ha subido el syllabus
+     * @param model Modelo para usar data del controlador en la vista
+     * @param redirectAttrs Objeto utilizado para almacenar data de sesion para manejar los mensajes en la vista
+     * @param temas Temas del syllabus ingresado por el usuario
+     * @param bibliografia Libros del syllabus ingresados por el usuario
      * @return
      */
     @RequestMapping(value = "/registrar", method = RequestMethod.POST)
