@@ -6,7 +6,6 @@ import java.sql.SQLException;
 
 public class AccesoOracleDB extends AccesoDB implements IAccesoDB {
 
-    @Override
     public Connection getConnection()
     {
         Connection cn = null;

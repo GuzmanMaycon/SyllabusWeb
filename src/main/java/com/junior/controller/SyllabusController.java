@@ -36,10 +36,8 @@ public class SyllabusController {
     @Autowired
     private IAsignaturaAperturadaDao asignaturaAperturadaDao; // Dao para asignaturas aperturadas
 
-    @Autowired
     private JsonParser<Tema> temaParser;// Parser para leer los temas del cuerpo del POST
 
-    @Autowired
     private JsonParser<Bibliografia> biblioParser;// Parser para leer los libros del cuerpo del POST
 
     /**

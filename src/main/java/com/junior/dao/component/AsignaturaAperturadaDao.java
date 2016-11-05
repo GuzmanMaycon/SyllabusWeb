@@ -20,7 +20,6 @@ public class AsignaturaAperturadaDao implements IAsignaturaAperturadaDao{
         this.db = db;
     }
 
-    @Override
     public String obtenerNombreDeAsignaturaPorId(Integer id)
     {
         String nombre = null;
