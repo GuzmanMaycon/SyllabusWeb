@@ -24,7 +24,7 @@ public class AvanceTemaController {
             )
     {
         map.addAttribute("course_name", "Diseño de Software");
-        List<Tema> temas = new ArrayList<>();
+        List<Tema> temas = new ArrayList<Tema>();
         temas.add((new Tema(1, "Intro a la programacion", 1, 1)));
         temas.add((new Tema(2, "Variables", 1,1)));
         temas.add((new Tema(3, "Arreglos", 1,1)));
