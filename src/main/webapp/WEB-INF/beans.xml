@@ -12,6 +12,7 @@
   <bean id="biblioParserImpl"
         class="com.junior.parser.BibliografiaJsonParser"></bean>
 
+  <!-- Controller -->
   <bean id="syllabusController" class="com.junior.controller.SyllabusController">
     <property name="asignaturaAperturadaDao">
       <ref local="asignaturaAperturadaDaoImpl"/>

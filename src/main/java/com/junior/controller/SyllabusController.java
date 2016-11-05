@@ -23,8 +23,10 @@ import com.junior.to.Tema;
 /**
  *  Controlador para el manejo de syllabus
  *  @author Junior Claudio
- *  @version 1.1.2, 03/11/16
+ *  @version 1.1.3, 05/11/16
  *  @see com.junior.dao.component.AsignaturaAperturadaDao#obtenerNombreDeAsignaturaPorId obtenerNombreDeAsignatura
+ *  @see com.junior.parser.TemaJsonParser#parse(JSONObject) temaParser
+ *  @see com.junior.parser.BibliografiaJsonParser#parse(JSONObject) biblioParser
  */
 
 @Controller
@@ -35,27 +37,37 @@ public class SyllabusController {
     private IAsignaturaAperturadaDao asignaturaAperturadaDao; // Dao para asignaturas aperturadas
 
     @Autowired
-    private JsonParser<Tema> temaParser;
+    private JsonParser<Tema> temaParser;// Parser para leer los temas del cuerpo del POST
 
     @Autowired
-    private JsonParser<Bibliografia> biblioParser;
+    private JsonParser<Bibliografia> biblioParser;// Parser para leer los libros del cuerpo del POST
 
+    /**
+     * Asignar el dao para asignatura aperturada
+     * @param asignaturaAperturadaDao dao que maneja las asignaturas aperturadas
+     */
     public void setAsignaturaAperturadaDao(IAsignaturaAperturadaDao asignaturaAperturadaDao)
     {
         this.asignaturaAperturadaDao = asignaturaAperturadaDao;
     }
 
+    /**
+     * Asignar el parser para temas
+     * @param temaParser parser que convierte un formato a objetos Tema
+     */
     public void setTemaParser(JsonParser<Tema> temaParser)
     {
         this.temaParser = temaParser;
     }
 
+    /**
+     * Asignar el parser para libros
+     * @param biblioParser parser que convierte un formato a objetos Bibliografia
+     */
     public void setBiblioParser(JsonParser<Bibliografia> biblioParser)
     {
         this.biblioParser = biblioParser;
     }
-
-    @Autowired
 
     /**
      * Controlar si se muestra la vista para registrar syllabus o se redirige a
