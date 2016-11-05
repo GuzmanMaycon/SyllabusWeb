@@ -1,5 +1,6 @@
 package com.junior.to;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -13,6 +14,12 @@ public class Syllabus {
     private Date fechaEntrega;
 
     private Date fechaAprobacion;
+
+    public Syllabus()
+    {
+        bibliografia = new ArrayList<Bibliografia>();
+        temas        = new ArrayList<Tema>();
+    }
 
     public List<Bibliografia> getBibliografia()
     {
@@ -62,5 +69,15 @@ public class Syllabus {
     public void setFechaAprobacion(Date fechaAprobacion)
     {
         this.fechaAprobacion = fechaAprobacion;
+    }
+
+    public void addTema(Tema tema)
+    {
+        this.temas.add(tema);
+    }
+
+    public void addLibro(Bibliografia libro)
+    {
+        this.bibliografia.add(libro);
     }
 }

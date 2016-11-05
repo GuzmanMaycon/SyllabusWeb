@@ -1,12 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
 <beans>
+  <!-- DAO -->
+  <bean id="asignaturaAperturadaDaoImpl"
+        class="com.junior.dao.component.AsignaturaAperturadaDao"/>
   
-  <bean id="asignaturaAperturadaDaoImpl" class="com.junior.dao.component.AsignaturaAperturadaDao"/>
-  
+  <!-- Parser -->
+  <bean id="temaParserImpl"
+        class="com.junior.parser.TemaJsonParser"></bean>
+
+  <bean id="biblioParserImpl"
+        class="com.junior.parser.BibliografiaJsonParser"></bean>
+
   <bean id="syllabusController" class="com.junior.controller.SyllabusController">
     <property name="asignaturaAperturadaDao">
       <ref local="asignaturaAperturadaDaoImpl"/>
+    </property>
+
+    <property name="temaParser">
+      <ref local="temaParserImpl"/>
+    </property>
+
+    <property name="biblioParser">
+      <ref local="biblioParserImpl"/>
     </property>
   </bean>
 

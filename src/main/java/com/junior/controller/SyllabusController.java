@@ -1,6 +1,5 @@
 package com.junior.controller;
 
-import java.util.ArrayList;
 import java.util.Date;
 
 import org.json.JSONException;
@@ -15,9 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.junior.dao.design.IAsignaturaAperturadaDao;
-import com.junior.parser.BibliografiaJsonParser;
 import com.junior.parser.JsonParser;
-import com.junior.parser.TemaJsonParser;
 import com.junior.to.Bibliografia;
 import com.junior.to.EstadoSyllabus;
 import com.junior.to.Syllabus;
@@ -37,10 +34,28 @@ public class SyllabusController {
     @Autowired
     private IAsignaturaAperturadaDao asignaturaAperturadaDao; // Dao para asignaturas aperturadas
 
+    @Autowired
+    private JsonParser<Tema> temaParser;
+
+    @Autowired
+    private JsonParser<Bibliografia> biblioParser;
+
     public void setAsignaturaAperturadaDao(IAsignaturaAperturadaDao asignaturaAperturadaDao)
     {
         this.asignaturaAperturadaDao = asignaturaAperturadaDao;
     }
+
+    public void setTemaParser(JsonParser<Tema> temaParser)
+    {
+        this.temaParser = temaParser;
+    }
+
+    public void setBiblioParser(JsonParser<Bibliografia> biblioParser)
+    {
+        this.biblioParser = biblioParser;
+    }
+
+    @Autowired
 
     /**
      * Controlar si se muestra la vista para registrar syllabus o se redirige a
@@ -85,23 +100,17 @@ public class SyllabusController {
             @RequestParam(value = "bibliografia[]") String[] bibliografia)
     {
         Syllabus syllabus = new Syllabus();
-        ArrayList<Tema> listaTemas = new ArrayList<Tema>();
-        ArrayList<Bibliografia> listaLibros = new ArrayList<Bibliografia>();
 
         try
         {
             for (String tema: temas) {
-                JsonParser<Tema> temaParser = new TemaJsonParser();
-                listaTemas.add(temaParser.parse(new JSONObject(tema)));
+                syllabus.addTema(this.temaParser.parse(new JSONObject(tema)));
             }
 
             for (String libro: bibliografia) {
-                JsonParser<Bibliografia> biblioParser = new BibliografiaJsonParser();
-                listaLibros.add(biblioParser.parse(new JSONObject(libro)));
+                syllabus.addLibro(this.biblioParser.parse(new JSONObject(libro)));
             }
 
-            syllabus.setTemas(listaTemas);
-            syllabus.setBibliografia(listaLibros);
             syllabus.setEstado(EstadoSyllabus.EN_ESPERA);
             syllabus.setFechaEntrega(new Date());
         } catch (JSONException e)
@@ -111,6 +120,8 @@ public class SyllabusController {
             //Redirigir al crear syllabus
             return "redirect:/asignatura/"+id+"/syllabus/registrar";
         }
+        //Enviar al dao de syllabus
+        //To-DO
         //Agregar como data de sesion el mensaje de exito
         redirectAttributes.addFlashAttribute("mensajeOk", "El syllabus fue correctamente registrado.");
         //Redirigir al indice
