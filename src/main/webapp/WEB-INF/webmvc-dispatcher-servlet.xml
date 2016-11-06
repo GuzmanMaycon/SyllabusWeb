@@ -20,7 +20,7 @@
     </bean>
 
     <!-- Including beans -->
-    <import resource="beans.xml" />
+    <import resource="controller.xml" />
 
     <mvc:resources location="/resources/" mapping="/resources/**"/>
     <mvc:annotation-driven/>

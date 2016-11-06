@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.junior.dao.design.IAsignaturaAperturadaDao;
+import com.junior.mailer.IMailSender;
 import com.junior.parser.JsonParser;
 import com.junior.to.Bibliografia;
 import com.junior.to.EstadoSyllabus;
@@ -41,6 +42,8 @@ public class SyllabusController {
 
     private JsonParser<Bibliografia> biblioParser;// Parser para leer los libros del cuerpo del POST
 
+    private IMailSender mailer; // Servidor de correos para el envio de syllabus
+
     /**
      * Asignar el dao para asignatura aperturada
      * @param asignaturaAperturadaDao dao que maneja las asignaturas aperturadas
@@ -66,6 +69,15 @@ public class SyllabusController {
     public void setBiblioParser(JsonParser<Bibliografia> biblioParser)
     {
         this.biblioParser = biblioParser;
+    }
+
+    /**
+     * Servidor de correos
+     * @param mailer servidor utilizado para notificar los syllabus que adjunten los profesores
+     */
+    public void setMailer(IMailSender mailer)
+    {
+        this.mailer = mailer;
     }
 
     /**
@@ -157,6 +169,11 @@ public class SyllabusController {
         }
         // Agregar como data de sesion el mensaje de exito
         redirectAttributes.addFlashAttribute("mensajeOk", "El syllabus fue correctamente registrado.");
+        /**
+         *  Enviar correo del director de escuela avisando
+         *  que el profesor del curso ha registrado su syllabus
+         */
+
         // Redirigir al indice
         return "redirect:/asignatura_aperturada/index";
     }
