@@ -7,12 +7,11 @@ import com.junior.to.Tema;
 
 public class TemaJsonParser implements JsonParser<Tema>{
 
-    @Override
     public Tema parse(JSONObject object) throws JSONException
     {
         Tema nuevoTema = new Tema();
-        nuevoTema.setSemana(object.getInt("semana"));
-        nuevoTema.setUnidad(object.getInt("unidad"));
+        nuevoTema.setSemana(Integer.parseInt(object.getString("semana")));
+        nuevoTema.setUnidad(Integer.parseInt(object.getString("unidad")));
         nuevoTema.setDescripcion(object.getString("name"));
 
         return nuevoTema;

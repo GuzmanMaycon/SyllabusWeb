@@ -1,25 +1,31 @@
 package com.junior.conexion;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+public abstract class AccesoDB {
+    protected String usuario;
 
-public class AccesoDB {
-    public Connection getConnection() {
-        Connection cn = null;
+    protected String password;
 
-        try {
-            Class.forName("oracle.jdbc.driver.OracleDriver");
-            cn = DriverManager.getConnection(
-                    "jdbc:oracle:thin:@localhost:1521:xe","system","oracle");
-        } catch (SQLException e) {
-            System.err.println(e.getMessage());
-        } catch ( Exception e) {
-            System.err.println(e.getMessage());
-        }
+    protected Integer puerto;
 
-        return cn;
+    protected String host;
+
+    public void setUsuario(String usuario)
+    {
+        this.usuario = usuario;
     }
-    public AccesoDB() {
+
+    public void setPassword(String password)
+    {
+        this.password = password;
+    }
+
+    public void setPuerto(Integer puerto)
+    {
+        this.puerto = puerto;
+    }
+
+    public void setHost(String host)
+    {
+        this.host = host;
     }
 }

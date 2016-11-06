@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+
+  <!-- Importar credenciales -->
+  <import resource="credenciales.xml"/>
+
+  <!-- Importar dao -->
+  <import resource="dao.xml"/>
+
+  <!-- Importar parser -->
+  <import resource="parser.xml"/>
+
+  <!-- Controller -->
+  <bean id="syllabusController" class="com.junior.controller.SyllabusController">
+    <property name="asignaturaAperturadaDao">
+      <ref bean="asignaturaAperturadaDaoImpl"/>
+    </property>
+
+    <property name="temaParser">
+      <ref bean="temaParserImpl"/>
+    </property>
+
+    <property name="biblioParser">
+      <ref bean="biblioParserImpl"/>
+    </property>
+
+    <property name="mailer">
+      <ref bean="gmailMailer"/>
+    </property>
+  </bean>
+</beans>

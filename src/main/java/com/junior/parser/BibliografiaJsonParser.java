@@ -7,11 +7,10 @@ import com.junior.to.Bibliografia;
 
 public class BibliografiaJsonParser implements JsonParser<Bibliografia>{
 
-    @Override
     public Bibliografia parse(JSONObject object) throws JSONException
     {
         Bibliografia nuevoLibro = new Bibliografia();
-        nuevoLibro.setAnioPublicacion(object.getInt("year"));
+        nuevoLibro.setAnioPublicacion(Integer.parseInt(object.getString("year")));
         nuevoLibro.setAutor(object.getString("author"));
         nuevoLibro.setEditorial(object.getString("editorial"));
         nuevoLibro.setTitulo(object.getString("title"));
