@@ -1,33 +1,33 @@
 package com.junior.to;
 
 public class Rol {
-	
-	private Integer id;
-	
+
+    private Integer id;
+
     private String nombre;
 
     private String descripcion;
 
     public Rol(
-    		Integer id, 
-    		String nombre, 
-    		String descripcion
-    		) 
+            Integer id,
+            String nombre,
+            String descripcion
+            )
     {
-		this.id = id;
-		this.nombre = nombre;
-		this.descripcion = descripcion;
-	}
+        this.id = id;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+    }
 
-	public Integer getId() {
-		return id;
-	}
+    public Integer getId() {
+        return id;
+    }
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-	public String getNombre()
+    public String getNombre()
     {
         return nombre;
     }

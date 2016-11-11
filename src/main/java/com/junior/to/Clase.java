@@ -3,9 +3,9 @@ package com.junior.to;
 import java.util.Date;
 
 public class Clase {
-	
-	private Integer id;
-	
+
+    private Integer id;
+
     private Date horaInicio;
 
     private Date horaFin;
@@ -13,27 +13,27 @@ public class Clase {
     private TipoClase tipo;
 
     public Clase(
-    		Integer id, 
-    		Date horaInicio, 
-    		Date horaFin, 
-    		TipoClase tipo
-    		) 
+            Integer id,
+            Date horaInicio,
+            Date horaFin,
+            TipoClase tipo
+            )
     {
-		this.id = id;
-		this.horaInicio = horaInicio;
-		this.horaFin = horaFin;
-		this.tipo = tipo;
-	}
+        this.id = id;
+        this.horaInicio = horaInicio;
+        this.horaFin = horaFin;
+        this.tipo = tipo;
+    }
 
-	public Integer getId() {
-		return id;
-	}
+    public Integer getId() {
+        return id;
+    }
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-	public Date getHoraInicio()
+    public Date getHoraInicio()
     {
         return horaInicio;
     }

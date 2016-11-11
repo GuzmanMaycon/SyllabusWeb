@@ -3,41 +3,41 @@ package com.junior.to;
 import java.util.List;
 
 public class PlanDeEstudio {
-	
-	private Integer id;
-	
+
+    private Integer id;
+
     private String nombre;
 
     private Boolean estaVigente;
 
     private Integer anioDePublicacion;
-    
+
     private List<Asignatura> asignaturas;
 
     public PlanDeEstudio(
-    		Integer id, 
-    		String nombre, 
-    		Boolean estaVigente, 
-    		Integer anioDePublicacion,
-			List<Asignatura> asignaturas
-			) 
+            Integer id,
+            String nombre,
+            Boolean estaVigente,
+            Integer anioDePublicacion,
+            List<Asignatura> asignaturas
+            )
     {
-		this.id = id;
-		this.nombre = nombre;
-		this.estaVigente = estaVigente;
-		this.anioDePublicacion = anioDePublicacion;
-		this.asignaturas = asignaturas;
-	}
+        this.id = id;
+        this.nombre = nombre;
+        this.estaVigente = estaVigente;
+        this.anioDePublicacion = anioDePublicacion;
+        this.asignaturas = asignaturas;
+    }
 
-	public Integer getId() {
-		return id;
-	}
+    public Integer getId() {
+        return id;
+    }
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-	public String getNombre()
+    public String getNombre()
     {
         return nombre;
     }
@@ -67,15 +67,15 @@ public class PlanDeEstudio {
         this.anioDePublicacion = anioDePublicacion;
     }
 
-	public List<Asignatura> getAsignaturas() {
-		return asignaturas;
-	}
+    public List<Asignatura> getAsignaturas() {
+        return asignaturas;
+    }
 
-	public void setAsignaturas(List<Asignatura> asignaturas) {
-		this.asignaturas = asignaturas;
-	}
-	
-	public void addAsignatura(Asignatura asignatura)
+    public void setAsignaturas(List<Asignatura> asignaturas) {
+        this.asignaturas = asignaturas;
+    }
+
+    public void addAsignatura(Asignatura asignatura)
     {
         this.asignaturas.add(asignatura);
     }

@@ -1,32 +1,32 @@
 package com.junior.to;
 
 public class AsignaturaAperturadaTO {
-	private Integer id;
-	
+    private Integer id;
+
     private Asignatura asignatura;
 
     private Periodo periodo;
 
     public AsignaturaAperturadaTO(
-    		Integer id, 
-    		Asignatura asignatura, 
-    		Periodo periodo
-    		) 
+            Integer id,
+            Asignatura asignatura,
+            Periodo periodo
+            )
     {
-		this.id = id;
-		this.asignatura = asignatura;
-		this.periodo = periodo;
-	}
+        this.id = id;
+        this.asignatura = asignatura;
+        this.periodo = periodo;
+    }
 
-	public Integer getId() {
-		return id;
-	}
+    public Integer getId() {
+        return id;
+    }
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-	public Asignatura getAsignatura()
+    public Asignatura getAsignatura()
     {
         return asignatura;
     }
