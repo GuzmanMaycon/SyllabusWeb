@@ -5,6 +5,9 @@ import java.util.Date;
 import java.util.List;
 
 public class Syllabus {
+	
+	private Integer id;
+	
     private List<Bibliografia> bibliografia;
 
     private List<Tema> temas;
@@ -15,7 +18,32 @@ public class Syllabus {
 
     private Date fechaAprobacion;
 
-    public Syllabus()
+    public Syllabus(
+    		Integer id, 
+    		List<Bibliografia> bibliografia, 
+    		List<Tema> temas, 
+    		EstadoSyllabus estado,
+			Date fechaEntrega, 
+			Date fechaAprobacion
+			) 
+    {
+		this.id = id;
+		this.bibliografia = bibliografia;
+		this.temas = temas;
+		this.estado = estado;
+		this.fechaEntrega = fechaEntrega;
+		this.fechaAprobacion = fechaAprobacion;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public Syllabus()
     {
         bibliografia = new ArrayList<Bibliografia>();
         temas        = new ArrayList<Tema>();

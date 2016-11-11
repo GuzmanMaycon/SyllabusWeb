@@ -1,6 +1,9 @@
 package com.junior.to;
 
 public class Usuario {
+	
+	private Integer id;
+	
     private String codigo;
 
     private String nombre;
@@ -17,7 +20,46 @@ public class Usuario {
 
     private Rol rol;
 
-    public String getCodigo()
+    public Usuario(
+    		Integer id, 
+    		String codigo, 
+    		String nombre, 
+    		String apellido, 
+    		String correo, 
+    		String contrasenia,
+			String telefono, 
+			String direccion, 
+			Rol rol
+			) 
+    {
+		this.id = id;
+		this.codigo = codigo;
+		this.nombre = nombre;
+		this.apellido = apellido;
+		this.correo = correo;
+		this.contrasenia = contrasenia;
+		this.telefono = telefono;
+		this.direccion = direccion;
+		this.rol = rol;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public Rol getRol() {
+		return rol;
+	}
+
+	public void setRol(Rol rol) {
+		this.rol = rol;
+	}
+
+	public String getCodigo()
     {
         return codigo;
     }

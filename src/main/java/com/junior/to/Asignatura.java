@@ -1,6 +1,8 @@
 package com.junior.to;
 
 public class Asignatura {
+	private Integer id;
+	
     private String codigo;
 
     private String nombre;
@@ -8,8 +10,35 @@ public class Asignatura {
     private Integer creditaje;
 
     private Integer ciclo;
+    
+    private String regimen;
+    
+    public Asignatura(
+    		Integer id, 
+    		String codigo, 
+    		String nombre, 
+    		Integer creditaje, 
+    		Integer ciclo, 
+    		String regimen
+    		) 
+    {
+		this.id = id;
+		this.codigo = codigo;
+		this.nombre = nombre;
+		this.creditaje = creditaje;
+		this.ciclo = ciclo;
+		this.regimen = regimen;
+	}
 
-    public String getCodigo()
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public String getCodigo()
     {
         return codigo;
     }
@@ -49,5 +78,11 @@ public class Asignatura {
         this.ciclo = ciclo;
     }
 
+	public String getRegimen() {
+		return regimen;
+	}
 
+	public void setRegimen(String regimen) {
+		this.regimen = regimen;
+	}
 }
