@@ -19,7 +19,7 @@
     </property>
 
     <property name="host">
-      <value>192.168.43.153</value>
+      <value>127.0.0.1</value>
     </property>
   </bean>
 
