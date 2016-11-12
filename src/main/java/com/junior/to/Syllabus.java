@@ -17,6 +17,8 @@ public class Syllabus {
     private Date fechaEntrega;
 
     private Date fechaAprobacion;
+    
+    private Integer idAsigAperturada;
 
     public Integer getId() {
         return id;
@@ -90,5 +92,13 @@ public class Syllabus {
     public void addLibro(Bibliografia libro)
     {
         this.bibliografia.add(libro);
+    }
+
+    public Integer getIdAsigAperturada() {
+        return idAsigAperturada;
+    }
+
+    public void setIdAsigAperturada(Integer idAsigAperturada) {
+        this.idAsigAperturada = idAsigAperturada;
     }
 }
