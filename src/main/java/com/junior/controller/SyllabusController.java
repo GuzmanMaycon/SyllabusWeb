@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.junior.dao.design.IAsignaturaAperturadaDao;
+import com.junior.dao.design.ISyllabusDao;
 import com.junior.mailer.IMailSender;
 import com.junior.parser.JsonParser;
 import com.junior.to.Bibliografia;
@@ -37,6 +38,8 @@ public class SyllabusController {
     @Autowired
     private IAsignaturaAperturadaDao asignaturaAperturadaDao; // Dao para asignaturas aperturadas
 
+    private ISyllabusDao syllabusDao; // Dao para syllabus
+
     private JsonParser<Tema> temaParser;// Parser para leer los temas del cuerpo del POST
 
     private JsonParser<Bibliografia> biblioParser;// Parser para leer los libros del cuerpo del POST
@@ -50,6 +53,15 @@ public class SyllabusController {
     public void setAsignaturaAperturadaDao(IAsignaturaAperturadaDao asignaturaAperturadaDao)
     {
         this.asignaturaAperturadaDao = asignaturaAperturadaDao;
+    }
+
+    /**
+     * Asignar el dao para syllabus
+     * @param syllabusDao dao que maneja el syllabus
+     */
+    public void setSyllabusDao(ISyllabusDao syllabusDao)
+    {
+        this.syllabusDao = syllabusDao;
     }
 
     /**
@@ -116,13 +128,14 @@ public class SyllabusController {
      * @param temas Temas del syllabus ingresado por el usuario
      * @param bibliografia Libros del syllabus ingresados por el usuario
      * @return
+     * @throws Exception
      */
     @RequestMapping(value = "/registrar", method = RequestMethod.POST)
     public String store(ModelMap model,
         RedirectAttributes redirectAttributes,
         @PathVariable(value = "asignaturaAperturadaId") Integer id,
         @RequestParam(value = "temas[]") String[] temas,
-        @RequestParam(value = "bibliografia[]") String[] bibliografia)
+        @RequestParam(value = "bibliografia[]") String[] bibliografia) throws Exception
     {
         Syllabus syllabus = new Syllabus();
 
@@ -158,8 +171,15 @@ public class SyllabusController {
                 syllabus.addLibro(nuevoLibro);
             }
 
-            syllabus.setEstado("EN_ESPERA");
+            syllabus.setEstado("E");
             syllabus.setFechaEntrega(new Date());
+            syllabus.setFechaAprobacion(new Date());
+            syllabus.setIdAsigAperturada(id);
+
+            String respuesta = this.syllabusDao.insertarSyllabus(syllabus);
+            if (!respuesta.equals("OK")) {
+                throw new Exception("Error");
+            }
         } catch (JSONException e) {
             // Agregar como data de sesion el mensaje de error
             redirectAttributes.addFlashAttribute("mensajeError","Error en el formulario.");
@@ -174,6 +194,6 @@ public class SyllabusController {
          */
 
         // Redirigir al indice
-        return "redirect:/asignatura_aperturada/index";
+        return "redirect:/asignaturas_del_ciclo/index";
     }
 }
