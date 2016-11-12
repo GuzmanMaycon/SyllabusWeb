@@ -37,6 +37,7 @@ create or replace package body PAC_CURSOR is
 
   end LISTAR_ASIG_X_COORD;
 end PAC_CURSOR;
+/
 
 /*--------------------------------------------------------------------------
  * NOMBRE    : Listar_Grupos                                             
@@ -73,6 +74,7 @@ create or replace package body PAC_CURSOR_LISTAR_GRUPOS is
 
   end LISTAR_GRUPOS;
 end PAC_CURSOR_LISTAR_GRUPOS;
+/
 
 /*--------------------------------------------------------------------------*/
 /* NOMBRE    : DEVUELVE_NOMBRE_ASIG_APER                                            	*/
@@ -98,3 +100,92 @@ EXCEPTION
 	WHEN OTHERS THEN 
 		RETURN NULL;
 END;
+/
+
+create or replace PROCEDURE REG_REF_BIBLIO
+/*---------------------------------------------------------------------------*/
+/* Nombre    : REG_REF_BIBLIO       		                             */
+/* Objetivo  : Inserta un registro en la tabla REFERENCIA_BIBLIOGRAFICA      */
+/*---------------------------------------------------------------------------*/                                
+/*     Informacion:                                                          */
+/*     Autor: Thalia Quiroz Guzman                                           */
+/*---------------------------------------------------------------------------*/
+
+   (TITULO		REFERENCIA_BIBLIOGRAFICA.TITULO%TYPE,
+    AUTOR		REFERENCIA_BIBLIOGRAFICA.AUTOR%TYPE,
+    ANIO_PUBLICACION	REFERENCIA_BIBLIOGRAFICA.ANIO_PUBLICACION%TYPE, 
+    LUGAR_PUBLICACION	REFERENCIA_BIBLIOGRAFICA.LUGAR_PUBLICACION%TYPE,
+    EDITORIAL		REFERENCIA_BIBLIOGRAFICA.EDITORIAL%TYPE,
+    ISBN REFERENCIA_BIBLIOGRAFICA.ISBN%TYPE,
+    ID_REFERENCIA	REFERENCIA_BIBLIOGRAFICA.ID_REFERENCIA%TYPE,
+    ID_SYLLABUS		REFERENCIA_BIBLIOGRAFICA.ID_SYLLABUS%TYPE) AUTHID CURRENT_USER AS
+
+BEGIN               
+    INSERT INTO REFERENCIA_BIBLIOGRAFICA (TITULO, AUTOR, 
+					ANIO_PUBLICACION, 
+					LUGAR_PUBLICACION, 
+					EDITORIAL, 
+					ISBN,
+					ID_REFERENCIA, 
+					ID_SYLLABUS)                                                
+      VALUES (REG_REF_BIBLIO.TITULO, 
+			REG_REF_BIBLIO.AUTOR, 
+			REG_REF_BIBLIO.ANIO_PUBLICACION, 
+			REG_REF_BIBLIO.LUGAR_PUBLICACION,
+			REG_REF_BIBLIO.EDITORIAL,
+			REG_REF_BIBLIO.ISBN,  
+			REG_REF_BIBLIO.ID_REFERENCIA, 
+			REG_REF_BIBLIO.ID_SYLLABUS);
+
+END REG_REF_BIBLIO;
+/
+
+create or replace PROCEDURE REG_TEMA
+/*---------------------------------------------------------------------------*/
+/* Nombre    : REG_TEMA       		                             */
+/* Objetivo  : Inserta un registro en la tabla TEMA      */
+/*---------------------------------------------------------------------------*/                                
+/*     Informacion:                                                          */
+/*     Autor: Thalia Quiroz Guzman                                           */
+/*---------------------------------------------------------------------------*/
+
+   (ID_TEMA			TEMA.ID_TEMA%TYPE,
+    DESCRIPCION		TEMA.DESCRIPCION%TYPE,
+    UNIDAD			TEMA.UNIDAD%TYPE, 
+    SEMANA			TEMA.SEMANA%TYPE,
+    ID_SYLLABUS		TEMA.ID_SYLLABUS%TYPE) AUTHID CURRENT_USER AS
+
+BEGIN               
+    INSERT INTO TEMA (ID_TEMA, DESCRIPCION, 
+					UNIDAD, 
+					SEMANA, 
+					ID_SYLLABUS)                                                
+      VALUES (REG_TEMA.ID_TEMA, 
+			REG_TEMA.DESCRIPCION, 
+			REG_TEMA.UNIDAD, 
+			REG_TEMA.SEMANA,
+			REG_TEMA.ID_SYLLABUS);
+
+END REG_TEMA;
+/
+
+/*--------------------------------------------------------------------------
+ * NOMBRE    : Registrar_Syllabus                                                
+ * OBJETIVO  : Registrar syllabus en la base de datos                 
+ * FECHA MOD : 03/11/2016 2:53pm
+ *--------------------------------------------------------------------------                                
+ *     INFORMACI?:                                                          
+ *     AUTOR: LUCERO DEL PILAR LIZA PUICAN                                  
+ *---------------------------------------------------------------------------*/
+CREATE OR REPLACE PROCEDURE dbsegsyl.Registrar_Syllabus(
+    p_FechaEntrega          IN dbsegsyl.syllabus.fecha_entrega%TYPE,
+    p_FechaAprobacion       IN dbsegsyl.syllabus.fecha_aprobacion%TYPE,
+    p_IDAsigAperturada      IN dbsegsyl.syllabus.id_asig_aperturada%TYPE 
+)
+AUTHID CURRENT_USER
+AS 
+BEGIN 
+       INSERT INTO dbsegsyl.syllabus(id_syllabus, estado, fecha_entrega, fecha_aprobacion, id_asig_aperturada)
+                             VALUES (sq_syllabus.nextval, 'E', p_FechaEntrega, p_FechaAprobacion, p_IDAsigAperturada);
+END Registrar_Syllabus;
+/
