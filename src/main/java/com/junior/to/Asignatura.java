@@ -1,6 +1,7 @@
 package com.junior.to;
 
 public class Asignatura {
+
     private String codigo;
 
     private String nombre;
@@ -8,6 +9,25 @@ public class Asignatura {
     private Integer creditaje;
 
     private Integer ciclo;
+
+    private PlanDeEstudio plan;
+
+    public Asignatura(){}
+
+    public Asignatura(PlanDeEstudio plan)
+    {
+        this.setPlan(plan);
+    }
+
+    public void setPlan(PlanDeEstudio plan)
+    {
+        this.plan = plan;
+    }
+
+    public PlanDeEstudio getPlan()
+    {
+        return this.plan;
+    }
 
     public String getCodigo()
     {

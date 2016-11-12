@@ -9,7 +9,7 @@ public class Syllabus {
 
     private List<Tema> temas;
 
-    private EstadoSyllabus estado;
+    private String estado;
 
     private Date fechaEntrega;
 
@@ -41,14 +41,14 @@ public class Syllabus {
         this.temas = temas;
     }
 
-    public EstadoSyllabus getEstado()
+    public String getEstado()
     {
         return estado;
     }
 
-    public void setEstado(EstadoSyllabus estado)
+    public void setEstado(String estado)
     {
-        this.estado = estado;
+        this.estado = EstadoSyllabus.valueOf(estado).toString();
     }
 
     public Date getFechaEntrega()

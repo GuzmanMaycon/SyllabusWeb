@@ -5,6 +5,30 @@ public class AsignaturaAperturadaTO {
 
     private Periodo periodo;
 
+    private Integer id;
+
+    private Syllabus syllabus;
+
+    public void setSyllabus(Syllabus syllabus)
+    {
+        this.syllabus = syllabus;
+    }
+
+    public Syllabus getSyllabus()
+    {
+        return this.syllabus;
+    }
+
+    public void setId(Integer id)
+    {
+        this.id = id;
+    }
+
+    public Integer getId()
+    {
+        return this.id;
+    }
+
     public Asignatura getAsignatura()
     {
         return asignatura;

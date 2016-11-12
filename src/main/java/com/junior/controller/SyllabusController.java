@@ -18,14 +18,13 @@ import com.junior.dao.design.IAsignaturaAperturadaDao;
 import com.junior.mailer.IMailSender;
 import com.junior.parser.JsonParser;
 import com.junior.to.Bibliografia;
-import com.junior.to.EstadoSyllabus;
 import com.junior.to.Syllabus;
 import com.junior.to.Tema;
 
 /**
  *  Controlador para el manejo de syllabus
  *  @author Junior Claudio
- *  @version 1.1.4, 05/11/16
+ *  @version 1.2.0, 11/11/16
  *  @see com.junior.dao.component.AsignaturaAperturadaDao#obtenerNombreDeAsignaturaPorId obtenerNombreDeAsignatura
  *  @see com.junior.parser.TemaJsonParser#parse(JSONObject) temaParser
  *  @see com.junior.parser.BibliografiaJsonParser#parse(JSONObject) biblioParser
@@ -90,8 +89,8 @@ public class SyllabusController {
      */
     @RequestMapping(value = "/registrar", method = RequestMethod.GET)
     public String create(ModelMap model,
-            @PathVariable(value = "asignaturaAperturadaId") Integer id,
-            RedirectAttributes redirectAttrs)
+        @PathVariable(value = "asignaturaAperturadaId") Integer id,
+        RedirectAttributes redirectAttrs)
     {
         // Obtener el nombre de la asignatura a partir del id de la asignatura aperturada
         String nombreAsignatura = this.asignaturaAperturadaDao.obtenerNombreDeAsignaturaPorId(id);
@@ -100,7 +99,7 @@ public class SyllabusController {
             // Agregar como data de sesion el mensaje de error
             redirectAttrs.addFlashAttribute("mensajeError","Asignatura no encontrada en la Base de Datos");
             // Redirigir indicando que el id de la asignatura aperturada no es correcta
-            return "redirect:/asignatura_aperturada/index";
+            return "redirect:/asignaturas_del_ciclo/index";
         }
         // Agregar al modelo el nombre de la asignatura
         model.addAttribute("nombreAsignatura", nombreAsignatura);
@@ -120,10 +119,10 @@ public class SyllabusController {
      */
     @RequestMapping(value = "/registrar", method = RequestMethod.POST)
     public String store(ModelMap model,
-            RedirectAttributes redirectAttributes,
-            @PathVariable(value = "asignaturaAperturadaId") Integer id,
-            @RequestParam(value = "temas[]") String[] temas,
-            @RequestParam(value = "bibliografia[]") String[] bibliografia)
+        RedirectAttributes redirectAttributes,
+        @PathVariable(value = "asignaturaAperturadaId") Integer id,
+        @RequestParam(value = "temas[]") String[] temas,
+        @RequestParam(value = "bibliografia[]") String[] bibliografia)
     {
         Syllabus syllabus = new Syllabus();
 
@@ -159,7 +158,7 @@ public class SyllabusController {
                 syllabus.addLibro(nuevoLibro);
             }
 
-            syllabus.setEstado(EstadoSyllabus.EN_ESPERA);
+            syllabus.setEstado("EN_ESPERA");
             syllabus.setFechaEntrega(new Date());
         } catch (JSONException e) {
             // Agregar como data de sesion el mensaje de error
