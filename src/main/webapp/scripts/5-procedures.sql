@@ -46,7 +46,7 @@ end PAC_CURSOR;
  *     INFORMACI?:                                                          
  *     AUTOR: TAKESHI FARRO HINOSHITA                                 
  *---------------------------------------------------------------------------*/
-create or replace package PAC_CURSOR is
+create or replace package PAC_CURSOR_LISTAR_GRUPOS is
   --Creating REF CURSOR type
   type g_cursor is ref cursor;
 
@@ -55,9 +55,9 @@ create or replace package PAC_CURSOR is
     p_IDPeriodo in periodo.id_periodo%type,
     o_cursor in out g_cursor); -- Our cursor
 
-end PAC_CURSOR;
+end PAC_CURSOR_LISTAR_GRUPOS;
 /
-create or replace package body PAC_CURSOR is
+create or replace package body PAC_CURSOR_LISTAR_GRUPOS is
   procedure LISTAR_GRUPOS(
     p_IDPeriodo in periodo.id_periodo%type,
     o_cursor in out g_cursor) is
@@ -72,7 +72,7 @@ create or replace package body PAC_CURSOR is
      WHERE id_periodo     = p_idperiodo;
 
   end LISTAR_GRUPOS;
-end PAC_CURSOR;
+end PAC_CURSOR_LISTAR_GRUPOS;
 
 /*--------------------------------------------------------------------------*/
 /* NOMBRE    : DEVUELVE_NOMBRE_ASIG_APER                                            	*/
