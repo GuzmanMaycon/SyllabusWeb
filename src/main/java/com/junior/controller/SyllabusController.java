@@ -178,7 +178,7 @@ public class SyllabusController {
 
             String respuesta = this.syllabusDao.insertarSyllabus(syllabus);
             if (!respuesta.equals("OK")) {
-                throw new Exception("Error");
+                throw new Exception(respuesta);
             }
         } catch (JSONException e) {
             // Agregar como data de sesion el mensaje de error

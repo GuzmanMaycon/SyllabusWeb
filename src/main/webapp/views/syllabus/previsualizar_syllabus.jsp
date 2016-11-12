@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-lg-12" id="app">
         <div class="text-center">
-            <h1>Previsualizar syllabus del curso de Programacion I</h1>
+            <h1>Previsualizar syllabus del curso de ${ nombreAsignatura }</h1>
         </div>
     </div>
 </div>

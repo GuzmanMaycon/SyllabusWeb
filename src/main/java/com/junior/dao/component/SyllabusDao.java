@@ -27,7 +27,7 @@ public class SyllabusDao implements ISyllabusDao{
     public String insertarSyllabus(Syllabus syllabus) {
         String procInsertarSyllabus = "{ call REG_SYLLABUS(?, ?)}";
         String procInsertarTema = "{ call REG_TEMA(?, ?, ?, ?)}";
-        String procInsertarBibliografia = "{ call REG_REF_BIBLIO(?, ?, ?, ?, ?)}";
+        String procInsertarBibliografia = "{ call REG_REF_BIBLIO(?, ?, ?, ?, ?, ?, ?)}";
 
         Connection cn = this.db.getConnection();
 
@@ -60,6 +60,7 @@ public class SyllabusDao implements ISyllabusDao{
                         }
                     }
                 } catch(SQLException ex) {
+                    ex.printStackTrace();
                     return ex.getMessage();
                 }
                 /**
@@ -83,14 +84,17 @@ public class SyllabusDao implements ISyllabusDao{
                         }
                     }
                 } catch(SQLException ex) {
+                    ex.printStackTrace();
                     return ex.getMessage();
                 }
             } catch (SQLException ex) {
+                ex.printStackTrace();
                 return ex.getMessage();
             } finally {
                 try {
                     cn.close();
                 } catch (SQLException ex) {
+                    ex.printStackTrace();
                     return ex.getMessage();
                 }
             }
