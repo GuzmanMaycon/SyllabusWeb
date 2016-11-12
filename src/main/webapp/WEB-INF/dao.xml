@@ -14,4 +14,11 @@
     </property>
   </bean>
 
+  <bean id="grupoDaoImpl"
+        class="com.junior.dao.component.GrupoDao">
+    <property name="db">
+      <ref bean="accesoOracleLocalImpl"/>
+    </property>
+  </bean>
+
 </beans>

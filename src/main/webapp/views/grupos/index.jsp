@@ -9,7 +9,15 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<div class="container">
+
+	<%@ include file="/views/layout/admin-sidebar.jsp" %>
+
+	<div class="content">
+		<c:if test="${not empty mensajeError}">
+		<div class="alert alert-danger">
+			<p>${mensajeError}</p>
+		</div>
+		</c:if>
 		<c:if test="${not empty mensajeOk}">
 		<div class="alert alert-success">
 			<p>${mensajeOk}</p>
@@ -31,9 +39,9 @@
 				<tbody>
 					<c:forEach var="row" items="${lista}">
 					<tr>						 
-						<td>${row.nombreCurso}</td>
-						<td>${row.grupo}</td>
-						<td>${row.avance}%</td>
+						<td>${row.asignaturaAperturada.asignatura.nombre}</td>
+						<td>${row.numero}</td>
+						<td>%</td>
 					</tr>
 					</c:forEach>				
 				</tbody>

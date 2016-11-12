@@ -5,15 +5,28 @@ import java.util.Date;
 import java.util.List;
 
 public class Syllabus {
+
+    private Integer id;
+
     private List<Bibliografia> bibliografia;
 
     private List<Tema> temas;
 
-    private EstadoSyllabus estado;
+    private String estado;
 
     private Date fechaEntrega;
 
     private Date fechaAprobacion;
+    
+    private Integer idAsigAperturada;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public Syllabus()
     {
@@ -41,14 +54,14 @@ public class Syllabus {
         this.temas = temas;
     }
 
-    public EstadoSyllabus getEstado()
+    public String getEstado()
     {
         return estado;
     }
 
-    public void setEstado(EstadoSyllabus estado)
+    public void setEstado(String estado)
     {
-        this.estado = estado;
+        this.estado = EstadoSyllabus.valueOf(estado).toString();
     }
 
     public Date getFechaEntrega()
@@ -79,5 +92,13 @@ public class Syllabus {
     public void addLibro(Bibliografia libro)
     {
         this.bibliografia.add(libro);
+    }
+
+    public Integer getIdAsigAperturada() {
+        return idAsigAperturada;
+    }
+
+    public void setIdAsigAperturada(Integer idAsigAperturada) {
+        this.idAsigAperturada = idAsigAperturada;
     }
 }

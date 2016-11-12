@@ -9,7 +9,10 @@
 <title>Listar Asignaturas ciclo</title>
 </head>
 <body>
-	<div class="container">
+
+	<%@ include file="/views/layout/coordinador-sidebar.jsp" %>
+
+	<div class="content">
 		<c:if test="${not empty mensajeError}">
 		<div class="alert alert-danger">
 			<p>${mensajeError}</p>
@@ -35,10 +38,13 @@
 				</thead>
 				<tbody>
 					<c:forEach var="row" items="${lista}">
-					<tr>						 
-						<td>${row.nombre}</td>
-						<td>${row.plan}</td>
-						<td>${row.estado}</td>
+					<tr>
+						<td>${row.asignatura.nombre}</td>
+						<td>${row.asignatura.plan.nombre}</td>
+						<td>${row.syllabus.estado}</td>
+						<td>
+							<a class="btn btn-primary" href="${pageContext.request.contextPath}/asignatura/${row.id}/syllabus/registrar">Entregar Syllabus</a>
+						</td>
 					</tr>
 					</c:forEach>				
 				</tbody>
