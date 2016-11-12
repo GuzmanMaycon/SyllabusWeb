@@ -117,7 +117,6 @@ create or replace PROCEDURE REG_REF_BIBLIO
     LUGAR_PUBLICACION	REFERENCIA_BIBLIOGRAFICA.LUGAR_PUBLICACION%TYPE,
     EDITORIAL		REFERENCIA_BIBLIOGRAFICA.EDITORIAL%TYPE,
     ISBN REFERENCIA_BIBLIOGRAFICA.ISBN%TYPE,
-    ID_REFERENCIA	REFERENCIA_BIBLIOGRAFICA.ID_REFERENCIA%TYPE,
     ID_SYLLABUS		REFERENCIA_BIBLIOGRAFICA.ID_SYLLABUS%TYPE) AUTHID CURRENT_USER AS
 
 BEGIN               
@@ -126,7 +125,6 @@ BEGIN
 					LUGAR_PUBLICACION, 
 					EDITORIAL, 
 					ISBN,
-					ID_REFERENCIA, 
 					ID_SYLLABUS)                                                
       VALUES (REG_REF_BIBLIO.TITULO, 
 			REG_REF_BIBLIO.AUTOR, 
@@ -134,7 +132,6 @@ BEGIN
 			REG_REF_BIBLIO.LUGAR_PUBLICACION,
 			REG_REF_BIBLIO.EDITORIAL,
 			REG_REF_BIBLIO.ISBN,  
-			REG_REF_BIBLIO.ID_REFERENCIA, 
 			REG_REF_BIBLIO.ID_SYLLABUS);
 
 END REG_REF_BIBLIO;
@@ -149,19 +146,17 @@ create or replace PROCEDURE REG_TEMA
 /*     Autor: Thalia Quiroz Guzman                                           */
 /*---------------------------------------------------------------------------*/
 
-   (ID_TEMA			TEMA.ID_TEMA%TYPE,
-    DESCRIPCION		TEMA.DESCRIPCION%TYPE,
+   (DESCRIPCION		TEMA.DESCRIPCION%TYPE,
     UNIDAD			TEMA.UNIDAD%TYPE, 
     SEMANA			TEMA.SEMANA%TYPE,
     ID_SYLLABUS		TEMA.ID_SYLLABUS%TYPE) AUTHID CURRENT_USER AS
 
 BEGIN               
-    INSERT INTO TEMA (ID_TEMA, DESCRIPCION, 
+    INSERT INTO TEMA (DESCRIPCION, 
 					UNIDAD, 
 					SEMANA, 
 					ID_SYLLABUS)                                                
-      VALUES (REG_TEMA.ID_TEMA, 
-			REG_TEMA.DESCRIPCION, 
+      VALUES (REG_TEMA.DESCRIPCION, 
 			REG_TEMA.UNIDAD, 
 			REG_TEMA.SEMANA,
 			REG_TEMA.ID_SYLLABUS);
@@ -170,22 +165,53 @@ END REG_TEMA;
 /
 
 /*--------------------------------------------------------------------------
- * NOMBRE    : Registrar_Syllabus                                                
+ * NOMBRE    : Reg_Syllabus                                                
  * OBJETIVO  : Registrar syllabus en la base de datos                 
  * FECHA MOD : 03/11/2016 2:53pm
  *--------------------------------------------------------------------------                                
  *     INFORMACI?:                                                          
  *     AUTOR: LUCERO DEL PILAR LIZA PUICAN                                  
  *---------------------------------------------------------------------------*/
-CREATE OR REPLACE PROCEDURE dbsegsyl.Registrar_Syllabus(
-    p_FechaEntrega          IN dbsegsyl.syllabus.fecha_entrega%TYPE,
-    p_FechaAprobacion       IN dbsegsyl.syllabus.fecha_aprobacion%TYPE,
-    p_IDAsigAperturada      IN dbsegsyl.syllabus.id_asig_aperturada%TYPE 
+CREATE OR REPLACE PROCEDURE dbsegsyl.Reg_Syllabus(
+    p_IDAsigAperturada      IN dbsegsyl.syllabus.id_asig_aperturada%TYPE, 
+	p_ID out                dbsegsyl.syllabus.id_syllabus%TYPE
 )
 AUTHID CURRENT_USER
 AS 
 BEGIN 
-       INSERT INTO dbsegsyl.syllabus(id_syllabus, estado, fecha_entrega, fecha_aprobacion, id_asig_aperturada)
-                             VALUES (sq_syllabus.nextval, 'E', p_FechaEntrega, p_FechaAprobacion, p_IDAsigAperturada);
-END Registrar_Syllabus;
+       INSERT INTO dbsegsyl.syllabus(id_syllabus, estado, id_asig_aperturada)
+                             VALUES (sq_syllabus.nextval, 'E', p_IDAsigAperturada)
+		RETURNING id_syllabus into p_ID;
+END Reg_Syllabus;
+/
+
+    --FECHA ULTIMA MODIFICACION: 11/11/2016 14:45PM
+            -- Verificar procedures de LISTAR y BUSCAR 
+            -- Definir parametros de salida de Listar_Syllabus_x_EAP
+            -- Se agrego Registrar/Modificar/Eliminar Validacion_Alumno
+            
+/*--------------------------------------------------------------------------
+ * NOMBRE    : Devuelve_IDPeriodo_Actual
+ * OBJETIVO  : Retorna los datos del periodo actual         
+ * FECHA MOD : 02/11/2016 2:12pm
+ *--------------------------------------------------------------------------                                
+ *     INFORMACI?:                                                          
+ *     AUTOR: LUCERO DEL PILAR LIZA PUICAN                                  
+ *--------------------------------------------------------------------------*/
+CREATE OR REPLACE FUNCTION dbsegsyl.Devuelve_IDPeriodo_Actual
+RETURN dbsegsyl.periodo.id_periodo%TYPE 
+IS    vIDPeriodo INTEGER;
+      vFechaActual DATE;
+BEGIN
+       vFechaActual := SYSDATE;
+       
+       SELECT id_periodo
+         INTO vIDPeriodo      
+         FROM dbsegsyl.periodo 
+        WHERE anio = TO_NUMBER( TO_CHAR(SYSDATE, 'YYYY'))
+          AND fecha_inicio <= vFechaActual 
+          AND fecha_fin >= vFechaActual;
+          
+       RETURN vIDPeriodo;
+END;
 /
