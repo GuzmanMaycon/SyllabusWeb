@@ -1,6 +1,7 @@
 package com.junior.to;
 
 public class AsignaturaAperturadaTO {
+
     private Asignatura asignatura;
 
     private Periodo periodo;
@@ -8,6 +9,15 @@ public class AsignaturaAperturadaTO {
     private Integer id;
 
     private Syllabus syllabus;
+
+    public AsignaturaAperturadaTO(){}
+
+    public AsignaturaAperturadaTO(Integer id, Asignatura asignatura, Periodo periodo)
+    {
+        this.id = id;
+        this.asignatura = asignatura;
+        this.periodo = periodo;
+    }
 
     public void setSyllabus(Syllabus syllabus)
     {

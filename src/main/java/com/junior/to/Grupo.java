@@ -1,20 +1,21 @@
 package com.junior.to;
 
 public class Grupo {
+
+    private Integer id;
+
     private AsignaturaAperturadaTO asignaturaAperturada;
 
     private Integer numero;
 
-    private Integer id;
+    public Integer getId()
+    {
+        return id;
+    }
 
     public void setId(Integer id)
     {
         this.id = id;
-    }
-
-    public Integer getId()
-    {
-        return this.id;
     }
 
     public AsignaturaAperturadaTO getAsignaturaAperturada()

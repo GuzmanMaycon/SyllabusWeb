@@ -3,6 +3,9 @@ package com.junior.to;
 import java.util.Date;
 
 public class Periodo {
+
+    private Integer id;
+
     private Integer anio;
 
     private Date fechaInicio;
@@ -10,6 +13,29 @@ public class Periodo {
     private Date fechaFin;
 
     private Integer semestre;
+
+    public Periodo(
+            Integer id,
+            Integer anio,
+            Date fechaInicio,
+            Date fechaFin,
+            Integer semestre
+            )
+    {
+        this.id = id;
+        this.anio = anio;
+        this.fechaInicio = fechaInicio;
+        this.fechaFin = fechaFin;
+        this.semestre = semestre;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public Integer getAnio()
     {
