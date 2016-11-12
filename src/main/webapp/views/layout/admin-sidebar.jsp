@@ -68,7 +68,7 @@
             </a>
         </li>
         <li>
-            <a class="sidebar-link" href="#">
+            <a class="sidebar-link" href="${pageContext.request.contextPath}/grupos/index" id="consultar-avance-link">
                 Consultar avance de Syllabus
             </a>
         </li>

@@ -110,6 +110,12 @@ h3 {
     border-right-style: solid;
     border-right-color: rgba(46, 98, 247, 0.63);;
 }
+.item-sidebar-active {
+	border-bottom-width: 0px;
+    border-right-width: 5px;
+    border-right-style: solid;
+    border-right-color: rgba(247, 46, 46, 0.63);;
+}
 .row-hover:focus {
     cursor: pointer;
     background: #555;
