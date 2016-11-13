@@ -1,7 +1,5 @@
 package com.junior.controller;
 
-import java.util.Date;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +17,7 @@ import com.junior.dao.design.ISyllabusDao;
 import com.junior.mailer.IMailSender;
 import com.junior.parser.JsonParser;
 import com.junior.to.Bibliografia;
+import com.junior.to.EstadoSyllabus;
 import com.junior.to.Syllabus;
 import com.junior.to.Tema;
 
@@ -101,22 +100,36 @@ public class SyllabusController {
      */
     @RequestMapping(value = "/registrar", method = RequestMethod.GET)
     public String create(ModelMap model,
-        @PathVariable(value = "asignaturaAperturadaId") Integer id,
+        @PathVariable(value = "asignaturaAperturadaId") Integer asignaturaAperturadaid,
         RedirectAttributes redirectAttrs)
     {
-        // Obtener el nombre de la asignatura a partir del id de la asignatura aperturada
-        String nombreAsignatura = this.asignaturaAperturadaDao.obtenerNombreDeAsignaturaPorId(id);
-        // Verificar si la asignatura es valida
-        if (nombreAsignatura == null) {
-            // Agregar como data de sesion el mensaje de error
-            redirectAttrs.addFlashAttribute("mensajeError","Asignatura no encontrada en la Base de Datos");
-            // Redirigir indicando que el id de la asignatura aperturada no es correcta
+        EstadoSyllabus estadoSyllabus = this.syllabusDao.obtenerEstadoPorAsigAperturadaId(asignaturaAperturadaid);
+
+        if (estadoSyllabus.equals(EstadoSyllabus.N)) {
+            // Obtener el nombre de la asignatura a partir del id de la asignatura aperturada
+            String nombreAsignatura = this.asignaturaAperturadaDao.obtenerNombreDeAsignaturaPorId(asignaturaAperturadaid);
+            // Verificar si la asignatura es valida
+            if (nombreAsignatura == null) {
+                // Agregar como data de sesion el mensaje de error
+                redirectAttrs.addFlashAttribute("mensajeError","Asignatura no encontrada en la Base de Datos");
+                // Redirigir indicando que el id de la asignatura aperturada no es correcta
+                return "redirect:/asignaturas_del_ciclo/index";
+            }
+            // Agregar al modelo el nombre de la asignatura
+            model.addAttribute("nombreAsignatura", nombreAsignatura);
+
+            return "syllabus/registrar";
+        } else if (estadoSyllabus.equals(EstadoSyllabus.A)) {
+            redirectAttrs.addFlashAttribute("mensajeOk","Tu syllabus fue aprobado anteriormente");
+            return "redirect:/asignaturas_del_ciclo/index";
+        } else {
+            redirectAttrs.addFlashAttribute("mensajeError","La vista correcta es la de edicion");
+            /** TO - DO
+             * Hacer edicion de syllabus
+             */
+
             return "redirect:/asignaturas_del_ciclo/index";
         }
-        // Agregar al modelo el nombre de la asignatura
-        model.addAttribute("nombreAsignatura", nombreAsignatura);
-
-        return "syllabus/registrar";
     }
 
     /**
@@ -171,9 +184,6 @@ public class SyllabusController {
                 syllabus.addLibro(nuevoLibro);
             }
 
-            syllabus.setEstado("E");
-            syllabus.setFechaEntrega(new Date());
-            syllabus.setFechaAprobacion(new Date());
             syllabus.setIdAsigAperturada(id);
 
             String respuesta = this.syllabusDao.insertarSyllabus(syllabus);

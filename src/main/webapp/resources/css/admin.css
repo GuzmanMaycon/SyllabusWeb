@@ -2342,5 +2342,7 @@ h3 {
   overflow: visible;
   clip: auto;
 }
-
+.fa-check {
+	color: #008000;
+}
 /*# sourceMappingURL=admin.css.map */

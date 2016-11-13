@@ -43,8 +43,17 @@
 						<td>${row.asignatura.plan.nombre}</td>
 						<td>${row.syllabus.estado}</td>
 						<td>
+						<c:choose>
+						<c:when test='${row.syllabus.estado == "NO ENTREGADO"}'>
 							<a class="btn btn-primary" href="${pageContext.request.contextPath}/asignatura/${row.id}/syllabus/registrar">Entregar Syllabus</a>
-						</td>
+						</c:when>
+						<c:when test='${row.syllabus.estado == "ACEPTADO"}'>
+							<i class="fa fa-check" aria-hidden="true"></i>
+						</c:when>
+						<c:otherwise>
+							<a class="btn btn-default" >Editar Syllabus</a>
+						</c:otherwise>
+						</c:choose>
 					</tr>
 					</c:forEach>				
 				</tbody>

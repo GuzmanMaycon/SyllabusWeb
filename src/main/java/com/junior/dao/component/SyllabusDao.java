@@ -3,18 +3,21 @@ package com.junior.dao.component;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Types;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.junior.conexion.IAccesoDB;
 import com.junior.dao.design.ISyllabusDao;
 import com.junior.to.Bibliografia;
+import com.junior.to.EstadoSyllabus;
 import com.junior.to.Syllabus;
 import com.junior.to.Tema;
 
 import oracle.jdbc.OracleTypes;
 
-public class SyllabusDao implements ISyllabusDao{
+public class SyllabusDao implements ISyllabusDao {
+
     @Autowired
     protected IAccesoDB db;
 
@@ -24,7 +27,8 @@ public class SyllabusDao implements ISyllabusDao{
     }
 
     @Override
-    public String insertarSyllabus(Syllabus syllabus) {
+    public String insertarSyllabus(Syllabus syllabus)
+    {
         String procInsertarSyllabus = "{ call REG_SYLLABUS(?, ?)}";
         String procInsertarTema = "{ call REG_TEMA(?, ?, ?, ?)}";
         String procInsertarBibliografia = "{ call REG_REF_BIBLIO(?, ?, ?, ?, ?, ?, ?)}";
@@ -54,8 +58,7 @@ public class SyllabusDao implements ISyllabusDao{
                         cs.setInt("ID_SYLLABUS", syllabus.getId());
 
                         int inserto = cs.executeUpdate();
-                        if (inserto == 0)
-                        {
+                        if (inserto == 0) {
                             return "Error al ingresar un tema";
                         }
                     }
@@ -78,9 +81,8 @@ public class SyllabusDao implements ISyllabusDao{
                         cs.setInt("ID_SYLLABUS", syllabus.getId());
 
                         int inserto = cs.executeUpdate();
-                        if (inserto == 0)
-                        {
-                            return "Error al ingresar un tema";
+                        if (inserto == 0) {
+                            return "Error al ingresar un libro";
                         }
                     }
                 } catch(SQLException ex) {
@@ -101,6 +103,39 @@ public class SyllabusDao implements ISyllabusDao{
         }
 
         return "OK";
+    }
+
+    @Override
+    public EstadoSyllabus obtenerEstadoPorAsigAperturadaId(Integer asigAperturadaId)
+    {
+        EstadoSyllabus estado = EstadoSyllabus.N;
+        String procedimientoAlmacenado = "{ ? = call RET_ESTADO_SYLLABUS_X_APER(?)}";
+        Connection cn = this.db.getConnection();
+
+        if (cn != null) {
+            try {
+                CallableStatement proc = cn.prepareCall(procedimientoAlmacenado);
+                proc.registerOutParameter(1, Types.VARCHAR);
+
+                proc.setString(2, asigAperturadaId.toString());
+                proc.executeQuery();
+
+                String resultado = proc.getString(1);
+                if (resultado != null) {
+                    estado = EstadoSyllabus.valueOf(resultado);
+                }
+            } catch(SQLException ex) {
+                System.err.println(ex.getMessage());
+            } finally {
+                try {
+                    cn.close();
+                } catch (Exception e) {
+                    System.err.println(e.getMessage());
+                }
+            }
+        }
+
+        return estado;
     }
 
 }
