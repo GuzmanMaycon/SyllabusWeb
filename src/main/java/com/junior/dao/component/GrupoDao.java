@@ -32,7 +32,7 @@ public class GrupoDao implements IGrupoDao {
         // TODO Auto-generated method stub
         List<Grupo> grupos = new ArrayList<Grupo>();
 
-        String procedimientoAlmacenado = "{ call PAC_CURSOR.LISTAR_GRUPOS(?, ?)}";
+        String procedimientoAlmacenado = "{ call PAC_CURSOR_LISTAR_GRUPOS.LISTAR_GRUPOS(?, ?)}";
 
         Connection cn = this.db.getConnection();
 
