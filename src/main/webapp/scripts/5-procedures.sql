@@ -20,27 +20,29 @@ CREATE OR REPLACE PACKAGE DBSEGSYL.PAC_CURSOR is
 
 end PAC_CURSOR;
 /
-create or replace package body DBSEGSYL.PAC_CURSOR is
-  procedure LISTAR_ASIG_X_COORD(
-    p_IDCoordinador     in     docente.id_usuario%type,
-    p_IDPeriodo in periodo.id_periodo%type,
-    o_cursor in out g_cursor) is
+CREATE OR REPLACE PACKAGE BODY PAC_CURSOR IS
+  PROCEDURE LISTAR_ASIG_X_COORD(
+    p_IDCoordinador IN docente.id_usuario%TYPE,
+    p_IDPeriodo     IN periodo.id_periodo%TYPE,
+    o_cursor        IN OUT g_cursor) IS
 
-       begin
+    BEGIN
         --Opening the cursor to return matched rows
-        open o_cursor for
-          select asignatura_aperturada.id_asig_aperturada, asignatura.nombre as asig_nombre, plan_de_estudio.nombre as plan_nombre,
-		  syllabus.estado as estado_syllabus
-          from asignatura_aperturada
-          JOIN dbsegsyl.asignatura ON ( asignatura.ID_ASIGNATURA = asignatura_aperturada.ID_ASIGNATURA)
-          JOIN dbsegsyl.plan_de_estudio ON ( plan_de_estudio.ID_PLAN_ESTUDIO = asignatura.ID_PLAN_ESTUDIO)
-		  JOIN dbsegsyl.syllabus ON (syllabus.id_asig_aperturada = asignatura_aperturada.id_asig_aperturada)
-     WHERE id_coordinador = p_idcoordinador
-       AND id_periodo     = p_idperiodo
-       ORDER BY asignatura.codigo;
+      OPEN o_cursor FOR
+        SELECT asignatura_aperturada.id_asig_aperturada,
+               asignatura.nombre AS asig_nombre,
+               plan_de_estudio.nombre AS plan_nombre,
+               NVL(syllabus.estado, 'N') AS estado_syllabus
+        FROM asignatura_aperturada
+        JOIN dbsegsyl.asignatura ON ( asignatura.ID_ASIGNATURA = asignatura_aperturada.ID_ASIGNATURA)
+        JOIN dbsegsyl.plan_de_estudio ON ( plan_de_estudio.ID_PLAN_ESTUDIO = asignatura.ID_PLAN_ESTUDIO)
+            LEFT JOIN dbsegsyl.syllabus ON (syllabus.id_asig_aperturada = asignatura_aperturada.id_asig_aperturada)
+        WHERE id_coordinador = p_idcoordinador
+        AND id_periodo     = p_idperiodo
+        ORDER BY asignatura.codigo;
 
-  end LISTAR_ASIG_X_COORD;
-end PAC_CURSOR;
+  END LISTAR_ASIG_X_COORD;
+END PAC_CURSOR;
 /
 
 /*--------------------------------------------------------------------------
