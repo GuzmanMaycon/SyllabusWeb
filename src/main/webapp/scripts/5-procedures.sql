@@ -27,10 +27,12 @@ create or replace package body PAC_CURSOR is
        begin
         --Opening the cursor to return matched rows
         open o_cursor for
-          select asignatura_aperturada.id_asig_aperturada, asignatura.nombre as asig_nombre, plan_de_estudio.nombre as plan_nombre
+          select asignatura_aperturada.id_asig_aperturada, asignatura.nombre as asig_nombre, plan_de_estudio.nombre as plan_nombre,
+		  syllabus.estado as estado_syllabus
           from asignatura_aperturada
           JOIN dbsegsyl.asignatura ON ( asignatura.ID_ASIGNATURA = asignatura_aperturada.ID_ASIGNATURA)
           JOIN dbsegsyl.plan_de_estudio ON ( plan_de_estudio.ID_PLAN_ESTUDIO = asignatura.ID_PLAN_ESTUDIO)
+		  JOIN dbsegsyl.syllabus ON (syllabus.id_asig_aperturada = asignatura_aperturada.id_asig_aperturada)
      WHERE id_coordinador = p_idcoordinador
        AND id_periodo     = p_idperiodo
        ORDER BY asignatura.codigo; 
@@ -120,13 +122,15 @@ create or replace PROCEDURE REG_REF_BIBLIO
     ID_SYLLABUS		REFERENCIA_BIBLIOGRAFICA.ID_SYLLABUS%TYPE) AUTHID CURRENT_USER AS
 
 BEGIN               
-    INSERT INTO REFERENCIA_BIBLIOGRAFICA (TITULO, AUTOR, 
+    INSERT INTO REFERENCIA_BIBLIOGRAFICA (ID_REFERENCIA,
+	                TITULO, AUTOR, 
 					ANIO_PUBLICACION, 
 					LUGAR_PUBLICACION, 
 					EDITORIAL, 
 					ISBN,
 					ID_SYLLABUS)                                                
-      VALUES (REG_REF_BIBLIO.TITULO, 
+      VALUES (sq_referencia.NEXTVAL,
+	        REG_REF_BIBLIO.TITULO, 
 			REG_REF_BIBLIO.AUTOR, 
 			REG_REF_BIBLIO.ANIO_PUBLICACION, 
 			REG_REF_BIBLIO.LUGAR_PUBLICACION,
@@ -152,11 +156,13 @@ create or replace PROCEDURE REG_TEMA
     ID_SYLLABUS		TEMA.ID_SYLLABUS%TYPE) AUTHID CURRENT_USER AS
 
 BEGIN               
-    INSERT INTO TEMA (DESCRIPCION, 
+    INSERT INTO TEMA (ID_TEMA,
+	                DESCRIPCION, 
 					UNIDAD, 
 					SEMANA, 
 					ID_SYLLABUS)                                                
-      VALUES (REG_TEMA.DESCRIPCION, 
+      VALUES (sq_tema.nextval,
+	        REG_TEMA.DESCRIPCION, 
 			REG_TEMA.UNIDAD, 
 			REG_TEMA.SEMANA,
 			REG_TEMA.ID_SYLLABUS);

@@ -66,51 +66,44 @@ CREATE SEQUENCE DBSEGSYL.SQ_VAL_ALUMNO
              
 /***********************************************************/
 --Secuencia para la referencia bibliografica
-/*
+
 CREATE SEQUENCE DBSEGSYL.SQ_REFERENCIA 
-       START WITH ( SELECT MAX(ID_REFERENCIA) 
-                      FROM DBSEGSYL.REFERENCIA_BIBLIOGRAFICA;) 
+       START WITH 7
        INCREMENT BY 1 
        NOCACHE
-       NOCYCLE:
+       NOCYCLE;
        
 --Secuencia para asignatura
 CREATE SEQUENCE DBSEGSYL.SQ_ASIGNATURA 
-       START WITH ( SELECT MAX(ID_ASIGNATURA) 
-                      FROM DBSEGSYL.ASIGNATURA;) 
+       START WITH 12
        INCREMENT BY 1 
        NOCACHE
-       NOCYCLE:
+       NOCYCLE;
 
 --Secuencia para asignatura aperturada
 CREATE SEQUENCE DBSEGSYL.SQ_ASIG_APERTURADA 
-       START WITH ( SELECT MAX(ID_ASIG_APERTURADA) 
-                      FROM DBSEGSYL.ASIG_APERTURADA;) 
+       START WITH 11
        INCREMENT BY 1 
        NOCACHE
-       NOCYCLE:
+       NOCYCLE;
 
 --Secuencia para asignatura aperturada
 CREATE SEQUENCE DBSEGSYL.SQ_SYLLABUS
-       START WITH ( SELECT MAX(ID_SYLLABUS) 
-                      FROM DBSEGSYL.SYLLABUS;) 
+       START WITH 5 
        INCREMENT BY 1 
        NOCACHE
-       NOCYCLE:
+       NOCYCLE;
 
 --Secuencia para usuario
 CREATE SEQUENCE DBSEGSYL.SQ_USUARIO 
-       START WITH ( SELECT MAX(ID_USUARIO) 
-                      FROM DBSEGSYL.USUARIO;) 
+       START WITH 10
        INCREMENT BY 1 
        NOCACHE
-       NOCYCLE:
+       NOCYCLE;
 
 --Secuencia para tema
 CREATE SEQUENCE DBSEGSYL.SQ_TEMA 
-       START WITH ( SELECT MAX(ID_TEMA) 
-                      FROM DBSEGSYL.TEMA;) 
+       START WITH 6
        INCREMENT BY 1 
        NOCACHE
-       NOCYCLE:
-*/
+       NOCYCLE;
