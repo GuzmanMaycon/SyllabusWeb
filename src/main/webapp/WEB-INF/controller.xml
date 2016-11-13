@@ -34,4 +34,14 @@
       <ref bean="gmailMailer"/>
     </property>
   </bean>
+
+  <bean id="temaApiController" class="com.junior.controller.api.TemaApiController">
+    <property name="temaDao">
+      <ref bean="temaDaoImpl"/>
+    </property>
+
+    <property name="asignaturaDao">
+      <ref bean="asignaturaDaoImpl"/>
+    </property>
+  </bean>
 </beans>
