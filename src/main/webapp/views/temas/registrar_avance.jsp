@@ -16,7 +16,10 @@
 	<title>Registrar Avance de Syllabus</title>
 </head>
 <body id="app">
-	<div class="container">
+
+	<%@ include file="/views/layout/docente-sidebar.jsp" %>
+
+	<div class="content">
 		<c:if test="${not empty mensajeError}">
 		<div class="alert alert-danger">
 			<p>${mensajeError}</p>
@@ -26,13 +29,13 @@
 		<div class="row">
 			<h2>Registro de avance del Curso de ${ course_name }</h2>
 		</div>
-		
+
 		<div class="row">
 			<table class="table">
 				<thead>
 					<tr>
 						<th>Unidad</th>
-						<th>Semana</th>					
+						<th>Semana</th>
 						<th>Descripcion del tema</th>
 						<th>Cumplido</th>
 					</tr>
@@ -46,21 +49,21 @@
 						<td>
 							<div class="checkbox">
 								<label>
-									<input id="tema_${tema.id}" 
-										   type="checkbox" 
-										   value="${tema.id}" 
-										   name="temas[]" 
+									<input id="tema_${tema.id}"
+										   type="checkbox"
+										   value="${tema.id}"
+										   name="temas[]"
 										   data-cumplido="0"
 										   @click="select_tema(${tema.id})"><span id="span_${tema.id}">No</span>
 								</label>
 							</div>
 						</td>
 					</tr>
-					</c:forEach>				
+					</c:forEach>
 				</tbody>
 			</table>
 		</div>
-		
+
 		<div class="row">
 			<div class="text-center">
 				<div class="checkbox">
@@ -96,11 +99,11 @@
 				<button class="btn btn-primary">Guardar avance</button>
 			</div>
 		</div>
-		
+
 		</form>
 	</div>
-			
+
 	<!-- Scripts -->
-    <script src="${registrarAvanceJs}"></script> 
+    <script src="${registrarAvanceJs}"></script>
 </body>
 </html>

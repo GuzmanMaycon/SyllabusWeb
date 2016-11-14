@@ -4,8 +4,8 @@
     <div class="navbar-collapse collapse">
     <ul class="nav in">
         <li>
-            <a class="sidebar-link" href="${pageContext.request.contextPath}/asignaturas_del_ciclo/index">
-                Gestionar syllabus
+            <a class="sidebar-link" href="${pageContext.request.contextPath}/grupos/index">
+                Registrar avance
             </a>
         </li>
         <li>
