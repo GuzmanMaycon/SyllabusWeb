@@ -28,7 +28,7 @@ public class UsuarioDao implements IUsuarioDao {
         Usuario usuario = this.obtenerUsuario(username);
         // Obtener roles del usuario
         ArrayList<Rol> roles = new ArrayList<Rol>();
-        Collection<GrantedAuthority> accesos = new ArrayList<>();
+        Collection<GrantedAuthority> accesos = new ArrayList<GrantedAuthority>();
         // Convertirlos en una coleccion de GrantedAuthority
         for (Rol rol : roles) {
             accesos.add(new SimpleGrantedAuthority(rol.getNombre()));

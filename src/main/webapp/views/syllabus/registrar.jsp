@@ -15,7 +15,7 @@
 </head>
 <body id="app">
 
-    <%@ include file="/views/layout/admin-sidebar.jsp" %>
+    <%@ include file="/views/layout/coordinador-sidebar.jsp" %>
 
     <div class="content">
         <div v-show="!see_preview">

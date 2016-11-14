@@ -1,12 +1,14 @@
 /*--------------------------------------------------------------------------
- * NOMBRE    : LISTAR_ASIG_X_COORD                                               
- * OBJETIVO  : Lista asignaturas aperturadas de acuerdo al periodo actual              
+ * NOMBRE    : LISTAR_ASIG_X_COORD
+ * OBJETIVO  : Lista asignaturas aperturadas de acuerdo al periodo actual
  * FECHA MOD : 11/11/2016 2:53pm
- *--------------------------------------------------------------------------                                
- *     INFORMACI?:                                                          
- *     AUTOR: TAKESHI FARRO HINOSHITA                                 
+ *--------------------------------------------------------------------------
+ *     INFORMACI?:
+ *     AUTOR: TAKESHI FARRO HINOSHITA
  *---------------------------------------------------------------------------*/
-create or replace package PAC_CURSOR is
+/
+
+CREATE OR REPLACE PACKAGE DBSEGSYL.PAC_CURSOR is
   --Creating REF CURSOR type
   type g_cursor is ref cursor;
 
@@ -18,13 +20,13 @@ create or replace package PAC_CURSOR is
 
 end PAC_CURSOR;
 /
-create or replace package body PAC_CURSOR is
-  procedure LISTAR_ASIG_X_COORD(
-    p_IDCoordinador     in     docente.id_usuario%type,
-    p_IDPeriodo in periodo.id_periodo%type,
-    o_cursor in out g_cursor) is
+CREATE OR REPLACE PACKAGE BODY PAC_CURSOR IS
+  PROCEDURE LISTAR_ASIG_X_COORD(
+    p_IDCoordinador IN docente.id_usuario%TYPE,
+    p_IDPeriodo     IN periodo.id_periodo%TYPE,
+    o_cursor        IN OUT g_cursor) IS
 
-       begin
+    BEGIN
         --Opening the cursor to return matched rows
         open o_cursor for
           select asignatura_aperturada.id_asig_aperturada, asignatura.nombre as asig_nombre, plan_de_estudio.nombre as plan_nombre,
@@ -32,7 +34,7 @@ create or replace package body PAC_CURSOR is
           from asignatura_aperturada
           JOIN dbsegsyl.asignatura ON ( asignatura.ID_ASIGNATURA = asignatura_aperturada.ID_ASIGNATURA)
           JOIN dbsegsyl.plan_de_estudio ON ( plan_de_estudio.ID_PLAN_ESTUDIO = asignatura.ID_PLAN_ESTUDIO)
-		      LEFT JOIN dbsegsyl.syllabus ON (syllabus.id_asig_aperturada = asignatura_aperturada.id_asig_aperturada)
+		  LEFT JOIN dbsegsyl.syllabus ON (syllabus.id_asig_aperturada = asignatura_aperturada.id_asig_aperturada)
           LEFT JOIN dbsegsyl.estado_syllabus ON (estado_syllabus.id_estado_syllabus = syllabus.id_estado)
      WHERE id_coordinador = p_idcoordinador
        AND id_periodo     = p_idperiodo
@@ -43,14 +45,14 @@ end PAC_CURSOR;
 /
 
 /*--------------------------------------------------------------------------
- * NOMBRE    : Listar_Grupos                                             
- * OBJETIVO  : Lista grupos del periodo actual              
+ * NOMBRE    : Listar_Grupos
+ * OBJETIVO  : Lista grupos del periodo actual
  * FECHA MOD : 11/11/2016 2:53pm
- *--------------------------------------------------------------------------                                
- *     INFORMACI?:                                                          
- *     AUTOR: TAKESHI FARRO HINOSHITA                                 
+ *--------------------------------------------------------------------------
+ *     INFORMACI?:
+ *     AUTOR: TAKESHI FARRO HINOSHITA
  *---------------------------------------------------------------------------*/
-create or replace package PAC_CURSOR_LISTAR_GRUPOS is
+create or replace package DBSEGSYL.PAC_CURSOR_LISTAR_GRUPOS is
   --Creating REF CURSOR type
   type g_cursor is ref cursor;
 
@@ -61,7 +63,7 @@ create or replace package PAC_CURSOR_LISTAR_GRUPOS is
 
 end PAC_CURSOR_LISTAR_GRUPOS;
 /
-create or replace package body PAC_CURSOR_LISTAR_GRUPOS is
+create or replace package body DBSEGSYL.PAC_CURSOR_LISTAR_GRUPOS is
   procedure LISTAR_GRUPOS(
     p_IDPeriodo in periodo.id_periodo%type,
     o_cursor in out g_cursor) is
@@ -83,7 +85,7 @@ end PAC_CURSOR_LISTAR_GRUPOS;
 /* NOMBRE    : DEVUELVE_NOMBRE_ASIG_APER                                            	*/
 /* OBJETIVO  : RETORNA EL NOMBRE DE UNA ASIGNATURA POR SU ID      */
 /* FECHA MODIFICACION : 11/11/2016 7:30pm
-/*--------------------------------------------------------------------------*/                                
+/*--------------------------------------------------------------------------*/
 /*     INFORMACION:                                                          */
 /*     AUTOR: TAKESHI FARRO HINOSHITA                                 */
 /*---------------------------------------------------------------------------*/
@@ -96,11 +98,11 @@ BEGIN
 		  INTO VNOMBRE
 		  FROM ASIGNATURA_APERTURADA ASIG_APERTURADA
 		  JOIN ASIGNATURA ASIG ON (ASIG_APERTURADA.ID_ASIGNATURA = ASIG.ID_ASIGNATURA)
-		 WHERE ID_ASIG_APERTURADA = TO_NUMBER(COD);  
+		 WHERE ID_ASIG_APERTURADA = TO_NUMBER(COD);
 
 	RETURN VNOMBRE;
-EXCEPTION 
-	WHEN OTHERS THEN 
+EXCEPTION
+	WHEN OTHERS THEN
 		RETURN NULL;
 END;
 /
@@ -109,62 +111,61 @@ create or replace PROCEDURE REG_REF_BIBLIO
 /*---------------------------------------------------------------------------*/
 /* Nombre    : REG_REF_BIBLIO       		                             */
 /* Objetivo  : Inserta un registro en la tabla REFERENCIA_BIBLIOGRAFICA      */
-/*---------------------------------------------------------------------------*/                                
+/*---------------------------------------------------------------------------*/
 /*     Informacion:                                                          */
 /*     Autor: Thalia Quiroz Guzman                                           */
 /*---------------------------------------------------------------------------*/
 
    (TITULO		REFERENCIA_BIBLIOGRAFICA.TITULO%TYPE,
     AUTOR		REFERENCIA_BIBLIOGRAFICA.AUTOR%TYPE,
-    ANIO_PUBLICACION	REFERENCIA_BIBLIOGRAFICA.ANIO_PUBLICACION%TYPE, 
+    ANIO_PUBLICACION	REFERENCIA_BIBLIOGRAFICA.ANIO_PUBLICACION%TYPE,
     LUGAR_PUBLICACION	REFERENCIA_BIBLIOGRAFICA.LUGAR_PUBLICACION%TYPE,
     EDITORIAL		REFERENCIA_BIBLIOGRAFICA.EDITORIAL%TYPE,
     ISBN REFERENCIA_BIBLIOGRAFICA.ISBN%TYPE,
     ID_SYLLABUS		REFERENCIA_BIBLIOGRAFICA.ID_SYLLABUS%TYPE) AUTHID CURRENT_USER AS
 
-BEGIN               
+BEGIN
     INSERT INTO REFERENCIA_BIBLIOGRAFICA (ID_REFERENCIA,
-	                TITULO, AUTOR, 
-					ANIO_PUBLICACION, 
-					LUGAR_PUBLICACION, 
-					EDITORIAL, 
+	                TITULO, AUTOR,
+					ANIO_PUBLICACION,
+					LUGAR_PUBLICACION,
+					EDITORIAL,
 					ISBN,
-					ID_SYLLABUS)                                                
+					ID_SYLLABUS)
       VALUES (sq_referencia.NEXTVAL,
-	        REG_REF_BIBLIO.TITULO, 
-			REG_REF_BIBLIO.AUTOR, 
-			REG_REF_BIBLIO.ANIO_PUBLICACION, 
+	        REG_REF_BIBLIO.TITULO,
+			REG_REF_BIBLIO.AUTOR,
+			REG_REF_BIBLIO.ANIO_PUBLICACION,
 			REG_REF_BIBLIO.LUGAR_PUBLICACION,
 			REG_REF_BIBLIO.EDITORIAL,
-			REG_REF_BIBLIO.ISBN,  
+			REG_REF_BIBLIO.ISBN,
 			REG_REF_BIBLIO.ID_SYLLABUS);
 
 END REG_REF_BIBLIO;
 /
 
-create or replace PROCEDURE REG_TEMA
 /*---------------------------------------------------------------------------*/
 /* Nombre    : REG_TEMA       		                             */
 /* Objetivo  : Inserta un registro en la tabla TEMA      */
-/*---------------------------------------------------------------------------*/                                
+/*---------------------------------------------------------------------------*/
 /*     Informacion:                                                          */
 /*     Autor: Thalia Quiroz Guzman                                           */
 /*---------------------------------------------------------------------------*/
-
+create or replace PROCEDURE REG_TEMA
    (DESCRIPCION		TEMA.DESCRIPCION%TYPE,
-    UNIDAD			TEMA.UNIDAD%TYPE, 
+    UNIDAD			TEMA.UNIDAD%TYPE,
     SEMANA			TEMA.SEMANA%TYPE,
     ID_SYLLABUS		TEMA.ID_SYLLABUS%TYPE) AUTHID CURRENT_USER AS
 
-BEGIN               
+BEGIN
     INSERT INTO TEMA (ID_TEMA,
-	                DESCRIPCION, 
-					UNIDAD, 
-					SEMANA, 
-					ID_SYLLABUS)                                                
+	                DESCRIPCION,
+					UNIDAD,
+					SEMANA,
+					ID_SYLLABUS)
       VALUES (sq_tema.nextval,
-	        REG_TEMA.DESCRIPCION, 
-			REG_TEMA.UNIDAD, 
+	        REG_TEMA.DESCRIPCION,
+			REG_TEMA.UNIDAD,
 			REG_TEMA.SEMANA,
 			REG_TEMA.ID_SYLLABUS);
 
@@ -172,53 +173,56 @@ END REG_TEMA;
 /
 
 /*--------------------------------------------------------------------------
- * NOMBRE    : Reg_Syllabus                                                
- * OBJETIVO  : Registrar syllabus en la base de datos                 
+ * NOMBRE    : Reg_Syllabus
+ * OBJETIVO  : Registrar syllabus en la base de datos
  * FECHA MOD : 03/11/2016 2:53pm
- *--------------------------------------------------------------------------                                
- *     INFORMACI?:                                                          
- *     AUTOR: LUCERO DEL PILAR LIZA PUICAN                                  
+ *--------------------------------------------------------------------------
+ *     INFORMACI?:
+ *     AUTOR: LUCERO DEL PILAR LIZA PUICAN
  *---------------------------------------------------------------------------*/
-CREATE OR REPLACE PROCEDURE dbsegsyl.Reg_Syllabus(
-    p_IDAsigAperturada      IN dbsegsyl.syllabus.id_asig_aperturada%TYPE, 
-	p_ID out                dbsegsyl.syllabus.id_syllabus%TYPE
-)
-AUTHID CURRENT_USER
-AS 
-BEGIN 
-       INSERT INTO dbsegsyl.syllabus(id_syllabus, id_estado, id_asig_aperturada)
-                             VALUES (sq_syllabus.nextval, 1, p_IDAsigAperturada)
-		RETURNING id_syllabus into p_ID;
+create or replace PROCEDURE Reg_Syllabus
+   (p_IDAsigAperturada      IN dbsegsyl.syllabus.id_asig_aperturada%TYPE
+   ) AUTHID CURRENT_USER AS
+
+BEGIN
+   INSERT INTO syllabus (
+      id_syllabus,
+      id_estado,
+      fecha_entrega,
+      id_asig_aperturada
+   )
+   VALUES (sq_syllabus.nextval, 1, SYSDATE, p_IDAsigAperturada);
+
 END Reg_Syllabus;
 /
 
     --FECHA ULTIMA MODIFICACION: 11/11/2016 14:45PM
-            -- Verificar procedures de LISTAR y BUSCAR 
+            -- Verificar procedures de LISTAR y BUSCAR
             -- Definir parametros de salida de Listar_Syllabus_x_EAP
             -- Se agrego Registrar/Modificar/Eliminar Validacion_Alumno
-            
+
 /*--------------------------------------------------------------------------
  * NOMBRE    : Devuelve_IDPeriodo_Actual
- * OBJETIVO  : Retorna los datos del periodo actual         
+ * OBJETIVO  : Retorna los datos del periodo actual
  * FECHA MOD : 02/11/2016 2:12pm
- *--------------------------------------------------------------------------                                
- *     INFORMACI?:                                                          
- *     AUTOR: LUCERO DEL PILAR LIZA PUICAN                                  
+ *--------------------------------------------------------------------------
+ *     INFORMACI?:
+ *     AUTOR: LUCERO DEL PILAR LIZA PUICAN
  *--------------------------------------------------------------------------*/
 CREATE OR REPLACE FUNCTION dbsegsyl.Devuelve_IDPeriodo_Actual
-RETURN dbsegsyl.periodo.id_periodo%TYPE 
+RETURN dbsegsyl.periodo.id_periodo%TYPE
 IS    vIDPeriodo INTEGER;
       vFechaActual DATE;
 BEGIN
        vFechaActual := SYSDATE;
-       
+
        SELECT id_periodo
-         INTO vIDPeriodo      
-         FROM dbsegsyl.periodo 
+         INTO vIDPeriodo
+         FROM dbsegsyl.periodo
         WHERE anio = TO_NUMBER( TO_CHAR(SYSDATE, 'YYYY'))
-          AND fecha_inicio <= vFechaActual 
+          AND fecha_inicio <= vFechaActual
           AND fecha_fin >= vFechaActual;
-          
+
        RETURN vIDPeriodo;
 END;
 /

@@ -12,6 +12,9 @@
 
 	<%@ include file="/views/layout/admin-sidebar.jsp" %>
 
+	<script>
+		document.getElementById("consultar-avance-link").className += " item-sidebar-active";
+	</script>
 	<div class="content">
 		<c:if test="${not empty mensajeError}">
 		<div class="alert alert-danger">

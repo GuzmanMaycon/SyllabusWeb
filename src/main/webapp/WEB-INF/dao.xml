@@ -14,8 +14,17 @@
     </property>
   </bean>
 
+  <!-- Dao para Grupos -->
   <bean id="grupoDaoImpl"
         class="com.junior.dao.component.GrupoDao">
+    <property name="db">
+      <ref bean="accesoOracleLocalImpl"/>
+    </property>
+  </bean>
+
+  <!-- Dao para Syllabus -->
+  <bean id="syllabusDaoImpl"
+        class="com.junior.dao.component.SyllabusDao">
     <property name="db">
       <ref bean="accesoOracleLocalImpl"/>
     </property>

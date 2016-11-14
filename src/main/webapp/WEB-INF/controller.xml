@@ -18,6 +18,10 @@
       <ref bean="asignaturaAperturadaDaoImpl"/>
     </property>
 
+    <property name="syllabusDao">
+      <ref bean="syllabusDaoImpl"/>
+    </property>
+
     <property name="temaParser">
       <ref bean="temaParserImpl"/>
     </property>
