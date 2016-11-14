@@ -1,6 +1,12 @@
 package com.junior.wrapper;
 
+/**
+ * Clase para englobar las propiedades de un tema necesario para los webservice
+ * @author Junior Claudio
+ * @version 1.0.0
+ */
 public class TemaWrapper {
+
     private Integer id;
 
     private String nombre;
@@ -36,5 +42,4 @@ public class TemaWrapper {
     {
         this.validado = validado;
     }
-
 }

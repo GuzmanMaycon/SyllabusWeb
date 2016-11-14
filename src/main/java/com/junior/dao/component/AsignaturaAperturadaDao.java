@@ -125,8 +125,51 @@ public class AsignaturaAperturadaDao implements IAsignaturaAperturadaDao{
     }
 
     @Override
-    public List<AsignaturaAperturadaTO> obtenerPorDirector(Integer escuelaId) {
+    public List<AsignaturaAperturadaTO> obtenerPorDirector(Integer escuelaId)
+    {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public List<AsignaturaAperturadaTO> obtenerPorAlumno(Integer codigo)
+    {
+        ArrayList<AsignaturaAperturadaTO> asignaturas = new ArrayList<AsignaturaAperturadaTO>();
+
+        String procedimientoAlmacenado = "{ call PAC_CURSOR.LISTAR_ASIG_AP_X_ALUMNO(?, ?, ?)}";
+
+        Connection cn = this.db.getConnection();
+
+        if (cn != null) {
+            try {
+                CallableStatement proc = cn.prepareCall(procedimientoAlmacenado);
+                proc.registerOutParameter("o_cursor", OracleTypes.CURSOR);
+                proc.setInt("ID_ALUM", codigo);
+                proc.setInt("PERIOD", 6);
+                proc.execute();
+
+                ResultSet rs = (ResultSet) proc.getObject("o_cursor");
+
+                while (rs.next()) {
+                    AsignaturaAperturadaTO asignaturaAperturada = new AsignaturaAperturadaTO();
+                    Asignatura asignatura = new Asignatura();
+                    asignatura.setNombre(rs.getString("ASIG_NOMBRE"));
+                    asignaturaAperturada.setId(rs.getInt("ID_ASIG_APERTURADA"));
+                    asignaturaAperturada.setAsignatura(asignatura);
+
+                    asignaturas.add(asignaturaAperturada);
+                }
+            } catch(SQLException ex) {
+                System.err.println(ex.getMessage());
+            } finally {
+                try {
+                    cn.close();
+                } catch (Exception e) {
+                    System.err.println(e.getMessage());
+                }
+            }
+        }
+
+        return asignaturas;
     }
 }

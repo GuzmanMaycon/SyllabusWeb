@@ -1,6 +1,7 @@
 package com.junior.wrapper;
 
 public class TemasPorValidarWrapper {
+
     private AlumnoTemasWrapper alumno;
 
     public AlumnoTemasWrapper getAlumno()

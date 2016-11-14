@@ -44,4 +44,10 @@
       <ref bean="asignaturaDaoImpl"/>
     </property>
   </bean>
+
+  <bean id="asignaturasPorSemanaApiController" class="com.junior.controller.api.AsignaturasPorSemanaApiController">
+    <property name="asignaturaAperturadaDao">
+      <ref bean="asignaturaAperturadaDaoImpl"/>
+    </property>
+  </bean>
 </beans>

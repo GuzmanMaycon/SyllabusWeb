@@ -3,6 +3,7 @@ package com.junior.wrapper;
 import java.util.List;
 
 public class AsignaturaAperturaConTemasWrapper {
+
     private String asignatura;
 
     private Integer asignaturaAperturadaId;
