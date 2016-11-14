@@ -28,11 +28,12 @@ create or replace package body PAC_CURSOR is
         --Opening the cursor to return matched rows
         open o_cursor for
           select asignatura_aperturada.id_asig_aperturada, asignatura.nombre as asig_nombre, plan_de_estudio.nombre as plan_nombre,
-		  syllabus.estado as estado_syllabus
+		  estado_syllabus.descripcion as estado_syllabus
           from asignatura_aperturada
           JOIN dbsegsyl.asignatura ON ( asignatura.ID_ASIGNATURA = asignatura_aperturada.ID_ASIGNATURA)
           JOIN dbsegsyl.plan_de_estudio ON ( plan_de_estudio.ID_PLAN_ESTUDIO = asignatura.ID_PLAN_ESTUDIO)
-		  JOIN dbsegsyl.syllabus ON (syllabus.id_asig_aperturada = asignatura_aperturada.id_asig_aperturada)
+		      LEFT JOIN dbsegsyl.syllabus ON (syllabus.id_asig_aperturada = asignatura_aperturada.id_asig_aperturada)
+          LEFT JOIN dbsegsyl.estado_syllabus ON (estado_syllabus.id_estado_syllabus = syllabus.id_estado)
      WHERE id_coordinador = p_idcoordinador
        AND id_periodo     = p_idperiodo
        ORDER BY asignatura.codigo; 
@@ -185,8 +186,8 @@ CREATE OR REPLACE PROCEDURE dbsegsyl.Reg_Syllabus(
 AUTHID CURRENT_USER
 AS 
 BEGIN 
-       INSERT INTO dbsegsyl.syllabus(id_syllabus, estado, id_asig_aperturada)
-                             VALUES (sq_syllabus.nextval, 'E', p_IDAsigAperturada)
+       INSERT INTO dbsegsyl.syllabus(id_syllabus, id_estado, id_asig_aperturada)
+                             VALUES (sq_syllabus.nextval, 1, p_IDAsigAperturada)
 		RETURNING id_syllabus into p_ID;
 END Reg_Syllabus;
 /
