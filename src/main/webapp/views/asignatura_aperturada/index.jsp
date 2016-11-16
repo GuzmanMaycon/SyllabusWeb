@@ -10,6 +10,8 @@
 </head>
 <body>
 
+	<%@ include file="/views/layout/header.jsp" %>
+
 	<%@ include file="/views/layout/coordinador-sidebar.jsp" %>
 
 	<div class="content">

@@ -1,6 +1,14 @@
+<spring:url value="/resources/img/logo.png" var="logoImg" />
 <style type="text/css">
 .navbar {
     margin-bottom: 0px;
+    min-height: 90px;
+}
+#img-logo {
+	width: 80%;
+}
+#span-username {
+	line-height: 90px;
 }
 </style>
 <nav class="navbar navbar-default navbar-static-top navbar-bottom-0">
@@ -17,7 +25,7 @@
 
             <!-- Branding Image -->
             <a class="navbar-brand" href="#">
-                Sistema de Syllabus
+                <img id="img-logo" src="${logoImg}">
             </a>
         </div>
 
@@ -29,10 +37,7 @@
 
             <!-- Right Side Of Navbar -->
             <ul class="nav navbar-nav navbar-right">
-                <!-- Authentication Links -->
-                <li class="dropdown">
-                    <span>Usuario</span>
-                </li>
+                <span id="span-username">Usuario</span>
             </ul>
         </div>
 

@@ -1,5 +1,3 @@
-<%@ include file="/views/layout/header.jsp" %>
-
 <div class="navbar-default sidebar" role="navigation">
     <div class="navbar-collapse collapse">
     <ul class="nav in">

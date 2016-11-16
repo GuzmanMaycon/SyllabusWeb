@@ -14,6 +14,7 @@
     <title>Registrar Syllabus</title>
 </head>
 <body id="app">
+	<%@ include file="/views/layout/header.jsp" %>
 
     <%@ include file="/views/layout/coordinador-sidebar.jsp" %>
 
