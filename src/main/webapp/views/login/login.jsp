@@ -42,10 +42,10 @@
           <img id="img-main" src="${mainImg}">
         </div>
         <div class="col-sm-offset-3 col-md-offset-0 col-sm-6 col-md-10">
-          <form class="form-horizontal" name='f' action="<c:url value='j_spring_security_check' />" method='POST'>
+          <form class="form-horizontal" name='loginForm' action="<c:url value='/j_spring_security_check' />" method='POST'>
 
           <div class="form-group">
-            <label class="control-label col-xs-4 col-sm-4 col-md-3">User</label>
+            <label class="control-label col-xs-4 col-sm-4 col-md-3">Usuario</label>
             <div class="col-xs-8 col-sm-8 col-md-9">
               <input type="text" class="form-control" name="username">
             </div>
@@ -57,6 +57,8 @@
               <input type="password" class="form-control" name="password">
             </div>
           </div>
+
+         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 
           <button class="btn btn-primary col-xs-12">Ingresar</button>
 

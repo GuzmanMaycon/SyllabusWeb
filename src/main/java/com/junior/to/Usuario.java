@@ -21,15 +21,15 @@ public class Usuario {
     private Rol rol;
 
     public Usuario(
-            Integer id,
-            String codigo,
-            String nombre,
-            String apellido,
-            String correo,
-            String contrasenia,
-            String telefono,
-            String direccion,
-            Rol rol
+        Integer id,
+        String codigo,
+        String nombre,
+        String apellido,
+        String correo,
+        String contrasenia,
+        String telefono,
+        String direccion,
+        Rol rol
             )
     {
         this.id = id;
@@ -42,6 +42,8 @@ public class Usuario {
         this.direccion = direccion;
         this.rol = rol;
     }
+
+    public Usuario() {}
 
     public Integer getId() {
         return id;

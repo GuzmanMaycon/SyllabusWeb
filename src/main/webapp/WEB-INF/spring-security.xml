@@ -8,10 +8,17 @@
 
   <http>
     <intercept-url pattern="/welcome*" access="ROLE_USER" />
+    <intercept-url pattern="/grupos/index" access="ROLE_USER"/>
 
-    <form-login login-page="/login" default-target-url="/" authentication-failure-url="/login"/>
-       
-    <logout invalidate-session="true" logout-success-url="/" />
+    <form-login 
+      login-page="/" 
+      default-target-url="/grupos/index" 
+      authentication-failure-url="/"
+      username-parameter="username"
+      password-parameter="password"
+      />
+    <csrf/>
+    <logout logout-success-url="/"></logout>
   </http>
 
   <authentication-manager>
@@ -19,5 +26,5 @@
   </authentication-manager>
   
   <beans:bean id="usuarioSecurity" class="com.junior.dao.component.UsuarioDao"/>
-  <beans:bean id="passwordEncoder" class="org.springframework.security.authentication.encoding.ShaPasswordEncoder" />
+  
 </beans:beans>

@@ -1,4 +1,5 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <spring:url value="/resources/css/admin.css" var="adminCss" />
 <spring:url value="/resources/css/app.css" var="appCss" />
 <spring:url value="/resources/js/app.js" var="appJs" />

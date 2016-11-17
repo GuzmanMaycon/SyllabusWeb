@@ -11,6 +11,18 @@
 	line-height: 90px;
 }
 </style>
+
+<c:url value="/j_spring_security_logout" var="logoutUrl" />
+<form action="${logoutUrl}" method="post" id="logoutForm">
+	<input type="hidden" name="${_csrf.parameterName}"
+		value="${_csrf.token}" />
+</form>
+<script>
+function formSubmit() {
+	document.getElementById("logoutForm").submit();
+}
+</script>
+
 <nav class="navbar navbar-default navbar-static-top navbar-bottom-0">
     <div class="container">
         <div class="navbar-header">
@@ -37,7 +49,9 @@
 
             <!-- Right Side Of Navbar -->
             <ul class="nav navbar-nav navbar-right">
-                <span id="span-username">Usuario</span>
+                <label id="span-username">
+				${pageContext.request.userPrincipal.name}
+				</label>
             </ul>
         </div>
 
