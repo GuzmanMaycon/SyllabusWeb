@@ -30,8 +30,5 @@
       <ref bean="biblioParserImpl"/>
     </property>
 
-    <property name="mailer">
-      <ref bean="gmailMailer"/>
-    </property>
   </bean>
 </beans>
