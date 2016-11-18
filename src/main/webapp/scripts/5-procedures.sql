@@ -238,7 +238,7 @@ create or replace PACKAGE          PAC_CURSOR is
 /*--------------------------------------------------------------------------
  * NOMBRE    : RET_TEMAS_X_SYLLABUS
  * OBJETIVO  : Retorna los temas del syllabus
- * FECHA MOD : 11/11/2016 2:53pm
+ * FECHA MOD : 18/11/2016 4:30pm
  *--------------------------------------------------------------------------
  *     INFORMACI?:
  *     AUTOR: TAKESHI FARRO HINOSHITA
@@ -260,6 +260,19 @@ create or replace PACKAGE          PAC_CURSOR is
       p_IDPeriodo in periodo.id_periodo%type,
       cod         in matricula.id_alumno%type,
       o_cursor    in out g_cursor
+	);
+
+/*--------------------------------------------------------------------------
+ * NOMBRE    : RET_ROLES_X_USUARIO
+ * OBJETIVO  : Retornar roles del usuario
+ * FECHA MOD : 18/11/2016 6:07pm
+ *--------------------------------------------------------------------------
+ *     INFORMACI?:
+ *     AUTOR: GIANCARLOS CLAUDIO ZAVALETA
+ *---------------------------------------------------------------------------*/     	
+	procedure RET_ROLES_X_USUARIO(
+	   p_id_usuario IN usuario.id_usuario%TYPE,
+       o_cursor    in out g_cursor
 	);
 
 end PAC_CURSOR;
@@ -372,7 +385,18 @@ create or replace PACKAGE BODY PAC_CURSOR IS
          JOIN MATRICULA ON MATRICULA.ID_GRUPO = GRUPO.ID_GRUPO
          WHERE ASIGNATURA_APERTURADA.ID_PERIODO = p_IDPeriodo AND MATRICULA.ID_ALUMNO = cod;
     
-   END LISTAR_GRUPOS_X_ALUMNO;   
+   END LISTAR_GRUPOS_X_ALUMNO; 
+
+   PROCEDURE RET_ROLES_X_USUARIO(
+      p_id_usuario IN usuario.id_usuario%TYPE,
+      o_cursor IN OUT g_cursor) IS
+   BEGIN
+      OPEN O_CURSOR FOR
+      SELECT ROL_X_USUARIO.ID_ROL AS ID_ROL, ROL.NOMBRE AS NOMBRE_ROL
+      FROM ROL_X_USUARIO
+      JOIN ROL ON ROL.ID_ROL = ROL_X_USUARIO.ID_ROL
+      WHERE ROL_X_USUARIO.ID_USUARIO = p_id_usuario;
+   END RET_ROLES_X_USUARIO;	   
          	  
 END PAC_CURSOR;
 /
