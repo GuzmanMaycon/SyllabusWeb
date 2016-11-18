@@ -12,14 +12,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.junior.to.Tema;
 
 @Controller
-@RequestMapping("/curso/{cursoAbiertoId}")
+@RequestMapping("/grupo/{grupoId}")
 public class ValidacionTemaController {
+
     @RequestMapping(value = "/valida", method = RequestMethod.GET)
     public String create(ModelMap map,
-            @PathVariable(value="cursoAbiertoId") String id
-            )
+        @PathVariable(value="grupoId") Integer grupoId)
     {
-        map.addAttribute("course_name", "Diseño de Software");
+        String nombreAsignatura = "";
+
+        map.addAttribute("nombreAsignatura", nombreAsignatura);
         List<Tema> temas = new ArrayList<Tema>();
         temas.add((new Tema(1, "Intro a la programacion", 1, 1)));
         temas.add((new Tema(2, "Variables", 1, 1)));

@@ -16,6 +16,7 @@
 	<title>Registrar Avance de Syllabus</title>
 </head>
 <body id="app">
+	<%@ include file="/views/layout/header.jsp" %>
 
 	<%@ include file="/views/layout/docente-sidebar.jsp" %>
 

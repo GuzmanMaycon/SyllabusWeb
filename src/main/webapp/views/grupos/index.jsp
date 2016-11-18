@@ -51,9 +51,12 @@
 						<td>${row.numero}</td>
 						<td>
 							<c:if test="${esDocente}">
-								<a href="${pageContext.request.contextPath}/asignatura/${row.asignaturaAperturada.id}/avance" class="btn btn-primary">Registrar Avance</a>
+								<a href="${pageContext.request.contextPath}/asignatura/" class="btn btn-primary">Registrar Avance</a>
 							</c:if>
-							<a class="btn btn-default">Ver Avance</a>
+							<c:if test="${esAlumno}">
+								<a href="${pageContext.request.contextPath}/grupo/${row.id}/valida" class="btn btn-primary">Validar Avance</a>
+							</c:if>
+							<a href="${pageContext.request.contextPath}/grupo/${row.id}/syllabus/avance" class="btn btn-default">Ver Avance</a>
 						</td>
 					</tr>
 					</c:forEach>				

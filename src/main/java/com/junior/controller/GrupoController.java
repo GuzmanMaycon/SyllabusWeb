@@ -46,6 +46,7 @@ public class GrupoController {
         ArrayList<String> rolesArray = new ArrayList<String>();
         List<Grupo> grupos;
         Boolean esDocente = false;
+        Boolean esAlumno = false;
 
         for (GrantedAuthority rol : roles) {
             rolesArray.add(rol.getAuthority());
@@ -59,6 +60,7 @@ public class GrupoController {
             grupos = new ArrayList<Grupo>();
         } else if (rolesArray.contains("ROLE_ALUMNO")) {
             grupos = this.grupoDao.obtenerPorAlumno(usuario.getId());
+            esAlumno = true;
         } else {
             grupos = new ArrayList<Grupo>();
         }
@@ -69,6 +71,7 @@ public class GrupoController {
 
         map.addAttribute("lista", grupos);
         map.addAttribute("esDocente", esDocente);
+        map.addAttribute("esAlumno", esAlumno);
 
         return "grupos/index";
     }

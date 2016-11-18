@@ -32,6 +32,7 @@ public class AvanceTemaController {
     {
         String nombreAsignatura = this.asignaturaAperturadaDao.obtenerNombreDeAsignaturaPorId(asignaturaAperturadaid);
         map.addAttribute("nombreAsignatura", nombreAsignatura);
+
         List<Tema> temas = new ArrayList<Tema>();
         temas.add((new Tema(1, "Intro a la programacion", 1, 1)));
         temas.add((new Tema(2, "Variables", 1,1)));
