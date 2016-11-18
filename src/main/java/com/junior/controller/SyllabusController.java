@@ -1,5 +1,10 @@
 package com.junior.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -205,5 +210,57 @@ public class SyllabusController {
 
         // Redirigir al indice
         return "redirect:/asignaturas_del_ciclo/index";
+    }
+
+    @RequestMapping(value = "/editar/{syllabusId}", method = RequestMethod.GET)
+    public String edit(ModelMap model,
+        @PathVariable(value = "asignaturaAperturadaId") Integer asignaturaAperturadaid,
+        @PathVariable(value = "syllabusId") Integer syllabusId,
+        RedirectAttributes redirectAttrs)
+    {
+        Syllabus syllabus = new Syllabus();
+
+        // Obtener el nombre de la asignatura a partir del id de la asignatura aperturada
+        String nombreAsignatura = this.asignaturaAperturadaDao.obtenerNombreDeAsignaturaPorId(asignaturaAperturadaid);
+        // Verificar si la asignatura es valida
+        if (nombreAsignatura == null) {
+            // Agregar como data de sesion el mensaje de error
+            redirectAttrs.addFlashAttribute("mensajeError","Asignatura no encontrada en la Base de Datos");
+            // Redirigir indicando que el id de la asignatura aperturada no es correcta
+            return "redirect:/asignaturas_del_ciclo/index";
+        }
+        // Agregar al modelo el nombre de la asignatura
+        model.addAttribute("nombreAsignatura", nombreAsignatura);
+
+        ArrayList<Tema> temas = new ArrayList<Tema>();
+        temas.add(new Tema(1, "Tema", 1, 1));
+        temas.add(new Tema(2, "Tema 2", 1, 1));
+        temas.add(new Tema(3, "Tema 3", 2, 1));
+        temas.add(new Tema(4, "Tema 4", 1, 2));
+
+        syllabus.setTemas(temas);
+
+        /**
+         * El Key es la unidad y el Value son las semanas de dicha unidad
+         */
+        Map<Integer, List<Integer>> unidades = new HashMap<Integer, List<Integer>>();
+
+        for (Tema tema : syllabus.getTemas()) {
+            Integer semana = tema.getSemana();
+            Integer unidad = tema.getUnidad();
+            if (!unidades.containsKey(unidad)) {
+                unidades.put(unidad, new ArrayList<Integer>());
+                unidades.get(unidad).add(semana);
+            } else {
+                if (!unidades.get(unidad).contains(semana)) {
+                    unidades.get(unidad).add(semana);
+                }
+            }
+        }
+
+        model.addAttribute("syllabus", syllabus);
+        model.addAttribute("unidades", unidades);
+
+        return "syllabus/editar";
     }
 }
