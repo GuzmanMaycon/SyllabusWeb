@@ -227,18 +227,40 @@ create or replace PACKAGE          PAC_CURSOR is
  * FECHA MOD : 11/11/2016 2:53pm
  *--------------------------------------------------------------------------
  *     INFORMACI?:
- *     AUTOR: TAKESHI FARRO HINOSHITA
+ *     AUTOR: GIANCARLOS CLAUDIO ZAVALETA
  *---------------------------------------------------------------------------*/
   
   procedure RET_USUARIO_X_EMAIL(
     EMAIL    IN     USUARIO.CORREO%TYPE,
     O_CURSOR IN OUT G_CURSOR
   );
-  
+
+/*--------------------------------------------------------------------------
+ * NOMBRE    : RET_TEMAS_X_SYLLABUS
+ * OBJETIVO  : Retorna los temas del syllabus
+ * FECHA MOD : 11/11/2016 2:53pm
+ *--------------------------------------------------------------------------
+ *     INFORMACI?:
+ *     AUTOR: TAKESHI FARRO HINOSHITA
+ *---------------------------------------------------------------------------*/  
    procedure RET_TEMAS_X_SYLLABUS(
       p_id_syllabus IN syllabus.id_syllabus%TYPE,
       O_CURSOR      IN OUT G_CURSOR
    );
+
+/*--------------------------------------------------------------------------
+ * NOMBRE    : LISTAR_GRUPOS_X_ALUMNO
+ * OBJETIVO  : Lista los grupos en los que se encuentra matriculado el alumno
+ * FECHA MOD : 11/11/2016 2:53pm
+ *--------------------------------------------------------------------------
+ *     INFORMACI?:
+ *     AUTOR: GIANCARLOS CLAUDIO ZAVALETA
+ *---------------------------------------------------------------------------*/     
+   procedure LISTAR_GRUPOS_X_ALUMNO(
+      p_IDPeriodo in periodo.id_periodo%type,
+      cod         in matricula.id_alumno%type,
+      o_cursor    in out g_cursor
+	);
 
 end PAC_CURSOR;
 /
@@ -335,7 +357,22 @@ create or replace PACKAGE BODY PAC_CURSOR IS
          SELECT *
          FROM tema	
          WHERE tema.id_syllabus = p_id_syllabus;
-   END RET_TEMAS_X_SYLLABUS;		 
+   END RET_TEMAS_X_SYLLABUS;	
+
+   procedure LISTAR_GRUPOS_X_ALUMNO(
+      p_IDPeriodo in periodo.id_periodo%type,
+      cod      in matricula.id_alumno%type,
+      o_cursor in out g_cursor) is
+      begin
+         OPEN O_CURSOR FOR
+         SELECT GRUPO.ID_GRUPO AS ID_GRUPO, GRUPO.NUMERO AS GRUPO_NUMERO, ASIGNATURA.NOMBRE AS ASIG_NOMBRE
+         FROM GRUPO
+         JOIN ASIGNATURA_APERTURADA ON ASIGNATURA_APERTURADA.ID_ASIG_APERTURADA = GRUPO.ID_ASIG_APERTURADA
+         JOIN ASIGNATURA ON ASIGNATURA.ID_ASIGNATURA = ASIGNATURA_APERTURADA.ID_ASIGNATURA
+         JOIN MATRICULA ON MATRICULA.ID_GRUPO = GRUPO.ID_GRUPO
+         WHERE ASIGNATURA_APERTURADA.ID_PERIODO = p_IDPeriodo AND MATRICULA.ID_ALUMNO = cod;
+    
+   END LISTAR_GRUPOS_X_ALUMNO;   
          	  
 END PAC_CURSOR;
 /
