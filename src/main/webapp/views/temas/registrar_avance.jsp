@@ -27,7 +27,7 @@
 		</c:if>
 		<form method="POST">
 		<div class="row">
-			<h2>Registro de avance del Curso de ${ course_name }</h2>
+			<h2>Registro de avance del Curso de ${ nombreAsignatura }</h2>
 		</div>
 
 		<div class="row">
