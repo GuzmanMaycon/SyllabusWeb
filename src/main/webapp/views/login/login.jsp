@@ -5,7 +5,9 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
   <%@ include file="/views/layout/admin-head.jsp" %>
-  <spring:url value="/resources/img/main_image.png" var="mainImg" />
+  <spring:url value="/resources/img/main_image.jpg" var="mainImg" />
+  <spring:url value="/resources/img/main_image_2.jpg" var="mainImg2" />
+
   <title>Login</title>
   <style>
     #form-login {
@@ -36,10 +38,11 @@
     <div class="row">
       <div class="hidden-xs hidden-sm col-md-7">
         <img id="img-main" src="${mainImg}">
+        <img id="img-main-2" src="${mainImg2}">
       </div>
       <div class="col-xs-12 col-md-5" id="form-login">
         <div class="hidden-xs hidden-sm col-md-2">
-          <img id="img-main" src="${mainImg}">
+          <i class="fa fa-users fa-4x" style="line-height: 100px;"></i>
         </div>
         <div class="col-sm-offset-3 col-md-offset-0 col-sm-6 col-md-10">
           <form class="form-horizontal" name='loginForm' action="<c:url value='/j_spring_security_check' />" method='POST'>
