@@ -49,7 +49,12 @@
 					<tr>						 
 						<td>${row.asignaturaAperturada.asignatura.nombre}</td>
 						<td>${row.numero}</td>
-						<td>%</td>
+						<td>
+							<c:if test="${esDocente}">
+								<a href="${pageContext.request.contextPath}/asignatura/${row.asignaturaAperturada.id}/avance" class="btn btn-primary">Registrar Avance</a>
+							</c:if>
+							<a class="btn btn-default">Ver Avance</a>
+						</td>
 					</tr>
 					</c:forEach>				
 				</tbody>

@@ -14,7 +14,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.junior.to.Tema;
 
 @Controller
-@RequestMapping("/asignatura/{asignaturaAperturadaId}/semana/{semana}")
+@RequestMapping("/asignatura/{asignaturaAperturadaId}")
 public class AvanceTemaController {
 
     @RequestMapping(value = "/avance", method = RequestMethod.GET)

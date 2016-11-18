@@ -45,6 +45,7 @@ public class GrupoController {
         Collection<GrantedAuthority> roles = (Collection<GrantedAuthority>) SecurityContextHolder.getContext().getAuthentication().getAuthorities();
         ArrayList<String> rolesArray = new ArrayList<String>();
         List<Grupo> grupos;
+        Boolean esDocente = false;
 
         for (GrantedAuthority rol : roles) {
             rolesArray.add(rol.getAuthority());
@@ -62,7 +63,12 @@ public class GrupoController {
             grupos = new ArrayList<Grupo>();
         }
 
+        if (rolesArray.contains("ROLE_DOCENTE")) {
+            esDocente = true;
+        }
+
         map.addAttribute("lista", grupos);
+        map.addAttribute("esDocente", esDocente);
 
         return "grupos/index";
     }
