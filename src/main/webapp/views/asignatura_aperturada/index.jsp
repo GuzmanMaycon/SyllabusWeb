@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>  
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -53,7 +53,7 @@
 							<i class="fa fa-check" aria-hidden="true"></i>
 						</c:when>
 						<c:otherwise>
-							<a class="btn btn-default" >Editar Syllabus</a>
+							<a class="btn btn-default" href="${pageContext.request.contextPath}/asignatura/${row.id}/syllabus/editar/${row.syllabus.id}" >Editar Syllabus</a>
 						</c:otherwise>
 						</c:choose>
 					</tr>
