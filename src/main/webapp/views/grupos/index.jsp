@@ -29,10 +29,13 @@
 		</div>
 		</c:if>
 		<div class="row">
+		  <div class="col-xs-12">
 			<h2>Lista de Grupos del ciclo ${periodoActual}</h2>
+		  </div>
 		</div>
 		
 		<div class="row">
+		  <div class="col-xs-12">
 			<table class="table">
 				<thead>
 					<tr>
@@ -51,6 +54,7 @@
 					</c:forEach>				
 				</tbody>
 			</table>
+		  </div>
 		</div>
 	</div>
 </body>

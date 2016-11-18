@@ -61,7 +61,7 @@ h3 {
         text-align: left;
     }
 }
-.content {  }
+.content { margin: 0 15px; }
 @media(min-width:768px) {
     .sidebar {
         z-index: 1;

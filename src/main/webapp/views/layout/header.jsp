@@ -1,15 +1,14 @@
 <spring:url value="/resources/img/logo.png" var="logoImg" />
+<spring:url value="/resources/img/logo-movil.png" var="logoMovilImg" />
 <style type="text/css">
-.navbar {
-    margin-bottom: 0px;
-    min-height: 90px;
+.navbar { margin-bottom: 0px; min-height: 90px; }
+#img-logo { width: 80%; display: none; }
+#img-logo-movil { width: 90%; display: block; }
+@media(min-width: 400px) {
+	#img-logo { display: block; }
+	#img-logo-movil { display: none; }
 }
-#img-logo {
-	width: 80%;
-}
-#span-username {
-	line-height: 90px;
-}
+#span-username { line-height: 90px; }
 </style>
 
 <c:url value="/j_spring_security_logout" var="logoutUrl" />
@@ -37,7 +36,8 @@ function formSubmit() {
 
             <!-- Branding Image -->
             <a class="navbar-brand" href="#">
-                <img id="img-logo" src="${logoImg}">
+                <img id="img-logo" src="${logoImg}"/>
+                <img id="img-logo-movil" src="${logoMovilImg}"/>
             </a>
         </div>
 
