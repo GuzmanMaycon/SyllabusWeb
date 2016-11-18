@@ -34,7 +34,6 @@ public class UsuarioDao implements IUsuarioDao {
     @Override
     public Usuario obtenerUsuario(String correo)
     {
-        // TODO Auto-generated method stub
         Usuario usuario = new Usuario();
 
         String procedimientoAlmacenado = "{ call PAC_CURSOR.RET_USUARIO_X_EMAIL(?, ?)}";
@@ -66,7 +65,6 @@ public class UsuarioDao implements IUsuarioDao {
             }
         }
 
-        // TODO Auto-generated method stub
         return usuario;
     }
 

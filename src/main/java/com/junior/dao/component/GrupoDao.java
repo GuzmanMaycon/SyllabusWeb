@@ -77,7 +77,7 @@ public class GrupoDao implements IGrupoDao {
     public List<Grupo> obtenerPorAlumno(Integer codigo) {
         List<Grupo> grupos = new ArrayList<Grupo>();
 
-        String procedimientoAlmacenado = "{ call PAC_CURSOR_LISTAR_GRUPOS.LISTAR_GRUPOS_X_ALUMNO(?, ?, ?)}";
+        String procedimientoAlmacenado = "{ call PAC_CURSOR.LISTAR_GRUPOS_X_ALUMNO(?, ?, ?)}";
 
         Connection cn = this.db.getConnection();
 
