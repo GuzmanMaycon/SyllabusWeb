@@ -220,6 +220,25 @@ create or replace PACKAGE          PAC_CURSOR is
      p_IDPeriodo IN periodo.id_periodo%TYPE,
      o_cursor    IN OUT g_cursor
   );
+ 
+/*--------------------------------------------------------------------------
+ * NOMBRE    : RET_USUARIO_X_EMAIL
+ * OBJETIVO  : Retorna la informacion del Usuario de acuerdo a su email
+ * FECHA MOD : 11/11/2016 2:53pm
+ *--------------------------------------------------------------------------
+ *     INFORMACI?:
+ *     AUTOR: TAKESHI FARRO HINOSHITA
+ *---------------------------------------------------------------------------*/
+  
+  procedure RET_USUARIO_X_EMAIL(
+    EMAIL    IN     USUARIO.CORREO%TYPE,
+    O_CURSOR IN OUT G_CURSOR
+  );
+  
+   procedure RET_TEMAS_X_SYLLABUS(
+      p_id_syllabus IN syllabus.id_syllabus%TYPE,
+      O_CURSOR      IN OUT G_CURSOR
+   );
 
 end PAC_CURSOR;
 /
@@ -299,6 +318,24 @@ create or replace PACKAGE BODY PAC_CURSOR IS
         WHERE id_periodo = p_idperiodo;
 
     END LISTAR_GRUPOS;
-  
+	
+   procedure RET_USUARIO_X_EMAIL(
+      EMAIL    IN     USUARIO.CORREO%TYPE,
+      O_CURSOR IN OUT G_CURSOR) IS
+      BEGIN
+         OPEN O_CURSOR FOR
+         SELECT * FROM USUARIO WHERE USUARIO.CORREO = EMAIL;
+   END RET_USUARIO_X_EMAIL;
+   
+   procedure RET_TEMAS_X_SYLLABUS(
+      p_id_syllabus IN syllabus.id_syllabus%TYPE,
+      O_CURSOR      IN OUT G_CURSOR) IS
+      BEGIN
+         OPEN O_CURSOR FOR
+         SELECT *
+         FROM tema	
+         WHERE tema.id_syllabus = p_id_syllabus;
+   END RET_TEMAS_X_SYLLABUS;		 
+         	  
 END PAC_CURSOR;
 /
