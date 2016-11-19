@@ -15,6 +15,8 @@ import com.junior.to.Asignatura;
 import com.junior.to.AsignaturaAperturadaTO;
 import com.junior.to.Grupo;
 
+import oracle.jdbc.internal.OracleTypes;
+
 public class GrupoDao implements IGrupoDao {
 
     @Autowired
@@ -37,7 +39,7 @@ public class GrupoDao implements IGrupoDao {
         if (cn != null) {
             try {
                 CallableStatement proc = cn.prepareCall(procedimientoAlmacenado);
-                proc.registerOutParameter("o_cursor", oracle.jdbc.OracleTypes.CURSOR);
+                proc.registerOutParameter("o_cursor", OracleTypes.CURSOR);
                 proc.setInt("p_IDPeriodo", 6);
                 proc.execute();
 
@@ -82,7 +84,7 @@ public class GrupoDao implements IGrupoDao {
         if (cn != null) {
             try {
                 CallableStatement proc = cn.prepareCall(procedimientoAlmacenado);
-                proc.registerOutParameter("o_cursor", oracle.jdbc.OracleTypes.CURSOR);
+                proc.registerOutParameter("o_cursor", OracleTypes.CURSOR);
                 proc.setInt("p_IDPeriodo", 6);
                 proc.setInt("COD", codigo);
                 proc.execute();
@@ -129,7 +131,7 @@ public class GrupoDao implements IGrupoDao {
         if (cn != null) {
             try {
                 CallableStatement proc = cn.prepareCall(procedimientoAlmacenado);
-                proc.registerOutParameter("o_cursor", oracle.jdbc.OracleTypes.CURSOR);
+                proc.registerOutParameter("o_cursor", OracleTypes.CURSOR);
                 proc.setInt("p_IDPeriodo", 6);
                 proc.setInt("COD", codigo);
                 proc.execute();
