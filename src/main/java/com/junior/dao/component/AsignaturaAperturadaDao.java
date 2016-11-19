@@ -103,6 +103,7 @@ public class AsignaturaAperturadaDao implements IAsignaturaAperturadaDao{
 
                     Syllabus syllabus = new Syllabus();
                     syllabus.setEstado(rs.getString("ESTADO_SYLLABUS"));
+                    syllabus.setId(rs.getInt("ID_SYLLABUS"));
 
                     asignaturaAperturada.setId(rs.getInt("ID_ASIG_APERTURADA"));
                     asignaturaAperturada.setAsignatura(asignatura);
