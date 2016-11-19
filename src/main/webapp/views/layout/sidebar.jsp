@@ -13,12 +13,12 @@
     	<%-- INICIO ROLE ADMIN --%>
 		<c:if test="${ authority.authority == 'ROLE_ADMIN' }">
         <li>
-            <a class="sidebar-link" href="#">
+            <a class="sidebar-link" href="${basePath}/coordinador-asignar/index" id="coordinador-asignar">
                 Asignar Coordinador
             </a>
         </li>
         <li>
-            <a class="sidebar-link" href="#">
+            <a class="sidebar-link" href="${basePath}/validar-syllabus/index" id="validar-syllabus">
                 Validar Syllabus
             </a>
         </li>

@@ -47,9 +47,9 @@
 				<tbody>
 					<c:forEach var="row" items="${lista}">
 					<tr>						 
-						<td>${row.asignaturaAperturada.asignatura.nombre}</td>
-						<td>${row.numero}</td>
-						<td>
+						<td class="text-center">${row.asignaturaAperturada.asignatura.nombre}</td>
+						<td class="text-center">${row.numero}</td>
+						<td class="text-center">
 							<c:forEach items="${authorities}" var="authority" varStatus="vs">
 							<c:if test="${ authority.authority == 'ROLE_DOCENTE' }">
 								<a href="${basePath}/asignatura/" class="btn btn-primary">Registrar Avance</a>

@@ -1,0 +1,21 @@
+.input-group .form-control{
+		height: auto !important;
+	}
+.modal-dialog {
+    width: 600px;
+    margin: 65px auto;
+}
+.modal-footer {
+	text-align: center !important;
+}
+.input-group > .input-group-btn:last-child > .selectpicker {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.input-group > .input-group-btn:first-child > .selectpicker {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+/*# sourceMappingURL=coordinador.css.map */
