@@ -140,6 +140,69 @@ BEGIN
 END Reg_Syllabus;
 /
 
+create or replace PROCEDURE EDITAR_REF_BIBLIO
+/*---------------------------------------------------------------------------*/
+/* Nombre    : EDITAR_REF_BIBLIO       		                             */
+/* Objetivo  : Edita un registro de la tabla REFERENCIA_BIBLIOGRAFICA      */
+/*---------------------------------------------------------------------------*/
+/*     Informacion:                                                          */
+/*     Autor: Lucero Liza Puican                                            */
+/*---------------------------------------------------------------------------*/
+
+   (p_IDReferencia      referencia_bibliografica.id_referencia%type,
+    p_Titulo		        referencia_bibliografica.TITULO%TYPE,
+    p_Autor		          referencia_bibliografica.AUTOR%TYPE,
+    p_AnioPublicacion	  referencia_bibliografica.ANIO_PUBLICACION%TYPE,
+    p_LugarPublicacion	referencia_bibliografica.LUGAR_PUBLICACION%TYPE,
+    p_Editorial		      referencia_bibliografica.EDITORIAL%TYPE,
+    p_ISBN              referencia_bibliografica.ISBN%TYPE,
+    p_IDSyllabus		    referencia_bibliografica.ID_SYLLABUS%TYPE) AUTHID CURRENT_USER AS
+
+BEGIN
+    UPDATE dbsegsyl.referencia_bibliografica
+       SET titulo = p_Titulo,
+           autor = p_Autor,
+           anio_publicacion = p_AnioPublicacion, 
+           lugar_publicacion = p_LugarPublicacion,
+           editorial = p_Editorial,
+           isbn = p_ISBN
+		WHERE  id_referencia = p_IDReferencia
+      AND  id_syllabus = p_IDSyllabus;
+
+END EDITAR_REF_BIBLIO;
+/
+
+create or replace PROCEDURE EDITAR_SYLLABUS
+/*------------------------------------------------------------------------*/
+/* Nombre    : EDITAR_SYLLABUS             		                            */
+/* Objetivo  : Edita un registro de la tabla SYLLABUS                     */
+/*------------------------------------------------------------------------*/
+/*     Informacion:                                                       */
+/*     Autor: Lucero Liza Puican                                          */
+/*------------------------------------------------------------------------*/
+   (p_IDSyllabus            IN dbsegsyl.syllabus.id_syllabus%TYPE,
+    p_DescEstado            IN dbsegsyl.estado_syllabus.descripcion%TYPE, 
+    p_FechaEntrega          IN dbsegsyl.syllabus.fecha_entrega%TYPE,
+    p_FechaAprobacion       IN dbsegsyl.syllabus.fecha_aprobacion%TYPE,
+    p_IDAsigAperturada      IN dbsegsyl.syllabus.id_asig_aperturada%TYPE 
+)AUTHID CURRENT_USER
+AS
+    v_IDEstadoSyll dbsegsyl.estado_syllabus.id_estado_syllabus%type;
+BEGIN
+      SELECT id_estado_syllabus 
+        INTO v_IDEstadoSyll 
+        FROM dbsegsyl.estado_syllabus
+       where descripcion = p_DescEstado;
+       
+       UPDATE dbsegsyl.syllabus 
+          SET id_estado        = v_IDEstadoSyll,
+              fecha_entrega    = p_FechaEntrega,
+              fecha_aprobacion = p_FechaAprobacion
+        WHERE id_syllabus      = p_IDSyllabus
+          AND id_asig_aperturada = p_IDAsigAperturada;
+END EDITAR_SYLLABUS;
+/
+
     --FECHA ULTIMA MODIFICACION: 11/11/2016 14:45PM
             -- Verificar procedures de LISTAR y BUSCAR
             -- Definir parametros de salida de Listar_Syllabus_x_EAP
@@ -271,6 +334,19 @@ create or replace PACKAGE          PAC_CURSOR is
  *     AUTOR: TAKESHI FARRO HINOSHITA
  *---------------------------------------------------------------------------*/
    procedure RET_TEMAS_X_SYLLABUS(
+      p_id_syllabus IN syllabus.id_syllabus%TYPE,
+      O_CURSOR      IN OUT G_CURSOR
+   );
+
+/*--------------------------------------------------------------------------
+ * NOMBRE    : RET_BIBLIOGRAFIA_X_SYLLABUS
+ * OBJETIVO  : Retorna las referencias bibliograficas del syllabus
+ * FECHA MOD : 19/11/2016 1:19am
+ *--------------------------------------------------------------------------
+ *     INFORMACI?:
+ *     AUTOR: Lucero Liza Puican
+ *---------------------------------------------------------------------------*/
+   procedure RET_BIBLIOGRAFIA_X_SYLLABUS(
       p_id_syllabus IN syllabus.id_syllabus%TYPE,
       O_CURSOR      IN OUT G_CURSOR
    );
@@ -412,6 +488,16 @@ create or replace PACKAGE BODY PAC_CURSOR IS
          FROM tema
          WHERE tema.id_syllabus = p_id_syllabus;
    END RET_TEMAS_X_SYLLABUS;
+
+   procedure RET_BIBLIOGRAFIA_X_SYLLABUS(
+      p_id_syllabus IN syllabus.id_syllabus%TYPE,
+      O_CURSOR      IN OUT G_CURSOR) IS
+      BEGIN
+         OPEN O_CURSOR FOR
+         SELECT *
+           FROM dbsegsyl.referencia_bibliografica
+          WHERE referencia_bibliografica.id_syllabus = p_id_syllabus;
+   END RET_BIBLIOGRAFIA_X_SYLLABUS;
 
    procedure LISTAR_GRUPOS_X_ALUMNO(
       p_IDPeriodo in periodo.id_periodo%type,
