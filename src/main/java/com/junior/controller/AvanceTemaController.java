@@ -3,6 +3,7 @@ package com.junior.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,19 +12,27 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.junior.dao.design.IAsignaturaAperturadaDao;
 import com.junior.to.Tema;
 
 @Controller
-@RequestMapping("/asignatura/{asignaturaAperturadaId}/semana/{semana}")
+@RequestMapping("/asignatura/{asignaturaAperturadaId}")
 public class AvanceTemaController {
 
-    @RequestMapping(value = "/avance", method = RequestMethod.GET)
-    public String create(ModelMap map,
-        @PathVariable(value="asignaturaAperturadaId") String id,
-        @PathVariable(value="semana") Integer semana
-            )
+    @Autowired
+    private IAsignaturaAperturadaDao asignaturaAperturadaDao; // Dao para asignaturas aperturadas
+
+    public void setAsignaturaAperturadaDao(IAsignaturaAperturadaDao asignaturaAperturadaDao)
     {
-        map.addAttribute("course_name", "Diseño de Software");
+        this.asignaturaAperturadaDao = asignaturaAperturadaDao;
+    }
+
+    @RequestMapping(value = "/avance", method = RequestMethod.GET)
+    public String create(ModelMap map, @PathVariable(value="asignaturaAperturadaId") Integer asignaturaAperturadaid)
+    {
+        String nombreAsignatura = this.asignaturaAperturadaDao.obtenerNombreDeAsignaturaPorId(asignaturaAperturadaid);
+        map.addAttribute("nombreAsignatura", nombreAsignatura);
+
         List<Tema> temas = new ArrayList<Tema>();
         temas.add((new Tema(1, "Intro a la programacion", 1, 1)));
         temas.add((new Tema(2, "Variables", 1,1)));

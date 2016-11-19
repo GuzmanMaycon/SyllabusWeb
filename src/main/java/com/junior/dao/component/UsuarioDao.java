@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -34,8 +35,8 @@ public class UsuarioDao implements IUsuarioDao {
     @Override
     public Usuario obtenerUsuario(String correo)
     {
-        // TODO Auto-generated method stub
         Usuario usuario = new Usuario();
+        List<Rol> roles = new ArrayList<Rol>();
 
         String procedimientoAlmacenado = "{ call PAC_CURSOR.RET_USUARIO_X_EMAIL(?, ?)}";
 
@@ -54,6 +55,24 @@ public class UsuarioDao implements IUsuarioDao {
                     usuario.setCorreo(correo);
                     usuario.setContrasenia(rs.getString("PASSWORD"));
                     usuario.setId(rs.getInt("ID_USUARIO"));
+
+                    String procedimientoAlmacenado2 = "{ call PAC_CURSOR.RET_ROLES_X_USUARIO(?,?)}";
+                    CallableStatement proc2 = cn.prepareCall(procedimientoAlmacenado2);
+                    proc2.registerOutParameter("o_cursor", OracleTypes.CURSOR);
+                    proc2.setInt("p_id_usuario", usuario.getId());
+                    proc2.execute();
+
+                    rs = (ResultSet) proc2.getObject("o_cursor");
+
+                    while (rs.next()) {
+                        Rol rol = new Rol();
+
+                        rol.setNombre(rs.getString("NOMBRE_ROL"));
+                        rol.setId(rs.getInt("ID_ROL"));
+                        roles.add(rol);
+                    }
+
+                    usuario.setRoles(roles);
                 }
             } catch(SQLException ex) {
                 System.err.println(ex.getMessage());
@@ -66,7 +85,6 @@ public class UsuarioDao implements IUsuarioDao {
             }
         }
 
-        // TODO Auto-generated method stub
         return usuario;
     }
 
@@ -74,12 +92,10 @@ public class UsuarioDao implements IUsuarioDao {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException
     {
         Usuario usuario = this.obtenerUsuario(username);
-        // Obtener roles del usuario
-        ArrayList<Rol> roles = new ArrayList<Rol>();
         Collection<GrantedAuthority> accesos = new ArrayList<GrantedAuthority>();
         // Convertirlos en una coleccion de GrantedAuthority
         accesos.add(new SimpleGrantedAuthority("ROLE_USER"));
-        for (Rol rol : roles) {
+        for (Rol rol : usuario.getRoles()) {
             accesos.add(new SimpleGrantedAuthority(rol.getNombre()));
         }
 

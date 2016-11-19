@@ -1,5 +1,7 @@
 package com.junior.to;
 
+import java.util.List;
+
 public class Usuario {
 
     private Integer id;
@@ -18,7 +20,7 @@ public class Usuario {
 
     private String direccion;
 
-    private Rol rol;
+    private List<Rol> roles;
 
     public Usuario(
         Integer id,
@@ -29,7 +31,7 @@ public class Usuario {
         String contrasenia,
         String telefono,
         String direccion,
-        Rol rol
+        List<Rol> roles
             )
     {
         this.id = id;
@@ -40,7 +42,7 @@ public class Usuario {
         this.contrasenia = contrasenia;
         this.telefono = telefono;
         this.direccion = direccion;
-        this.rol = rol;
+        this.roles = roles;
     }
 
     public Usuario() {}
@@ -51,14 +53,6 @@ public class Usuario {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public Rol getRol() {
-        return rol;
-    }
-
-    public void setRol(Rol rol) {
-        this.rol = rol;
     }
 
     public String getCodigo()
@@ -130,4 +124,12 @@ public class Usuario {
     {
         this.direccion = direccion;
     }
+
+	public List<Rol> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(List<Rol> roles) {
+		this.roles = roles;
+	}
 }

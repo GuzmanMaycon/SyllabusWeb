@@ -9,7 +9,9 @@ import java.sql.Types;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.junior.conexion.IAccesoDB;
+import com.junior.dao.design.IBibliografiaDao;
 import com.junior.dao.design.ISyllabusDao;
+import com.junior.dao.design.ITemaDao;
 import com.junior.to.Bibliografia;
 import com.junior.to.EstadoSyllabus;
 import com.junior.to.Syllabus;
@@ -115,6 +117,58 @@ public class SyllabusDao implements ISyllabusDao {
         return "OK";
     }
 
+
+	@Override
+	public String editarSyllabus(Syllabus syllabus) {
+
+		//Parseo de java.util.date a java.sql.date
+		java.sql.Date auxFechaEntrega = new java.sql.Date(syllabus.getFechaEntrega().getTime());
+		java.sql.Date auxFechaAprobacion = new java.sql.Date(syllabus.getFechaEntrega().getTime());
+		
+		String rpta = null;
+		String procEditarSyllabus = "{CALL EDITAR_SYLLABUS(?,?,?,?,?)}";
+		Connection cn = db.getConnection();
+		
+		if(cn != null){
+			try{
+				CallableStatement cs = cn.prepareCall(procEditarSyllabus);
+				cs.setInt(1, syllabus.getId());
+				cs.setString(2, syllabus.getEstado() );
+				cs.setDate(3, auxFechaEntrega);
+				cs.setDate(4, auxFechaAprobacion);
+				cs.setInt(5, syllabus.getIdAsigAperturada());
+				
+				
+				//Editar Bibliografia
+				IBibliografiaDao bibliografiaDAO = new BibliografiaDao();
+				for(Bibliografia libro : syllabus.getBibliografia()){
+					bibliografiaDAO.editarBibliografia(libro, syllabus.getId());
+				}	
+				/*
+				//Editar Temas
+				ITemaDao temaDAO = new TemaDao();
+				for(Tema tema : syllabus.getTemas()){
+					temaDAO.editarTema(tema, syllabus.getId());
+				}	
+				*/
+				int actualizo = cs.executeUpdate();
+				
+				if(actualizo == 0){
+						rpta = "ERROR";
+				}
+			}catch(SQLException ex){
+				rpta = ex.getMessage();
+			}finally{
+				try{
+					cn.close();
+				}catch(SQLException e){
+					rpta = e.getMessage();
+				}
+			}	
+		}
+		return rpta;
+	}    
+    
     @Override
     /**
      * Obtiene el estado del Syllabus de la asignatura aperturada

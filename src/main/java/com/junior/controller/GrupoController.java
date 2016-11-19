@@ -45,6 +45,8 @@ public class GrupoController {
         Collection<GrantedAuthority> roles = (Collection<GrantedAuthority>) SecurityContextHolder.getContext().getAuthentication().getAuthorities();
         ArrayList<String> rolesArray = new ArrayList<String>();
         List<Grupo> grupos;
+        Boolean esDocente = false;
+        Boolean esAlumno = false;
 
         for (GrantedAuthority rol : roles) {
             rolesArray.add(rol.getAuthority());
@@ -55,15 +57,21 @@ public class GrupoController {
         } else if (rolesArray.contains("ROLE_DIRECTOR")) {
             grupos = new ArrayList<Grupo>();
         } else if (rolesArray.contains("ROLE_DOCENTE")) {
-        	//grupos = new ArrayList<Grupo>();
-        	grupos = this.grupoDao.obtenerPorDocente(usuario.getId()); 
+            grupos = this.grupoDao.obtenerPorDocente(usuario.getId());
         } else if (rolesArray.contains("ROLE_ALUMNO")) {
             grupos = this.grupoDao.obtenerPorAlumno(usuario.getId());
+            esAlumno = true;
         } else {
             grupos = new ArrayList<Grupo>();
         }
 
+        if (rolesArray.contains("ROLE_DOCENTE")) {
+            esDocente = true;
+        }
+
         map.addAttribute("lista", grupos);
+        map.addAttribute("esDocente", esDocente);
+        map.addAttribute("esAlumno", esAlumno);
 
         return "grupos/index";
     }
