@@ -21,14 +21,6 @@
       <ref bean="accesoOracleLocalImpl"/>
     </property>
   </bean>
-
-  <!-- Dao para Syllabus -->
-  <bean id="syllabusDaoImpl"
-        class="com.junior.dao.component.SyllabusDao">
-    <property name="db">
-      <ref bean="accesoOracleLocalImpl"/>
-    </property>
-  </bean>
   
   <!-- Dao para Temas -->
   <bean id="temaDaoImpl"
@@ -43,6 +35,20 @@
         class="com.junior.dao.component.BibliografiaDao">
     <property name="db">
       <ref bean="accesoOracleLocalImpl"/>
+    </property>
+  </bean>
+
+  <!-- Dao para Syllabus -->
+  <bean id="syllabusDaoImpl"
+        class="com.junior.dao.component.SyllabusDao">
+    <property name="db">
+      <ref bean="accesoOracleLocalImpl"/>
+    </property>
+    <property name="temaDao">
+      <ref local="temaDaoImpl"/>
+    </property>
+    <property name="bibliografiaDao">
+      <ref local="bibliografiaDaoImpl"/>
     </property>
   </bean>
 

@@ -28,11 +28,24 @@ import oracle.jdbc.OracleTypes;
 public class SyllabusDao implements ISyllabusDao {
 
     @Autowired
-    protected IAccesoDB db;
-
     public void setDb(IAccesoDB db)
     {
         this.db = db;
+    }
+    // SE AGREGARON LOS AUTOWIRED
+    @Autowired    
+    protected IAccesoDB db;
+    @Autowired
+    private ITemaDao temaDao;
+    @Autowired
+    private IBibliografiaDao bibliografiaDao;
+
+    public void setTemaDao(ITemaDao temaDao){
+    	this.temaDao = temaDao;
+    }
+    
+    public void setBibliografiaDao(IBibliografiaDao bibliografiaDao){
+    	this.bibliografiaDao = bibliografiaDao;
     }
 
     @Override
@@ -212,18 +225,14 @@ public class SyllabusDao implements ISyllabusDao {
     @Override
 	public Syllabus obtenerSyllabus(Integer syllabusId) {
 		Syllabus syllabus = new Syllabus();
-		List<Tema> temas = new ArrayList<Tema>();
-		List<Bibliografia> bibliografia = new ArrayList<Bibliografia>();
 		
-		String procedimientoAlmacenado1 = "{ call PAC_CURSOR.RET_SYLLABUS(?, ?)}";
-		String procedimientoAlmacenado2 = "{ call PAC_CURSOR.RET_TEMAS_X_SYLLABUS(?, ?)}";
-		String procedimientoAlmacenado3 = "{ call PAC_CURSOR.RET_BIBLIOGRAFIA_X_SYLLABUS(?, ?)}";
+		String procedimientoAlmacenado = "{ call PAC_CURSOR.RET_SYLLABUS(?, ?)}";
 		
 		Connection cn = this.db.getConnection();
 		
 		if (cn != null) {
             try {
-                CallableStatement proc = cn.prepareCall(procedimientoAlmacenado1);
+                CallableStatement proc = cn.prepareCall(procedimientoAlmacenado);
                 proc.registerOutParameter("O_CURSOR", OracleTypes.CURSOR);
 
                 proc.setInt("p_id_syllabus", syllabusId);
@@ -239,11 +248,8 @@ public class SyllabusDao implements ISyllabusDao {
                     syllabus.setFechaAprobacion(rs.getDate("FECHA_APROBACION"));
                     syllabus.setIdAsigAperturada(rs.getInt("ID_ASIG_APERTURADA"));
                     
-                    proc = cn.prepareCall(procedimientoAlmacenado2);
-                    proc.registerOutParameter("O_CURSOR", OracleTypes.CURSOR);
-
-                    proc.setInt("p_id_syllabus", syllabusId);
-                    proc.execute();
+                    syllabus.setTemas(this.temaDao.obtenerTodos(syllabus));
+                    syllabus.setBibliografia(this.bibliografiaDao.obtenerPorSyllabus(syllabus));
                 }
                 
             } catch(SQLException ex) {

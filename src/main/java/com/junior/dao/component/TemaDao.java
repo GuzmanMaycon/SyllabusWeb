@@ -59,11 +59,6 @@ public class TemaDao implements ITemaDao {
 
 					temas.add(tema);
 
-					System.out.println("Tema ID" + tema.getId());
-					System.out.println("Tema DESCRIPCION" + tema.getDescripcion());
-					System.out.println("Tema SEMANA" + tema.getSemana());
-					System.out.println("Tema UNIDAD" + tema.getUnidad());
-
 				}
 			} catch (SQLException ex) {
 				System.err.println(ex.getMessage());

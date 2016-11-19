@@ -96,17 +96,8 @@ public class BibliografiaDao implements IBibliografiaDao {
                     Syllabus syll = new Syllabus();                   
                     syll.setId(rs.getInt("ID_SYLLABUS"));
                                        
-                    bibliografia.add(libro);                                                         
-                    
-                    System.out.println("Libro ID: " + libro.getId());
-                    System.out.println("Titulo: " + libro.getTitulo());  
-                    System.out.println("Autor: " + libro.getAutor());
-                    System.out.println("Año Publicacion:" + libro.getAnioPublicacion());
-                    System.out.println("Lugar Publicacion: " + libro.getLugarPublicacion());
-                    System.out.println("Editorial: "+ libro.getEditorial());
-                    System.out.println("ISBN:" + libro.getIsbn());
-                    System.out.println("ID_SYLLABUS: "+ syll.getId());
-                                       
+                    bibliografia.add(libro);
+
                 }
             } catch(SQLException ex) {
                 System.err.println(ex.getMessage());
