@@ -5,6 +5,8 @@ public class TipoClase {
     private Integer id;
 
     private String descripcion;
+    
+    public TipoClase(){}    
 
     public TipoClase(
             Integer id,
