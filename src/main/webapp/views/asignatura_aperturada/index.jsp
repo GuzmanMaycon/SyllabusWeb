@@ -12,7 +12,7 @@
 
 	<%@ include file="/views/layout/header.jsp" %>
 
-	<%@ include file="/views/layout/coordinador-sidebar.jsp" %>
+	<%@ include file="/views/layout/sidebar.jsp" %>
 
 	<div class="content">
 		<c:if test="${not empty mensajeError}">

@@ -50,6 +50,12 @@
     </dependency>
 
     <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-taglibs</artifactId>
+      <version>${spring.security.version}</version>
+    </dependency>
+
+    <dependency>
       <groupId>jstl</groupId>
       <artifactId>jstl</artifactId>
       <version>1.2</version>
@@ -65,12 +71,6 @@
       <groupId>org.json</groupId>
       <artifactId>json</artifactId>
       <version>20090211</version>
-    </dependency>
-
-    <dependency><!--  mail server -->
-      <groupId>com.junior</groupId>
-      <artifactId>mail-server</artifactId>
-      <version>0.0.1</version>
     </dependency>
   </dependencies>
 

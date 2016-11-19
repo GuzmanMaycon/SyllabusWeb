@@ -16,7 +16,7 @@
 <body id="app">
 	<%@ include file="/views/layout/header.jsp" %>
 
-    <%@ include file="/views/layout/coordinador-sidebar.jsp" %>
+    <%@ include file="/views/layout/sidebar.jsp" %>
 
     <div class="content">
         <div v-show="!see_preview">
