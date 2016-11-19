@@ -12,12 +12,12 @@ CREATE OR REPLACE FUNCTION DBSEGSYL.DEVUELVE_NOMBRE_ASIG_X_GRUPO(
 RETURN VARCHAR2 IS vnombre VARCHAR2(200);
 BEGIN
 		SELECT A.NOMBRE AS asig_nombre
-      into vnombre 
-      FROM dbsegsyl.grupo g 
+      into vnombre
+      FROM dbsegsyl.grupo g
       JOIN dbsegsyl.asignatura_aperturada ap ON (ap.ID_ASIG_APERTURADA = g.ID_ASIG_APERTURADA)
       JOIN dbsegsyl.asignatura A ON (A.ID_ASIGNATURA = ap.ID_ASIGNATURA)
      WHERE g.ID_GRUPO = cod;
-     
+
 	RETURN vnombre;
 EXCEPTION
 	WHEN OTHERS THEN
@@ -197,7 +197,7 @@ create or replace PACKAGE          PAC_CURSOR is
    *     INFORMACI?:
    *     AUTOR: GIANCARLOS CLAUDIO ZAVALETA
    *---------------------------------------------------------------------------*/
-   
+
   procedure LISTAR_TEMAS_X_ASIG_APER(
     ASIG_APER_ID     in ASIGNATURA_APERTURADA.ID_ASIG_APERTURADA%TYPE,
     SEM              in TEMA.SEMANA%TYPE,
@@ -212,7 +212,7 @@ create or replace PACKAGE          PAC_CURSOR is
    *     INFORMACI?:
    *     AUTOR: GIANCARLOS CLAUDIO ZAVALETA
    *---------------------------------------------------------------------------*/
-   
+
   procedure RET_ASIG_X_ASIG_APER(
     ASIG_APER_ID in ASIGNATURA_APERTURADA.ID_ASIG_APERTURADA%TYPE,
     O_CURSOR         in out g_cursor
@@ -220,14 +220,14 @@ create or replace PACKAGE          PAC_CURSOR is
 
  /*--------------------------------------------------------------------------
    * NOMBRE    : LISTAR_ASIG_AP_X_ALUMNO
-   * OBJETIVO  : Retorna las asignaturas aperturadas en las que se encuentra 
+   * OBJETIVO  : Retorna las asignaturas aperturadas en las que se encuentra
                  matriculado el alumno
    * FECHA MOD : 13/11/2016 10:30pm
    *--------------------------------------------------------------------------
    *     INFORMACI?:
    *     AUTOR: GIANCARLOS CLAUDIO ZAVALETA
    *---------------------------------------------------------------------------*/
-   
+
   procedure LISTAR_ASIG_AP_X_ALUMNO(
     ID_ALUM  IN     ALUMNO.ID_USUARIO%TYPE,
     PERIOD   IN     PERIODO.ID_PERIODO%TYPE,
@@ -242,12 +242,12 @@ create or replace PACKAGE          PAC_CURSOR is
  *     INFORMACI?:
  *     AUTOR: TAKESHI FARRO HINOSHITA
  *---------------------------------------------------------------------------*/
- 
+
   procedure LISTAR_GRUPOS(
      p_IDPeriodo IN periodo.id_periodo%TYPE,
      o_cursor    IN OUT g_cursor
   );
- 
+
 /*--------------------------------------------------------------------------
  * NOMBRE    : RET_USUARIO_X_EMAIL
  * OBJETIVO  : Retorna la informacion del Usuario de acuerdo a su email
@@ -256,7 +256,7 @@ create or replace PACKAGE          PAC_CURSOR is
  *     INFORMACI?:
  *     AUTOR: GIANCARLOS CLAUDIO ZAVALETA
  *---------------------------------------------------------------------------*/
-  
+
   procedure RET_USUARIO_X_EMAIL(
     EMAIL    IN     USUARIO.CORREO%TYPE,
     O_CURSOR IN OUT G_CURSOR
@@ -265,11 +265,11 @@ create or replace PACKAGE          PAC_CURSOR is
 /*--------------------------------------------------------------------------
  * NOMBRE    : RET_TEMAS_X_SYLLABUS
  * OBJETIVO  : Retorna los temas del syllabus
- * FECHA MOD : 11/11/2016 2:53pm
+ * FECHA MOD : 18/11/2016 4:30pm
  *--------------------------------------------------------------------------
  *     INFORMACI?:
  *     AUTOR: TAKESHI FARRO HINOSHITA
- *---------------------------------------------------------------------------*/  
+ *---------------------------------------------------------------------------*/
    procedure RET_TEMAS_X_SYLLABUS(
       p_id_syllabus IN syllabus.id_syllabus%TYPE,
       O_CURSOR      IN OUT G_CURSOR
@@ -282,13 +282,13 @@ create or replace PACKAGE          PAC_CURSOR is
  *--------------------------------------------------------------------------
  *     INFORMACI?:
  *     AUTOR: GIANCARLOS CLAUDIO ZAVALETA
- *---------------------------------------------------------------------------*/     
+ *---------------------------------------------------------------------------*/
    procedure LISTAR_GRUPOS_X_ALUMNO(
       p_IDPeriodo in periodo.id_periodo%type,
       cod         in matricula.id_alumno%type,
       o_cursor    in out g_cursor
 	);
-  
+
 /*--------------------------------------------------------------------------
  * NOMBRE    : LISTAR_GRUPOS_X_DOCENTE
  * OBJETIVO  : Lista los grupos asignados al docente
@@ -296,11 +296,24 @@ create or replace PACKAGE          PAC_CURSOR is
  *--------------------------------------------------------------------------
  *     INFORMACI?:
  *     AUTOR: LUCERO LIZA PUICAN
- *---------------------------------------------------------------------------*/     
+ *---------------------------------------------------------------------------*/
    procedure LISTAR_GRUPOS_X_DOCENTE(
       p_IDPeriodo in periodo.id_periodo%type,
       cod         in docente.id_usuario%type,
       o_cursor    in out g_cursor
+	);
+
+/*--------------------------------------------------------------------------
+ * NOMBRE    : RET_ROLES_X_USUARIO
+ * OBJETIVO  : Retornar roles del usuario
+ * FECHA MOD : 18/11/2016 6:07pm
+ *--------------------------------------------------------------------------
+ *     INFORMACI?:
+ *     AUTOR: GIANCARLOS CLAUDIO ZAVALETA
+ *---------------------------------------------------------------------------*/
+	procedure RET_ROLES_X_USUARIO(
+	   p_id_usuario IN usuario.id_usuario%TYPE,
+       o_cursor    in out g_cursor
 	);
 
 end PAC_CURSOR;
@@ -314,8 +327,8 @@ create or replace PACKAGE BODY PAC_CURSOR IS
     BEGIN
       --Opening the cursor to return matched rows
       OPEN o_cursor FOR
-        SELECT asignatura_aperturada.id_asig_aperturada, 
-               asignatura.nombre AS asig_nombre, 
+        SELECT asignatura_aperturada.id_asig_aperturada,
+               asignatura.nombre AS asig_nombre,
                plan_de_estudio.nombre AS plan_nombre,
                estado_syllabus.descripcion AS estado_syllabus
         FROM asignatura_aperturada
@@ -328,12 +341,12 @@ create or replace PACKAGE BODY PAC_CURSOR IS
         ORDER BY asignatura.codigo;
 
   END LISTAR_ASIG_X_COORD;
-  
+
   PROCEDURE LISTAR_TEMAS_X_ASIG_APER(
     ASIG_APER_ID     in ASIGNATURA_APERTURADA.ID_ASIG_APERTURADA%TYPE,
     SEM              in TEMA.SEMANA%TYPE,
     O_CURSOR         in out g_cursor) IS
-    
+
   BEGIN
     OPEN o_cursor FOR
       SELECT TEMA.ID_TEMA, TEMA.DESCRIPCION
@@ -343,7 +356,7 @@ create or replace PACKAGE BODY PAC_CURSOR IS
       AND TEMA.SEMANA = SEM;
 
   END LISTAR_TEMAS_X_ASIG_APER;
-    
+
   PROCEDURE RET_ASIG_X_ASIG_APER(
     ASIG_APER_ID     in ASIGNATURA_APERTURADA.ID_ASIG_APERTURADA%TYPE,
     O_CURSOR         in out g_cursor) IS
@@ -359,7 +372,7 @@ create or replace PACKAGE BODY PAC_CURSOR IS
     ID_ALUM  IN     ALUMNO.ID_USUARIO%TYPE,
     PERIOD   IN     PERIODO.ID_PERIODO%TYPE,
     O_CURSOR IN OUT G_CURSOR) IS
-  BEGIN  
+  BEGIN
     OPEN O_CURSOR FOR
       SELECT ASIGNATURA_APERTURADA.ID_ASIG_APERTURADA, ASIGNATURA.NOMBRE AS ASIG_NOMBRE
       FROM ASIGNATURA_APERTURADA
@@ -368,7 +381,7 @@ create or replace PACKAGE BODY PAC_CURSOR IS
       JOIN MATRICULA ON GRUPO.ID_GRUPO = MATRICULA.ID_GRUPO
       WHERE MATRICULA.ID_ALUMNO = ID_ALUM AND ASIGNATURA_APERTURADA.ID_PERIODO = PERIOD;
   END LISTAR_ASIG_AP_X_ALUMNO;
-  
+
   procedure LISTAR_GRUPOS(
      p_IDPeriodo IN periodo.id_periodo%TYPE,
      o_cursor IN OUT g_cursor) IS
@@ -381,7 +394,7 @@ create or replace PACKAGE BODY PAC_CURSOR IS
         WHERE id_periodo = p_idperiodo;
 
     END LISTAR_GRUPOS;
-	
+
    procedure RET_USUARIO_X_EMAIL(
       EMAIL    IN     USUARIO.CORREO%TYPE,
       O_CURSOR IN OUT G_CURSOR) IS
@@ -389,16 +402,16 @@ create or replace PACKAGE BODY PAC_CURSOR IS
          OPEN O_CURSOR FOR
          SELECT * FROM USUARIO WHERE USUARIO.CORREO = EMAIL;
    END RET_USUARIO_X_EMAIL;
-   
+
    procedure RET_TEMAS_X_SYLLABUS(
       p_id_syllabus IN syllabus.id_syllabus%TYPE,
       O_CURSOR      IN OUT G_CURSOR) IS
       BEGIN
          OPEN O_CURSOR FOR
          SELECT *
-         FROM tema	
+         FROM tema
          WHERE tema.id_syllabus = p_id_syllabus;
-   END RET_TEMAS_X_SYLLABUS;	
+   END RET_TEMAS_X_SYLLABUS;
 
    procedure LISTAR_GRUPOS_X_ALUMNO(
       p_IDPeriodo in periodo.id_periodo%type,
@@ -412,9 +425,9 @@ create or replace PACKAGE BODY PAC_CURSOR IS
          JOIN ASIGNATURA ON ASIGNATURA.ID_ASIGNATURA = ASIGNATURA_APERTURADA.ID_ASIGNATURA
          JOIN MATRICULA ON MATRICULA.ID_GRUPO = GRUPO.ID_GRUPO
          WHERE ASIGNATURA_APERTURADA.ID_PERIODO = p_IDPeriodo AND MATRICULA.ID_ALUMNO = cod;
-    
-   END LISTAR_GRUPOS_X_ALUMNO;   
-   
+
+   END LISTAR_GRUPOS_X_ALUMNO;
+
    procedure LISTAR_GRUPOS_X_DOCENTE(
       p_IDPeriodo in periodo.id_periodo%type,
       cod         in docente.id_usuario%type,
@@ -422,15 +435,26 @@ create or replace PACKAGE BODY PAC_CURSOR IS
       begin
          OPEN O_CURSOR FOR
          SELECT DISTINCT GRUPO.ID_GRUPO AS ID_GRUPO, GRUPO.NUMERO AS GRUPO_NUMERO, ASIGNATURA.NOMBRE AS ASIG_NOMBRE
-           FROM DBSEGSYL.GRUPO 
+           FROM DBSEGSYL.GRUPO
            JOIN DBSEGSYL.ASIGNATURA_APERTURADA ON ASIGNATURA_APERTURADA.ID_ASIG_APERTURADA = GRUPO.ID_ASIG_APERTURADA
-           JOIN DBSEGSYL.ASIGNATURA ON ASIGNATURA.ID_ASIGNATURA = ASIGNATURA_APERTURADA.ID_ASIGNATURA 
-           JOIN DBSEGSYL.CLASE ON CLASE.ID_GRUPO = GRUPO.ID_GRUPO 
+           JOIN DBSEGSYL.ASIGNATURA ON ASIGNATURA.ID_ASIGNATURA = ASIGNATURA_APERTURADA.ID_ASIGNATURA
+           JOIN DBSEGSYL.CLASE ON CLASE.ID_GRUPO = GRUPO.ID_GRUPO
            JOIN DBSEGSYL.DOCENTE ON DOCENTE.ID_USUARIO = CLASE.ID_DOCENTE
-          WHERE DOCENTE.ID_USUARIO = cod 
+          WHERE DOCENTE.ID_USUARIO = cod
             AND ASIGNATURA_APERTURADA.ID_PERIODO = p_IDPeriodo;
-            
-   END LISTAR_GRUPOS_X_DOCENTE; 
-         	  
+
+   END LISTAR_GRUPOS_X_DOCENTE;
+
+   PROCEDURE RET_ROLES_X_USUARIO(
+      p_id_usuario IN usuario.id_usuario%TYPE,
+      o_cursor IN OUT g_cursor) IS
+   BEGIN
+      OPEN O_CURSOR FOR
+      SELECT ROL_X_USUARIO.ID_ROL AS ID_ROL, ROL.NOMBRE AS NOMBRE_ROL
+      FROM ROL_X_USUARIO
+      JOIN ROL ON ROL.ID_ROL = ROL_X_USUARIO.ID_ROL
+      WHERE ROL_X_USUARIO.ID_USUARIO = p_id_usuario;
+   END RET_ROLES_X_USUARIO;
+
 END PAC_CURSOR;
 /
