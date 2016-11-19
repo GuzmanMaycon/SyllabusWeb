@@ -1,6 +1,5 @@
 package com.junior.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.junior.dao.design.IAsignaturaAperturadaDao;
+import com.junior.dao.design.ITemasAsignaturaAperturadaPorSemanaDao;
 import com.junior.to.Tema;
 
 @Controller
@@ -22,9 +22,17 @@ public class AvanceTemaController {
     @Autowired
     private IAsignaturaAperturadaDao asignaturaAperturadaDao; // Dao para asignaturas aperturadas
 
+    @Autowired
+    private ITemasAsignaturaAperturadaPorSemanaDao temaDao;
+
     public void setAsignaturaAperturadaDao(IAsignaturaAperturadaDao asignaturaAperturadaDao)
     {
         this.asignaturaAperturadaDao = asignaturaAperturadaDao;
+    }
+
+    public void setTemaDao(ITemasAsignaturaAperturadaPorSemanaDao temaDao)
+    {
+        this.temaDao = temaDao;
     }
 
     @RequestMapping(value = "/avance", method = RequestMethod.GET)
@@ -33,11 +41,9 @@ public class AvanceTemaController {
         String nombreAsignatura = this.asignaturaAperturadaDao.obtenerNombreDeAsignaturaPorId(asignaturaAperturadaid);
         map.addAttribute("nombreAsignatura", nombreAsignatura);
 
-        List<Tema> temas = new ArrayList<Tema>();
-        temas.add((new Tema(1, "Intro a la programacion", 1, 1)));
-        temas.add((new Tema(2, "Variables", 1,1)));
-        temas.add((new Tema(3, "Arreglos", 1,1)));
-        map.addAttribute("temaList", temas);
+        List<Tema> temas = this.temaDao.obtenerTemasPorAsignaturaPorSemana(asignaturaAperturadaid, 1);
+
+        map.addAttribute("temas", temas);
 
         return "temas/registrar_avance";
     }

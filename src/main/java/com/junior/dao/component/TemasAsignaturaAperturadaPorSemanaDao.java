@@ -16,24 +16,24 @@ import com.junior.to.Tema;
 import oracle.jdbc.internal.OracleTypes;
 
 public class TemasAsignaturaAperturadaPorSemanaDao implements ITemasAsignaturaAperturadaPorSemanaDao{
-	
-	@Autowired
+
+    @Autowired
     protected IAccesoDB db;
 
     public void setDb(IAccesoDB db)
     {
         this.db = db;
     }
-	
-	@Override
-	public List<Tema> obtenerTemasPorAsignaturaPorSemana(Integer idAsignaturaAperturada, Integer numeroSemana) {
-		// TODO Auto-generated method stub
+
+    @Override
+    public List<Tema> obtenerTemasPorAsignaturaPorSemana(Integer idAsignaturaAperturada, Integer numeroSemana) {
+        // TODO Auto-generated method stub
         ArrayList<Tema> temas = new ArrayList<Tema>();
 
-        String procedimientoAlmacenado = "{ call PAC_CURSOR.TEMAS_ASIGNA_APER_x_SEMANA(?, ?)}";
-        
+        String procedimientoAlmacenado = "{ call PAC_CURSOR.TEMAS_ASIGNA_APER_x_SEMANA(?, ?, ?)}";
+
         Connection cn = this.db.getConnection();
-        
+
         if (cn != null) {
             try {
                 CallableStatement proc = cn.prepareCall(procedimientoAlmacenado);
@@ -43,14 +43,15 @@ public class TemasAsignaturaAperturadaPorSemanaDao implements ITemasAsignaturaAp
                 proc.execute();
 
                 ResultSet rs = (ResultSet) proc.getObject("o_cursor");
-                
+
                 while (rs.next()) {
                     Tema tema = new Tema();
-                    
+                    tema.setId(rs.getInt("ID_TEMA"));
                     tema.setDescripcion(rs.getString("DESCRIPCION"));
+                    tema.setSemana(rs.getInt("SEMANA"));
+                    tema.setUnidad(rs.getInt("UNIDAD"));
 
                     temas.add(tema);
-                    System.out.println(tema.getDescripcion());
                 }
             } catch(SQLException ex) {
                 System.err.println(ex.getMessage());
@@ -64,6 +65,6 @@ public class TemasAsignaturaAperturadaPorSemanaDao implements ITemasAsignaturaAp
         }
 
         return temas;
-	}
+    }
 }
 

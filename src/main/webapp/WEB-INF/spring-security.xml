@@ -9,7 +9,7 @@
   <http>
     <intercept-url pattern="/grupos/index" access="ROLE_USER"/>
     <intercept-url pattern="/asignaturas_del_ciclo/index" access="ROLE_COORDINADOR"/>
-    <intercept-url pattern="/asignatura/{asignaturaAperturadaId}/avance/*" access="ROLE_DOCENTE"/>
+    <intercept-url pattern="/asignatura/{asignaturaAperturadaId}/avance*" access="ROLE_DOCENTE"/>
     <intercept-url pattern="/asignatura/{asignaturaAperturadaId}/syllabus/*" access="ROLE_COORDINADOR"/>
     <intercept-url pattern="/grupo/{grupoId}/valida" access="ROLE_ALUMNO"/>
 

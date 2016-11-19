@@ -42,12 +42,12 @@
 					</tr>
 				</thead>
 				<tbody>
-					<c:forEach var="tema" items="${temaList}">
+					<c:forEach var="tema" items="${temas}">
 					<tr>
-						<td>${tema.unidad}</td>
-						<td>${tema.semana}</td>
-						<td>${tema.descripcion}</td>
-						<td>
+						<td class="text-center">${tema.unidad}</td>
+						<td class="text-center">${tema.semana}</td>
+						<td class="text-center">${tema.descripcion}</td>
+						<td class="text-center">
 							<div class="checkbox">
 								<label>
 									<input id="tema_${tema.id}"
