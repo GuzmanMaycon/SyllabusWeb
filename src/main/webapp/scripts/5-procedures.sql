@@ -1,4 +1,31 @@
 /*--------------------------------------------------------------------------*/
+/* NOMBRE    : DEVUELVE_NOMBRE_ASIG_X_GRUPO                                 */
+/* OBJETIVO  : RETORNA EL NOMBRE DE UNA ASIGNATURA POR ID_GRUPO             */
+/* FECHA MODIFICACION : 18/11/2016 7:00pm
+/*---------------------------------------------------------------------------*/
+/*     INFORMACION:                                                          */
+/*     AUTOR: LUCERO LIZA PUICAN                                             */
+/*---------------------------------------------------------------------------*/
+CREATE OR REPLACE FUNCTION DBSEGSYL.DEVUELVE_NOMBRE_ASIG_X_GRUPO(
+	COD 	IN VARCHAR2
+)
+RETURN VARCHAR2 IS vnombre VARCHAR2(200);
+BEGIN
+		SELECT A.NOMBRE AS asig_nombre
+      into vnombre 
+      FROM dbsegsyl.grupo g 
+      JOIN dbsegsyl.asignatura_aperturada ap ON (ap.ID_ASIG_APERTURADA = g.ID_ASIG_APERTURADA)
+      JOIN dbsegsyl.asignatura A ON (A.ID_ASIGNATURA = ap.ID_ASIGNATURA)
+     WHERE g.ID_GRUPO = cod;
+     
+	RETURN vnombre;
+EXCEPTION
+	WHEN OTHERS THEN
+		RETURN NULL;
+END;
+/
+
+/*--------------------------------------------------------------------------*/
 /* NOMBRE    : DEVUELVE_NOMBRE_ASIG_APER                                            	*/
 /* OBJETIVO  : RETORNA EL NOMBRE DE UNA ASIGNATURA POR SU ID      */
 /* FECHA MODIFICACION : 11/11/2016 7:30pm
@@ -261,6 +288,20 @@ create or replace PACKAGE          PAC_CURSOR is
       cod         in matricula.id_alumno%type,
       o_cursor    in out g_cursor
 	);
+  
+/*--------------------------------------------------------------------------
+ * NOMBRE    : LISTAR_GRUPOS_X_DOCENTE
+ * OBJETIVO  : Lista los grupos asignados al docente
+ * FECHA MOD : 18/11/2016 5:55pm
+ *--------------------------------------------------------------------------
+ *     INFORMACI?:
+ *     AUTOR: LUCERO LIZA PUICAN
+ *---------------------------------------------------------------------------*/     
+   procedure LISTAR_GRUPOS_X_DOCENTE(
+      p_IDPeriodo in periodo.id_periodo%type,
+      cod         in docente.id_usuario%type,
+      o_cursor    in out g_cursor
+	);
 
 end PAC_CURSOR;
 /
@@ -373,6 +414,23 @@ create or replace PACKAGE BODY PAC_CURSOR IS
          WHERE ASIGNATURA_APERTURADA.ID_PERIODO = p_IDPeriodo AND MATRICULA.ID_ALUMNO = cod;
     
    END LISTAR_GRUPOS_X_ALUMNO;   
+   
+   procedure LISTAR_GRUPOS_X_DOCENTE(
+      p_IDPeriodo in periodo.id_periodo%type,
+      cod         in docente.id_usuario%type,
+      o_cursor    in out g_cursor) is
+      begin
+         OPEN O_CURSOR FOR
+         SELECT DISTINCT GRUPO.ID_GRUPO AS ID_GRUPO, GRUPO.NUMERO AS GRUPO_NUMERO, ASIGNATURA.NOMBRE AS ASIG_NOMBRE
+           FROM DBSEGSYL.GRUPO 
+           JOIN DBSEGSYL.ASIGNATURA_APERTURADA ON ASIGNATURA_APERTURADA.ID_ASIG_APERTURADA = GRUPO.ID_ASIG_APERTURADA
+           JOIN DBSEGSYL.ASIGNATURA ON ASIGNATURA.ID_ASIGNATURA = ASIGNATURA_APERTURADA.ID_ASIGNATURA 
+           JOIN DBSEGSYL.CLASE ON CLASE.ID_GRUPO = GRUPO.ID_GRUPO 
+           JOIN DBSEGSYL.DOCENTE ON DOCENTE.ID_USUARIO = CLASE.ID_DOCENTE
+          WHERE DOCENTE.ID_USUARIO = cod 
+            AND ASIGNATURA_APERTURADA.ID_PERIODO = p_IDPeriodo;
+            
+   END LISTAR_GRUPOS_X_DOCENTE; 
          	  
 END PAC_CURSOR;
 /
