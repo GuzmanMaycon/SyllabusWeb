@@ -211,7 +211,8 @@ public class SyllabusController {
         @PathVariable(value = "syllabusId") Integer syllabusId,
         RedirectAttributes redirectAttrs)
     {
-        Syllabus syllabus = new Syllabus();
+    	//Obtener los atributos del Syllabus a partir del id del Syllabus
+        Syllabus syllabus = this.syllabusDao.obtenerSyllabus(syllabusId);
 
         // Obtener el nombre de la asignatura a partir del id de la asignatura aperturada
         String nombreAsignatura = this.asignaturaAperturadaDao.obtenerNombreDeAsignaturaPorId(asignaturaAperturadaid);

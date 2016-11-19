@@ -29,5 +29,21 @@
       <ref bean="accesoOracleLocalImpl"/>
     </property>
   </bean>
+  
+  <!-- Dao para Temas -->
+  <bean id="temaDaoImpl"
+        class="com.junior.dao.component.TemaDao">
+    <property name="db">
+      <ref bean="accesoOracleLocalImpl"/>
+    </property>
+  </bean>
+  
+  <!-- Dao para Bibliografia-->
+  <bean id="bibliografiaDaoImpl"
+        class="com.junior.dao.component.BibliografiaDao">
+    <property name="db">
+      <ref bean="accesoOracleLocalImpl"/>
+    </property>
+  </bean>
 
 </beans>
