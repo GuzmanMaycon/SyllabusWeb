@@ -23,9 +23,9 @@ public class ValidacionTemaController {
 
         map.addAttribute("nombreAsignatura", nombreAsignatura);
         List<Tema> temas = new ArrayList<Tema>();
-        temas.add((new Tema(1, "Intro a la programacion", 1, 1)));
-        temas.add((new Tema(2, "Variables", 1, 1)));
-        temas.add((new Tema(3, "Arreglos", 1, 1)));
+        temas.add((new Tema(1, "Intro a la programacion", 1, 1,2,1)));
+        temas.add((new Tema(2, "Variables", 1, 1,2,1)));
+        temas.add((new Tema(3, "Arreglos", 1, 1,2,1)));
         map.addAttribute("temaList", temas);
 
         return "temas/registrar_avance";

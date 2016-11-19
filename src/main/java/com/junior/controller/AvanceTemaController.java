@@ -39,10 +39,9 @@ public class AvanceTemaController {
     public String create(ModelMap map, @PathVariable(value="asignaturaAperturadaId") Integer asignaturaAperturadaid)
     {
         String nombreAsignatura = this.asignaturaAperturadaDao.obtenerNombreDeAsignaturaPorId(asignaturaAperturadaid);
-        map.addAttribute("nombreAsignatura", nombreAsignatura);
-
         List<Tema> temas = this.temaDao.obtenerTemasPorAsignaturaPorSemana(asignaturaAperturadaid, 1);
 
+        map.addAttribute("nombreAsignatura", nombreAsignatura);
         map.addAttribute("temas", temas);
 
         return "temas/registrar_avance";
