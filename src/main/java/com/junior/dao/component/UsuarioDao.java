@@ -77,7 +77,6 @@ public class UsuarioDao implements IUsuarioDao {
         Collection<GrantedAuthority> accesos = new ArrayList<GrantedAuthority>();
         // Convertirlos en una coleccion de GrantedAuthority
         accesos.add(new SimpleGrantedAuthority("ROLE_USER"));
-        accesos.add(new SimpleGrantedAuthority("ROLE_ALUMNO"));
         for (Rol rol : roles) {
             accesos.add(new SimpleGrantedAuthority(rol.getNombre()));
         }
