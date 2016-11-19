@@ -7,7 +7,7 @@
             </a>
         </li>
         <li>
-            <a class="sidebar-link" href="#">
+            <a class="sidebar-link" href="javascript:formSubmit()">
                 Cerrar sesión
             </a>
         </li>
