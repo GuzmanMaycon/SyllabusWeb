@@ -140,69 +140,6 @@ BEGIN
 END Reg_Syllabus;
 /
 
-create or replace PROCEDURE EDITAR_REF_BIBLIO
-/*---------------------------------------------------------------------------*/
-/* Nombre    : EDITAR_REF_BIBLIO       		                             */
-/* Objetivo  : Edita un registro de la tabla REFERENCIA_BIBLIOGRAFICA      */
-/*---------------------------------------------------------------------------*/
-/*     Informacion:                                                          */
-/*     Autor: Lucero Liza Puican                                            */
-/*---------------------------------------------------------------------------*/
-
-   (p_IDReferencia      referencia_bibliografica.id_referencia%type,
-    p_Titulo		        referencia_bibliografica.TITULO%TYPE,
-    p_Autor		          referencia_bibliografica.AUTOR%TYPE,
-    p_AnioPublicacion	  referencia_bibliografica.ANIO_PUBLICACION%TYPE,
-    p_LugarPublicacion	referencia_bibliografica.LUGAR_PUBLICACION%TYPE,
-    p_Editorial		      referencia_bibliografica.EDITORIAL%TYPE,
-    p_ISBN              referencia_bibliografica.ISBN%TYPE,
-    p_IDSyllabus		    referencia_bibliografica.ID_SYLLABUS%TYPE) AUTHID CURRENT_USER AS
-
-BEGIN
-    UPDATE dbsegsyl.referencia_bibliografica
-       SET titulo = p_Titulo,
-           autor = p_Autor,
-           anio_publicacion = p_AnioPublicacion, 
-           lugar_publicacion = p_LugarPublicacion,
-           editorial = p_Editorial,
-           isbn = p_ISBN
-		WHERE  id_referencia = p_IDReferencia
-      AND  id_syllabus = p_IDSyllabus;
-
-END EDITAR_REF_BIBLIO;
-/
-
-create or replace PROCEDURE EDITAR_SYLLABUS
-/*------------------------------------------------------------------------*/
-/* Nombre    : EDITAR_SYLLABUS             		                            */
-/* Objetivo  : Edita un registro de la tabla SYLLABUS                     */
-/*------------------------------------------------------------------------*/
-/*     Informacion:                                                       */
-/*     Autor: Lucero Liza Puican                                          */
-/*------------------------------------------------------------------------*/
-   (p_IDSyllabus            IN dbsegsyl.syllabus.id_syllabus%TYPE,
-    p_DescEstado            IN dbsegsyl.estado_syllabus.descripcion%TYPE, 
-    p_FechaEntrega          IN dbsegsyl.syllabus.fecha_entrega%TYPE,
-    p_FechaAprobacion       IN dbsegsyl.syllabus.fecha_aprobacion%TYPE,
-    p_IDAsigAperturada      IN dbsegsyl.syllabus.id_asig_aperturada%TYPE 
-)AUTHID CURRENT_USER
-AS
-    v_IDEstadoSyll dbsegsyl.estado_syllabus.id_estado_syllabus%type;
-BEGIN
-      SELECT id_estado_syllabus 
-        INTO v_IDEstadoSyll 
-        FROM dbsegsyl.estado_syllabus
-       where descripcion = p_DescEstado;
-       
-       UPDATE dbsegsyl.syllabus 
-          SET id_estado        = v_IDEstadoSyll,
-              fecha_entrega    = p_FechaEntrega,
-              fecha_aprobacion = p_FechaAprobacion
-        WHERE id_syllabus      = p_IDSyllabus
-          AND id_asig_aperturada = p_IDAsigAperturada;
-END EDITAR_SYLLABUS;
-/
-
     --FECHA ULTIMA MODIFICACION: 11/11/2016 14:45PM
             -- Verificar procedures de LISTAR y BUSCAR
             -- Definir parametros de salida de Listar_Syllabus_x_EAP
@@ -339,19 +276,6 @@ create or replace PACKAGE          PAC_CURSOR is
    );
 
 /*--------------------------------------------------------------------------
- * NOMBRE    : RET_BIBLIOGRAFIA_X_SYLLABUS
- * OBJETIVO  : Retorna las referencias bibliograficas del syllabus
- * FECHA MOD : 19/11/2016 1:19am
- *--------------------------------------------------------------------------
- *     INFORMACI?:
- *     AUTOR: Lucero Liza Puican
- *---------------------------------------------------------------------------*/
-   procedure RET_BIBLIOGRAFIA_X_SYLLABUS(
-      p_id_syllabus IN syllabus.id_syllabus%TYPE,
-      O_CURSOR      IN OUT G_CURSOR
-   );
-
-/*--------------------------------------------------------------------------
  * NOMBRE    : LISTAR_GRUPOS_X_ALUMNO
  * OBJETIVO  : Lista los grupos en los que se encuentra matriculado el alumno
  * FECHA MOD : 11/11/2016 2:53pm
@@ -392,6 +316,16 @@ create or replace PACKAGE          PAC_CURSOR is
        o_cursor    in out g_cursor
 	);
 
+   PROCEDURE RET_SYLLABUS(
+      p_id_syllabus IN syllabus.id_syllabus%TYPE,
+      o_cursor IN OUT g_cursor
+   );
+   
+   procedure RET_BIBLIOGRAFIA_X_SYLLABUS(
+      p_id_syllabus IN syllabus.id_syllabus%TYPE,
+      O_CURSOR      IN OUT G_CURSOR
+   );
+
 end PAC_CURSOR;
 /
 create or replace PACKAGE BODY PAC_CURSOR IS
@@ -406,7 +340,8 @@ create or replace PACKAGE BODY PAC_CURSOR IS
         SELECT asignatura_aperturada.id_asig_aperturada,
                asignatura.nombre AS asig_nombre,
                plan_de_estudio.nombre AS plan_nombre,
-               estado_syllabus.descripcion AS estado_syllabus
+               NVL(estado_syllabus.descripcion, 'NO ENTREGADO') AS estado_syllabus,
+			   syllabus.id_syllabus AS id_syllabus
         FROM asignatura_aperturada
         JOIN dbsegsyl.asignatura ON ( asignatura.ID_ASIGNATURA = asignatura_aperturada.ID_ASIGNATURA)
         JOIN dbsegsyl.plan_de_estudio ON ( plan_de_estudio.ID_PLAN_ESTUDIO = asignatura.ID_PLAN_ESTUDIO)
@@ -489,16 +424,6 @@ create or replace PACKAGE BODY PAC_CURSOR IS
          WHERE tema.id_syllabus = p_id_syllabus;
    END RET_TEMAS_X_SYLLABUS;
 
-   procedure RET_BIBLIOGRAFIA_X_SYLLABUS(
-      p_id_syllabus IN syllabus.id_syllabus%TYPE,
-      O_CURSOR      IN OUT G_CURSOR) IS
-      BEGIN
-         OPEN O_CURSOR FOR
-         SELECT *
-           FROM dbsegsyl.referencia_bibliografica
-          WHERE referencia_bibliografica.id_syllabus = p_id_syllabus;
-   END RET_BIBLIOGRAFIA_X_SYLLABUS;
-
    procedure LISTAR_GRUPOS_X_ALUMNO(
       p_IDPeriodo in periodo.id_periodo%type,
       cod      in matricula.id_alumno%type,
@@ -542,5 +467,123 @@ create or replace PACKAGE BODY PAC_CURSOR IS
       WHERE ROL_X_USUARIO.ID_USUARIO = p_id_usuario;
    END RET_ROLES_X_USUARIO;
 
+   PROCEDURE RET_SYLLABUS(
+      p_id_syllabus IN syllabus.id_syllabus%TYPE,
+      o_cursor IN OUT g_cursor) IS
+      BEGIN
+         OPEN O_CURSOR FOR
+         SELECT SYLLABUS.FECHA_ENTREGA AS FECHA_ENTREGA,
+                SYLLABUS.FECHA_APROBACION AS FECHA_APROBACION,
+                SYLLABUS.ID_ASIG_APERTURADA AS ID_ASIG_APERTURADA,
+                NVL(ESTADO_SYLLABUS.DESCRIPCION, 'NO ENTREGADO') AS ESTADO_SYLLABUS
+         FROM SYLLABUS
+         JOIN ESTADO_SYLLABUS ON ESTADO_SYLLABUS.ID_ESTADO_SYLLABUS = SYLLABUS.ID_ESTADO
+        WHERE SYLLABUS.ID_SYLLABUS = p_id_syllabus;
+   END RET_SYLLABUS;
+   
+   procedure RET_BIBLIOGRAFIA_X_SYLLABUS(
+      p_id_syllabus IN syllabus.id_syllabus%TYPE,
+      O_CURSOR      IN OUT G_CURSOR) IS
+      BEGIN
+         OPEN O_CURSOR FOR
+         SELECT *
+           FROM dbsegsyl.referencia_bibliografica
+          WHERE referencia_bibliografica.id_syllabus = p_id_syllabus;
+   END RET_BIBLIOGRAFIA_X_SYLLABUS;
+
 END PAC_CURSOR;
+/
+
+--FUNCIONES
+create or replace FUNCTION RET_ESTADO_SYLLABUS_X_APER
+(
+  ASIG_APER_ID IN ASIGNATURA_APERTURADA.ID_ASIG_APERTURADA%TYPE
+)
+RETURN VARCHAR2 IS VESTADO VARCHAR2(200);
+BEGIN
+  SELECT ESTADO_SYLLABUS.DESCRIPCION
+  INTO VESTADO
+  FROM SYLLABUS
+  JOIN ESTADO_SYLLABUS ON ESTADO_SYLLABUS.ID_ESTADO_SYLLABUS = SYLLABUS.ID_ESTADO
+  WHERE SYLLABUS.ID_ASIG_APERTURADA = ASIG_APER_ID;
+
+  RETURN VESTADO;
+END RET_ESTADO_SYLLABUS_X_APER;
+/
+
+create or replace PROCEDURE EDITAR_REF_BIBLIO
+/*---------------------------------------------------------------------------*/
+/* Nombre    : EDITAR_REF_BIBLIO       		                             */
+/* Objetivo  : Edita un registro de la tabla REFERENCIA_BIBLIOGRAFICA      */
+/*---------------------------------------------------------------------------*/
+/*     Informacion:                                                          */
+/*     Autor: Lucero Liza Puican                                            */
+/*---------------------------------------------------------------------------*/
+
+   (p_IDReferencia      REFERENCIA_BIBLIOGRAFICA.id_referencia%type,
+    p_Titulo		        REFERENCIA_BIBLIOGRAFICA.TITULO%TYPE,
+    p_Autor		          REFERENCIA_BIBLIOGRAFICA.AUTOR%TYPE,
+    p_AnioPublicacion	  REFERENCIA_BIBLIOGRAFICA.ANIO_PUBLICACION%TYPE,
+    p_LugarPublicacion	REFERENCIA_BIBLIOGRAFICA.LUGAR_PUBLICACION%TYPE,
+    p_Editorial		      REFERENCIA_BIBLIOGRAFICA.EDITORIAL%TYPE,
+    p_ISBN              REFERENCIA_BIBLIOGRAFICA.ISBN%TYPE,
+    p_IDSyllabus		    REFERENCIA_BIBLIOGRAFICA.ID_SYLLABUS%TYPE) AUTHID CURRENT_USER AS
+
+BEGIN
+    UPDATE dbsegsyl.referencia_bibliografica
+       SET titulo = p_Titulo,
+           autor = p_Autor,
+           anio_publicacion = p_AnioPublicacion, 
+           lugar_publicacion = p_LugarPublicacion,
+           editorial = p_Editorial,
+           isbn = p_ISBN
+		WHERE  id_referencia = p_IDReferencia
+      AND  id_syllabus = p_IDSyllabus;
+
+END EDITAR_REF_BIBLIO;
+/
+
+create or replace PROCEDURE EDITAR_TEMA
+/*---------------------------------------------------------------------------*/
+/* Nombre    : EDITAR_TEMA      		                                     */
+/* Objetivo  : Edita un registro de la tabla TEMA  							 */
+/*---------------------------------------------------------------------------*/
+/*     Informacion:                                                          */
+/*     Autor: Thalia Quiroz Guzman                                           */
+/*---------------------------------------------------------------------------*/
+
+   (p_IDTema		TEMA.ID_TEMA%TYPE,
+    p_Descripcion	TEMA.DESCRIPCION%TYPE,
+    p_Unidad		TEMA.UNIDAD%TYPE,
+    p_Semana		TEMA.SEMANA%TYPE,
+    p_IDTipo		TEMA.ID_TIPO%TYPE,
+    P_IDSyllabus	TEMA.ID_SYLLABUS%TYPE) AUTHID CURRENT_USER AS
+
+BEGIN
+    UPDATE dbsegsyl.tema
+       SET DESCRIPCION = p_Descripcion,
+           UNIDAD = p_Unidad,
+           SEMANA = p_Semana, 
+           ID_TIPO = p_IDTipo
+		WHERE  ID_TEMA = p_IDTema
+      AND  ID_SYLLABUS = p_IDSyllabus;
+
+END EDITAR_TEMA;
+/
+
+create or replace PROCEDURE ELIMINAR_TEMA
+/*---------------------------------------------------------------------------*/
+/* Nombre    : ELIMINAR_TEMA      		                                     */
+/* Objetivo  : Elimina un registro de la tabla TEMA  						 */
+/*---------------------------------------------------------------------------*/
+/*     Informacion:                                                          */
+/*     Autor: Thalia Quiroz Guzman                                           */
+/*---------------------------------------------------------------------------*/
+
+   (p_IDTema		TEMA.ID_TEMA%TYPE) AUTHID CURRENT_USER AS
+
+BEGIN
+    DELETE FROM TEMA
+	WHERE ID_TEMA = p_IDTema;
+END ELIMINAR_TEMA;
 /

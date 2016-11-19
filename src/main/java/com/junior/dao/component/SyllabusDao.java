@@ -1,5 +1,7 @@
 package com.junior.dao.component;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -210,14 +212,18 @@ public class SyllabusDao implements ISyllabusDao {
     @Override
 	public Syllabus obtenerSyllabus(Integer syllabusId) {
 		Syllabus syllabus = new Syllabus();
+		List<Tema> temas = new ArrayList<Tema>();
+		List<Bibliografia> bibliografia = new ArrayList<Bibliografia>();
 		
-		String procedimientoAlmacenado = "{ call PAC_CURSOR.RET_SYLLABUS(?, ?)}";
+		String procedimientoAlmacenado1 = "{ call PAC_CURSOR.RET_SYLLABUS(?, ?)}";
+		String procedimientoAlmacenado2 = "{ call PAC_CURSOR.RET_TEMAS_X_SYLLABUS(?, ?)}";
+		String procedimientoAlmacenado3 = "{ call PAC_CURSOR.RET_BIBLIOGRAFIA_X_SYLLABUS(?, ?)}";
 		
 		Connection cn = this.db.getConnection();
 		
 		if (cn != null) {
             try {
-                CallableStatement proc = cn.prepareCall(procedimientoAlmacenado);
+                CallableStatement proc = cn.prepareCall(procedimientoAlmacenado1);
                 proc.registerOutParameter("O_CURSOR", OracleTypes.CURSOR);
 
                 proc.setInt("p_id_syllabus", syllabusId);
@@ -232,6 +238,12 @@ public class SyllabusDao implements ISyllabusDao {
                     syllabus.setFechaEntrega(rs.getDate("FECHA_ENTREGA"));
                     syllabus.setFechaAprobacion(rs.getDate("FECHA_APROBACION"));
                     syllabus.setIdAsigAperturada(rs.getInt("ID_ASIG_APERTURADA"));
+                    
+                    proc = cn.prepareCall(procedimientoAlmacenado2);
+                    proc.registerOutParameter("O_CURSOR", OracleTypes.CURSOR);
+
+                    proc.setInt("p_id_syllabus", syllabusId);
+                    proc.execute();
                 }
                 
             } catch(SQLException ex) {
