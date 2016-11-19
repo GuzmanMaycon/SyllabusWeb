@@ -48,8 +48,8 @@
 					<c:forEach var="row" items="${lista}">
 					<tr>						 
 						<td>${row.asignaturaAperturada.asignatura.nombre}</td>
-						<td>${row.numero}</td>
-						<td>
+						<td class="text-center">${row.numero}</td>
+						<td class="text-center">
 							<c:if test="${esDocente}">
 								<a href="${pageContext.request.contextPath}/asignatura/" class="btn btn-primary">Registrar Avance</a>
 							</c:if>

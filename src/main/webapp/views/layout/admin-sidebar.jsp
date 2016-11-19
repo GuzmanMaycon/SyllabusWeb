@@ -7,12 +7,12 @@
             </a>
         </li>
         <li>
-            <a class="sidebar-link" href="#">
+            <a class="sidebar-link" href="${pageContext.request.contextPath}/coordinador-asignar/index" id="coordinador-asignar">
                 Asignar Coordinador
             </a>
         </li>
         <li>
-            <a class="sidebar-link" href="#">
+            <a class="sidebar-link" href="${pageContext.request.contextPath}/validar-syllabus/index" id="validar-syllabus">
                 Validar Syllabus
             </a>
         </li>
