@@ -16,7 +16,7 @@
 
 	<%@ include file="/views/layout/header.jsp" %>
 
-	<%@ include file="/views/layout/admin-sidebar.jsp" %>
+	<%@ include file="/views/layout/sidebar.jsp" %>
 
 	<script>
 		document.getElementById("validar-syllabus").className += " item-sidebar-active";
