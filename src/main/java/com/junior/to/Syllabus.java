@@ -17,14 +17,16 @@ public class Syllabus {
     private Date fechaEntrega;
 
     private Date fechaAprobacion;
-    
+
     private Integer idAsigAperturada;
 
-    public Integer getId() {
+    public Integer getId()
+    {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Integer id)
+    {
         this.id = id;
     }
 
@@ -61,7 +63,7 @@ public class Syllabus {
 
     public void setEstado(String estado)
     {
-        this.estado = EstadoSyllabus.valueOf(estado).toString();
+        this.estado = estado;
     }
 
     public Date getFechaEntrega()
@@ -94,11 +96,13 @@ public class Syllabus {
         this.bibliografia.add(libro);
     }
 
-    public Integer getIdAsigAperturada() {
+    public Integer getIdAsigAperturada()
+    {
         return idAsigAperturada;
     }
 
-    public void setIdAsigAperturada(Integer idAsigAperturada) {
+    public void setIdAsigAperturada(Integer idAsigAperturada)
+    {
         this.idAsigAperturada = idAsigAperturada;
     }
 }
