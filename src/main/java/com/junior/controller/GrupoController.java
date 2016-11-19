@@ -57,8 +57,7 @@ public class GrupoController {
         } else if (rolesArray.contains("ROLE_DIRECTOR")) {
             grupos = new ArrayList<Grupo>();
         } else if (rolesArray.contains("ROLE_DOCENTE")) {
-        	//grupos = new ArrayList<Grupo>();
-        	grupos = this.grupoDao.obtenerPorDocente(usuario.getId()); 
+            grupos = this.grupoDao.obtenerPorDocente(usuario.getId());
         } else if (rolesArray.contains("ROLE_ALUMNO")) {
             grupos = this.grupoDao.obtenerPorAlumno(usuario.getId());
             esAlumno = true;
