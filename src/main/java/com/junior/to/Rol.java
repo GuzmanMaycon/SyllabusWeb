@@ -18,6 +18,8 @@ public class Rol {
         this.nombre = nombre;
         this.descripcion = descripcion;
     }
+    
+    public Rol(){};
 
     public Integer getId() {
         return id;
