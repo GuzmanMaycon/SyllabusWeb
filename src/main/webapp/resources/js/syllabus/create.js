@@ -72,7 +72,7 @@ var vm = new Vue(
             if (len_unidades < this.max_unidades)
                 this.unidades.push({
                     id: new_id,
-                    number: (len_unidades + 1),
+                    number: (len_unidades + 1)
                 })
             else
                 alert("Muchas unidades")
@@ -186,11 +186,11 @@ var vm = new Vue(
         },
         add_tema: function() {
             this.temas.push({
-                id: ++this.last_tema_id,
+                id: (++this.last_tema_id)+"",
                 name: this.new_tema,
-                semanaId: this.semana_selected.id,
-                semana: this.semana_selected.number,
-                unidad: this.unidad_selected.number,
+                semanaId: this.semana_selected.id+"",
+                semana: this.semana_selected.number+"",
+                unidad: this.unidad_selected.number+""
             })
             this.new_tema = ''
             document.getElementById('new-tema').focus();
@@ -266,13 +266,13 @@ var vm = new Vue(
                 this.new_ref_titulo != ""
                 ) {
                 this.ref_bibliografica.push({
-                    id: ++this.last_ref_id,
+                    id: (++this.last_ref_id)+"",
                     author: this.new_ref_autor,
-                    year: this.new_ref_anio,
+                    year: this.new_ref_anio+"",
                     title: this.new_ref_titulo,
                     editorial: this.new_ref_editorial,
                     isbn: this.new_ref_isbn,
-                    lugar: this.new_ref_lugar,
+                    lugar: this.new_ref_lugar
                 })
                 this.new_ref_autor = ''
                 this.new_ref_anio = ''
@@ -348,4 +348,15 @@ var vm = new Vue(
                 this.tema_title = 'Temas - Unidad ' + this.unidad_selected.number + ' - Semana' + this.semana_selected.number
         }
     },
+
+    ready: function() {
+       if (window.unidades.length > 0) {
+          this.unidades = window.unidades;
+          this.last_unidad_id = window.lastUnidadId;
+          this.semanas = window.semanas;
+          this.last_semana_id = window.lastSemanaId;
+          this.temas = window.temas;
+          this.last_tema_id = window.lastTemaId;
+       }
+    }
 });

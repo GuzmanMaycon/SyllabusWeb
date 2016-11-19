@@ -14,13 +14,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.junior.to.Tema;
 
 @Controller
-@RequestMapping("/curso/{cursoAbiertoId}/semana/{semana}")
+@RequestMapping("/asignatura/{asignaturaAperturadaId}/semana/{semana}")
 public class AvanceTemaController {
 
     @RequestMapping(value = "/avance", method = RequestMethod.GET)
     public String create(ModelMap map,
-            @PathVariable(value="cursoAbiertoId") String id,
-            @PathVariable(value="semana") String semana
+        @PathVariable(value="asignaturaAperturadaId") String id,
+        @PathVariable(value="semana") Integer semana
             )
     {
         map.addAttribute("course_name", "Diseño de Software");
@@ -35,8 +35,8 @@ public class AvanceTemaController {
 
     @RequestMapping(value = "/avance", method = RequestMethod.POST)
     public String store(ModelMap map,
-            @RequestParam(value = "temas[]", required = false) List<Integer> temas,
-            RedirectAttributes redirectAttrs)
+        @RequestParam(value = "temas[]", required = false) List<Integer> temas,
+        RedirectAttributes redirectAttrs)
     {
         if(temas != null) {
             for(Object t: temas)
