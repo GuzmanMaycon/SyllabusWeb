@@ -51,6 +51,26 @@ EXCEPTION
 END;
 /
 
+/*--------------------------------------------------------------------------
+ * NOMBRE    : Eliminar_Bibliografia
+ * OBJETIVO  : Eliminar referencias bibliograficas                 
+ * FECHA MOD : 08/11/2016 8:50am
+ *--------------------------------------------------------------------------                                
+ *     INFORMACI?:                                                          
+ *     AUTOR: LUCERO DEL PILAR LIZA PUICAN                                  
+ *---------------------------------------------------------------------------*/
+CREATE OR REPLACE PROCEDURE dbsegsyl.Eliminar_Bibliografia(
+    p_IDReferencia       IN dbsegsyl.referencia_bibliografica.id_referencia%TYPE 
+)
+AUTHID CURRENT_USER
+AS 
+BEGIN
+       DELETE FROM dbsegsyl.referencia_bibliografica 
+             WHERE id_referencia = p_IDReferencia; 
+       
+END Eliminar_Bibliografia;
+/
+
 create or replace PROCEDURE REG_REF_BIBLIO
 /*---------------------------------------------------------------------------*/
 /* Nombre    : REG_REF_BIBLIO       		                             */
@@ -326,6 +346,19 @@ create or replace PACKAGE          PAC_CURSOR is
       O_CURSOR      IN OUT G_CURSOR
    );
 
+/*--------------------------------------------------------------------------
+ * NOMBRE    : LISTAR_TEMAS_A_VALIDAR_X_GRUPO
+ * OBJETIVO  : Lista los temas a validar del grupo en el que esta matriculado el alumno
+ * FECHA MOD : 19/11/2016 5:12am
+ *--------------------------------------------------------------------------
+ *     INFORMACI?:
+ *     AUTOR: Lucero Liza Puican 
+ *---------------------------------------------------------------------------*/
+	PROCEDURE LISTAR_TEMAS_A_VALIDAR_X_GRUPO(
+	     p_IDGrupo  IN grupo.id_grupo%type,
+       o_cursor    in out g_cursor
+	);
+
 end PAC_CURSOR;
 /
 create or replace PACKAGE BODY PAC_CURSOR IS
@@ -405,6 +438,21 @@ create or replace PACKAGE BODY PAC_CURSOR IS
         WHERE id_periodo = p_idperiodo;
 
     END LISTAR_GRUPOS;
+
+  PROCEDURE LISTAR_TEMAS_A_VALIDAR_X_GRUPO(
+     p_IDGrupo  IN grupo.id_grupo%type,
+     o_cursor IN OUT g_cursor) IS
+     BEGIN
+        OPEN o_cursor FOR
+      SELECT t.id_tema, t.unidad, t.semana, t.descripcion
+        FROM dbsegsyl.grupo g
+        JOIN dbsegsyl.clase c ON (c.id_grupo = g.id_grupo)
+        JOIN dbsegsyl.sesion s ON (s.id_clase = c.id_clase)
+        JOIN dbsegsyl.tema_x_sesion ts ON (ts.id_sesion = s.id_sesion)
+        JOIN dbsegsyl.tema t ON (t.id_tema = ts.id_tema)
+       where g.id_grupo = p_IDGrupo;
+       
+    END LISTAR_TEMAS_A_VALIDAR_X_GRUPO;
 
    procedure RET_USUARIO_X_EMAIL(
       EMAIL    IN     USUARIO.CORREO%TYPE,

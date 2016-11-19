@@ -30,6 +30,7 @@
     </property>
   </bean>
   
+  
   <!-- Dao para Bibliografia-->
   <bean id="bibliografiaDaoImpl"
         class="com.junior.dao.component.BibliografiaDao">
@@ -55,6 +56,14 @@
   <!-- Dao para temas -->
   <bean id="temasAsignaturaAperturadaPorSemanaDaoImpl"
         class="com.junior.dao.component.TemasAsignaturaAperturadaPorSemanaDao">
+    <property name="db">
+      <ref bean="accesoOracleLocalImpl"/>
+    </property>
+  </bean>
+
+  <!-- Dao para Periodo Academico-->
+  <bean id="periodoDaoImpl"
+        class="com.junior.dao.component.PeriodoDao">
     <property name="db">
       <ref bean="accesoOracleLocalImpl"/>
     </property>
