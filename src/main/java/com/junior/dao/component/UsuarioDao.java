@@ -19,8 +19,6 @@ import com.junior.dao.design.IUsuarioDao;
 import com.junior.to.Rol;
 import com.junior.to.Usuario;
 
-import oracle.jdbc.internal.OracleTypes;
-
 public class UsuarioDao implements IUsuarioDao {
 
     @Autowired
@@ -44,7 +42,7 @@ public class UsuarioDao implements IUsuarioDao {
         if (cn != null) {
             try {
                 CallableStatement proc = cn.prepareCall(procedimientoAlmacenado);
-                proc.registerOutParameter("O_CURSOR", OracleTypes.CURSOR);
+                proc.registerOutParameter("O_CURSOR", oracle.jdbc.OracleTypes.CURSOR);
                 proc.setString("EMAIL", correo);
                 proc.execute();
 
@@ -80,6 +78,9 @@ public class UsuarioDao implements IUsuarioDao {
         // Convertirlos en una coleccion de GrantedAuthority
         accesos.add(new SimpleGrantedAuthority("ROLE_USER"));
         accesos.add(new SimpleGrantedAuthority("ROLE_ALUMNO"));
+        
+        //Usuario docente 
+        accesos.add(new SimpleGrantedAuthority("ROLE_DOCENTE"));
         for (Rol rol : roles) {
             accesos.add(new SimpleGrantedAuthority(rol.getNombre()));
         }
