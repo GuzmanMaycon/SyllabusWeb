@@ -330,7 +330,8 @@ create or replace PACKAGE BODY PAC_CURSOR IS
         SELECT asignatura_aperturada.id_asig_aperturada,
                asignatura.nombre AS asig_nombre,
                plan_de_estudio.nombre AS plan_nombre,
-               estado_syllabus.descripcion AS estado_syllabus
+               NVL(estado_syllabus.descripcion, 'NO ENTREGADO') AS estado_syllabus,
+			   syllabus.id_syllabus AS id_syllabus
         FROM asignatura_aperturada
         JOIN dbsegsyl.asignatura ON ( asignatura.ID_ASIGNATURA = asignatura_aperturada.ID_ASIGNATURA)
         JOIN dbsegsyl.plan_de_estudio ON ( plan_de_estudio.ID_PLAN_ESTUDIO = asignatura.ID_PLAN_ESTUDIO)
@@ -458,3 +459,19 @@ create or replace PACKAGE BODY PAC_CURSOR IS
 
 END PAC_CURSOR;
 /
+
+--FUNCIONES
+create or replace FUNCTION RET_ESTADO_SYLLABUS_X_APER
+(
+  ASIG_APER_ID IN ASIGNATURA_APERTURADA.ID_ASIG_APERTURADA%TYPE
+) 
+RETURN VARCHAR2 IS VESTADO VARCHAR2(200);
+BEGIN
+  SELECT ESTADO_SYLLABUS.DESCRIPCION
+  INTO VESTADO
+  FROM SYLLABUS
+  JOIN ESTADO_SYLLABUS ON ESTADO_SYLLABUS.ID_ESTADO_SYLLABUS = SYLLABUS.ID_ESTADO
+  WHERE SYLLABUS.ID_ASIG_APERTURADA = ASIG_APER_ID;
+  
+  RETURN VESTADO;
+END RET_ESTADO_SYLLABUS_X_APER;

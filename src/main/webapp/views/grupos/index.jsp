@@ -12,7 +12,7 @@
 
 	<%@ include file="/views/layout/header.jsp" %>
 
-	<%@ include file="/views/layout/admin-sidebar.jsp" %>
+	<%@ include file="/views/layout/sidebar.jsp" %>
 
 	<script>
 		document.getElementById("consultar-avance-link").className += " item-sidebar-active";
@@ -47,16 +47,18 @@
 				<tbody>
 					<c:forEach var="row" items="${lista}">
 					<tr>						 
-						<td>${row.asignaturaAperturada.asignatura.nombre}</td>
-						<td>${row.numero}</td>
-						<td>
-							<c:if test="${esDocente}">
-								<a href="${pageContext.request.contextPath}/asignatura/" class="btn btn-primary">Registrar Avance</a>
+						<td class="text-center">${row.asignaturaAperturada.asignatura.nombre}</td>
+						<td class="text-center">${row.numero}</td>
+						<td class="text-center">
+							<c:forEach items="${authorities}" var="authority" varStatus="vs">
+							<c:if test="${ authority.authority == 'ROLE_DOCENTE' }">
+								<a href="${basePath}/asignatura/" class="btn btn-primary">Registrar Avance</a>
 							</c:if>
-							<c:if test="${esAlumno}">
-								<a href="${pageContext.request.contextPath}/grupo/${row.id}/valida" class="btn btn-primary">Validar Avance</a>
+							<c:if test="${ authority.authority == 'ROLE_ALUMNO' }">
+								<a href="${basePath}/grupo/${row.id}/valida" class="btn btn-primary">Validar Avance</a>
 							</c:if>
-							<a href="${pageContext.request.contextPath}/grupo/${row.id}/syllabus/avance" class="btn btn-default">Ver Avance</a>
+							</c:forEach>
+							<a href="${basePath}/grupo/${row.id}/syllabus/avance" class="btn btn-default">Ver Avance</a>
 						</td>
 					</tr>
 					</c:forEach>				
