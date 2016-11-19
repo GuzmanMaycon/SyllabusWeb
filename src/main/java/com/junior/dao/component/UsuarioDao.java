@@ -71,6 +71,8 @@ public class UsuarioDao implements IUsuarioDao {
                         rol.setId(rs.getInt("ID_ROL"));
                         roles.add(rol);
                     }
+
+                    usuario.setRoles(roles);
                 }
             } catch(SQLException ex) {
                 System.err.println(ex.getMessage());
@@ -90,12 +92,10 @@ public class UsuarioDao implements IUsuarioDao {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException
     {
         Usuario usuario = this.obtenerUsuario(username);
-        // Obtener roles del usuario
-        ArrayList<Rol> roles = new ArrayList<Rol>();
         Collection<GrantedAuthority> accesos = new ArrayList<GrantedAuthority>();
         // Convertirlos en una coleccion de GrantedAuthority
         accesos.add(new SimpleGrantedAuthority("ROLE_USER"));
-        for (Rol rol : roles) {
+        for (Rol rol : usuario.getRoles()) {
             accesos.add(new SimpleGrantedAuthority(rol.getNombre()));
         }
 
