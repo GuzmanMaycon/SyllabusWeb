@@ -226,14 +226,6 @@ public class SyllabusController {
         // Agregar al modelo el nombre de la asignatura
         model.addAttribute("nombreAsignatura", nombreAsignatura);
 
-        ArrayList<Tema> temas = new ArrayList<Tema>();
-        temas.add(new Tema(1, "Tema", 1, 1,1,1));
-        temas.add(new Tema(2, "Tema 2", 1, 1,1,1));
-        temas.add(new Tema(3, "Tema 3", 2, 1,1,2));
-        temas.add(new Tema(4, "Tema 4", 1, 2,1,2));
-
-        syllabus.setTemas(temas);
-
         /**
          * El Key es la unidad y el Value son las semanas de dicha unidad
          */
