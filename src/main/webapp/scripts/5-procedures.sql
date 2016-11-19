@@ -330,7 +330,7 @@ create or replace PACKAGE BODY PAC_CURSOR IS
         SELECT asignatura_aperturada.id_asig_aperturada,
                asignatura.nombre AS asig_nombre,
                plan_de_estudio.nombre AS plan_nombre,
-               estado_syllabus.descripcion AS estado_syllabus,
+               NVL(estado_syllabus.descripcion, 'NO ENTREGADO') AS estado_syllabus,
 			   syllabus.id_syllabus AS id_syllabus
         FROM asignatura_aperturada
         JOIN dbsegsyl.asignatura ON ( asignatura.ID_ASIGNATURA = asignatura_aperturada.ID_ASIGNATURA)
