@@ -11,7 +11,7 @@
         </li>
     	<c:forEach items="${authorities}" var="authority" varStatus="vs">
     	<%-- INICIO ROLE ADMIN --%>
-		<c:if test="${ authority.authority == 'ROLE_ADMIN' }">
+		<c:if test="${ authority.authority == 'ROLE_DECANO' }">
         <li>
             <a class="sidebar-link" href="${basePath}/coordinador-asignar/index" id="coordinador-asignar">
                 Asignar Coordinador
