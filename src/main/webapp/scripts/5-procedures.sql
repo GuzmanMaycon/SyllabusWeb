@@ -355,8 +355,8 @@ create or replace PACKAGE          PAC_CURSOR is
  *     AUTOR: Lucero Liza Puican 
  *---------------------------------------------------------------------------*/
 	PROCEDURE LISTAR_TEMAS_A_VALIDAR_X_GRUPO(
-	     p_IDGrupo  IN grupo.id_grupo%type,
-       o_cursor    in out g_cursor
+	     p_id_grupo  IN grupo.id_grupo%TYPE,
+       O_CURSOR    IN out G_CURSOR
 	);
 
 end PAC_CURSOR;
@@ -440,17 +440,17 @@ create or replace PACKAGE BODY PAC_CURSOR IS
     END LISTAR_GRUPOS;
 
   PROCEDURE LISTAR_TEMAS_A_VALIDAR_X_GRUPO(
-     p_IDGrupo  IN grupo.id_grupo%type,
-     o_cursor IN OUT g_cursor) IS
+     p_id_grupo IN grupo.id_grupo%TYPE,
+     O_CURSOR IN OUT G_CURSOR) IS
      BEGIN
-        OPEN o_cursor FOR
-      SELECT t.id_tema, t.unidad, t.semana, t.descripcion
+        OPEN O_CURSOR FOR
+      SELECT t.id_tema, t.unidad, t.semana, t.descripcion, t.id_tipo, t.id_syllabus
         FROM dbsegsyl.grupo g
         JOIN dbsegsyl.clase c ON (c.id_grupo = g.id_grupo)
         JOIN dbsegsyl.sesion s ON (s.id_clase = c.id_clase)
         JOIN dbsegsyl.tema_x_sesion ts ON (ts.id_sesion = s.id_sesion)
         JOIN dbsegsyl.tema t ON (t.id_tema = ts.id_tema)
-       where g.id_grupo = p_IDGrupo;
+       where g.id_grupo = p_id_grupo;
        
     END LISTAR_TEMAS_A_VALIDAR_X_GRUPO;
 

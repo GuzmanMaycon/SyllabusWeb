@@ -17,6 +17,11 @@ import com.junior.to.TipoClase;
 
 import oracle.jdbc.internal.OracleTypes;
 
+/**
+ * DAO para Temas usando Oracle
+ * @author Thalia Quiroz
+ * @version 1.0.1, 18-11-2016
+ */
 public class TemaDao implements ITemaDao {
 
 	@Autowired
@@ -26,6 +31,11 @@ public class TemaDao implements ITemaDao {
 		this.db = db;
 	}
 
+    /**
+     * Devuelve todos los temas correspondientes a un syllabus
+     * @param syllabus Objeto syllabus de referencia
+     * @return List<TemaTO> temas registrados en el syllabus
+     */
 	@Override
 	public List<Tema> obtenerTodos(Syllabus syllabus) {
 
@@ -75,6 +85,12 @@ public class TemaDao implements ITemaDao {
 
 	}
 
+    /**
+     * Modifica el tema registrado en un syllabus
+     * @param tema Objeto tema a modificar
+     * @param idSyllabus ID del syllabus al que pertenece el tema
+     * @return rpta mensaje de confirmacion del metodo
+     */
 	@Override
 	public String editarTema(Tema tema, Integer idSyllabus) {
 		String rpta = null;
@@ -109,6 +125,11 @@ public class TemaDao implements ITemaDao {
 		return rpta;
 	}
 
+    /**
+     * Elimina el tema registrado en un syllabus
+     * @param tema Objeto tema a eliminar
+     * @return rpta mensaje de confirmacion del metodo
+     */
 	@Override
 	public String eliminarTema(Tema tema) {
 		
@@ -138,5 +159,63 @@ public class TemaDao implements ITemaDao {
 		}
 		return rpta;
 		
+	}
+
+    /**
+     * Lista los temas que el alumno tiene que validar por grupo
+     * @param idGrupo ID del grupo correspondiente de los temas a validar
+     * @param idAlumno ID del alumno que realizara la validacion
+     * @return List<TemaTO> lista de los temas disponibles a validar por el alumno 
+     */
+	@Override
+	public List<Tema> obtenerAvancePorValidar(Integer idGrupo, Integer idAlumno) {
+		List<Tema> temasAvanzadosPorValidar = new ArrayList<Tema>();
+
+		String procedimientoAlmacenado = "{ call PAC_CURSOR.LISTAR_TEMAS_A_VALIDAR_X_GRUPO(?,?,?)}";
+
+		Connection cn = this.db.getConnection();
+
+		if (cn != null) {
+			try {
+				CallableStatement proc = cn.prepareCall(procedimientoAlmacenado);
+				proc.setInt(1, idGrupo);
+				proc.setInt(2, idAlumno);
+				proc.registerOutParameter(3, OracleTypes.CURSOR);
+				
+				proc.execute();
+				
+				ResultSet rs = (ResultSet) proc.getObject(3);
+
+				while (rs.next()) {
+					Tema tema = new Tema();
+					tema.setId(rs.getInt("ID_TEMA"));
+					tema.setUnidad(rs.getInt("UNIDAD"));
+					tema.setSemana(rs.getInt("SEMANA"));
+					tema.setDescripcion(rs.getString("DESCRIPCION"));
+					tema.setTipo(rs.getInt("ID_TIPO"));
+					tema.setSyllabus(rs.getInt("ID_SYLLABUS"));
+					
+					System.out.println("Tema: "+tema.getId());
+					System.out.println("Tema: "+tema.getUnidad());
+					System.out.println("Tema: "+tema.getSemana());
+					System.out.println("Tema: "+tema.getDescripcion());
+					System.out.println("Tema: "+tema.getTipo());
+					System.out.println("Tema: "+tema.getSyllabus());
+					
+					temasAvanzadosPorValidar.add(tema);
+
+				}
+			} catch (SQLException ex) {
+				System.err.println(ex.getMessage());
+			} finally {
+				try {
+					cn.close();
+				} catch (Exception e) {
+					System.err.println(e.getMessage());
+				}
+			}
+		}
+
+		return temasAvanzadosPorValidar;
 	}
 }
