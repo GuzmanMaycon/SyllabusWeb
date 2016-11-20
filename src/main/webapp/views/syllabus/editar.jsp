@@ -51,7 +51,7 @@
       <script>
       window.semanas.push({
          id: ++window.lastSemanaId,
-         number: "(window.semanas.length + 1)",
+         number: (window.semanas.length + 1),
          unidadId: "${unidad.key}"
       });
       </script>
