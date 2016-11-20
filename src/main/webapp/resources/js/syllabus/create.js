@@ -25,7 +25,9 @@ var vm = new Vue(
         max_semanas_por_unidad: 5,
 
         new_tema: '',
+        newTemaTipo: '',
         edit_tema: '',
+        editTemaTipo: '',
 
         new_ref_autor: '',
         new_ref_anio: '',
@@ -190,9 +192,11 @@ var vm = new Vue(
                 name: this.new_tema,
                 semanaId: this.semana_selected.id+"",
                 semana: this.semana_selected.number+"",
-                unidad: this.unidad_selected.number+""
-            })
-            this.new_tema = ''
+                unidad: this.unidad_selected.number+"",
+                tipoId: this.newTemaTipo+""
+            });
+            this.new_tema = '';
+            this.newTemaTipo = '';
             document.getElementById('new-tema').focus();
         },
         delete_tema: function(tema) {
@@ -205,11 +209,13 @@ var vm = new Vue(
         },
         actualizar_tema: function(tema) {
            var tema_filtered = this.temas.filter(function(elemento){
-               return tema.id == elemento.id
-           })[0]
-           tema_filtered.name = this.edit_tema
-           this.edit_tema = ''
-           this.cancelar_actualizar()
+               return tema.id == elemento.id;
+           })[0];
+           tema_filtered.name = this.edit_tema;
+           tema_filtered.tipoId = this.editTemaTipo;
+           this.edit_tema = '';
+           this.editTemaTipo = '';
+           this.cancelar_actualizar();
         },
         cancelar_actualizar: function() {
            this.select_tema(this.tema_selected)
@@ -226,9 +232,10 @@ var vm = new Vue(
             })
         },
         add_binding: function(tema) {
-            document.getElementById('edit-tema').dataset.id = tema.id
-            this.select_tema(tema)
-            this.edit_tema = tema.name
+            document.getElementById('edit-tema').dataset.id = tema.id;
+            this.select_tema(tema);
+            this.edit_tema = tema.name;
+            this.editTemaTipo = tema.tipoId;
         },
         //Bibliografia
         select_ref: function(ref) {

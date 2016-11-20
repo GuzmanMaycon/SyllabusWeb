@@ -12,6 +12,16 @@
            placeholder="Ingrese el nuevo tema"
            id="new-tema"
            @keyup.enter="add_tema()">
+	<div v-show="semana_selected.id && !(tema_selected.id)">
+		<label><input type="radio" v-model="newTemaTipo" value="1">Teoria</label>&nbsp;
+		<label><input type="radio" v-model="newTemaTipo" value="2">Practica</label>&nbsp;
+		<label><input type="radio" v-model="newTemaTipo" value="3">Labo</label>
+    </div>
+    <div v-show="tema_selected.id">
+		<label><input type="radio" v-model="editTemaTipo" value="1">Teoria</label>&nbsp;
+		<label><input type="radio" v-model="editTemaTipo" value="2">Practica</label>&nbsp;
+		<label><input type="radio" v-model="editTemaTipo" value="3">Labo</label>
+    </div>
     <a class="btn btn-success"
        v-show="semana_selected.id && !(tema_selected.id)"
        title="Agregar Tema"
