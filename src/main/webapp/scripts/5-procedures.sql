@@ -356,6 +356,7 @@ create or replace PACKAGE          PAC_CURSOR is
  *---------------------------------------------------------------------------*/
 	PROCEDURE LISTAR_TEMAS_A_VALIDAR_X_GRUPO(
 	     p_id_grupo  IN grupo.id_grupo%TYPE,
+       p_id_usuario IN alumno.id_usuario%TYPE,
        O_CURSOR    IN out G_CURSOR
 	);
 
@@ -441,14 +442,19 @@ create or replace PACKAGE BODY PAC_CURSOR IS
 
   PROCEDURE LISTAR_TEMAS_A_VALIDAR_X_GRUPO(
      p_id_grupo IN grupo.id_grupo%TYPE,
+     p_id_usuario IN alumno.id_usuario%TYPE,
      O_CURSOR IN OUT G_CURSOR) IS
      BEGIN
         OPEN O_CURSOR FOR
       SELECT t.id_tema, t.unidad, t.semana, t.descripcion, t.id_tipo, t.id_syllabus
         FROM dbsegsyl.grupo g
-        JOIN dbsegsyl.clase c ON (c.id_grupo = g.id_grupo)
+        JOIN dbsegsyl.clase c  ON (c.id_grupo = g.id_grupo)
         JOIN dbsegsyl.sesion s ON (s.id_clase = c.id_clase)
-        JOIN dbsegsyl.tema_x_sesion ts ON (ts.id_sesion = s.id_sesion)
+        JOIN dbsegsyl.tema_x_sesion ts ON (ts.id_sesion = s.id_sesion
+                                       AND ts.cumplido  IN ('S'))
+        JOIN dbsegsyl.asistencia asist ON (asist.id_sesion = ts.id_sesion
+                                      AND  asist.id_usuario = p_id_usuario
+                                      AND  asist.verificacion IN ('A'))
         JOIN dbsegsyl.tema t ON (t.id_tema = ts.id_tema)
        where g.id_grupo = p_id_grupo;
        
