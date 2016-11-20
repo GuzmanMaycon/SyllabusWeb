@@ -34,7 +34,7 @@
             <div class="row">
               <div class="text-center">
                 <h3>Unidades</h3>
-                <a class="btn btn-success" @click="add_unidad()" title="Agregar Unidad">
+                <a class="btn btn-success" @click="addUnidad()" title="Agregar Unidad">
                   <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
                 </a>
               </div>
@@ -52,7 +52,7 @@
             <div class="row">
               <div class="text-center">
                 <h3>Semanas</h3>
-                <a class="btn btn-success" @click="add_semana()" v-show="unidad_selected.id" title="Agregar Semana">
+                <a class="btn btn-success" @click="addSemana()" v-show="unidadSelected.id" title="Agregar Semana">
                   <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
                 </a>
               </div>

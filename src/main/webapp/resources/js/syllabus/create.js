@@ -7,71 +7,71 @@ var vm = new Vue(
         unidades: [],
         semanas: [],
         temas: [],
-        ref_bibliografica: [],
+        refBibliografica: [],
 
-        unidad_selected: {},
-        semana_selected: {},
-        tema_selected: {},
+        unidadSelected: {},
+        semanaSelected: {},
+        temaSelected: {},
         ref_selected: {},
 
-        last_unidad_id: 0,
-        last_semana_id: 0,
-        last_tema_id: 0,
-        last_ref_id: 0,
+        lastUnidadId: 0,
+        lastSemanaId: 0,
+        lastTemaId: 0,
+        lastRefId: 0,
 
         see_preview: false,
-        max_unidades: 5,
-        max_semanas: 17,
-        max_semanas_por_unidad: 5,
+        maxUnidades: 5,
+        maxSemanas: 17,
+        maxSemanasPorUnidad: 5,
 
-        new_tema: '',
+        newTema: '',
         newTemaTipo: '',
-        edit_tema: '',
+        editTema: '',
         editTemaTipo: '',
 
-        new_ref_autor: '',
-        new_ref_anio: '',
-        new_ref_titulo: '',
-        new_ref_editorial: '',
-        new_ref_isbn: '',
-        new_ref_lugar: '',
+        newRefAutor: '',
+        newRefAnio: '',
+        newRefTitulo: '',
+        newRefEditorial: '',
+        newRefIsbn: '',
+        newRefLugar: '',
 
-        edit_ref_autor: '',
-        edit_ref_anio: '',
-        edit_ref_titulo: '',
-        edit_ref_editorial: '',
-        edit_ref_isbn: '',
-        edit_ref_lugar: '',
+        editRefAutor: '',
+        editRefAnio: '',
+        editRefTitulo: '',
+        editRefEditorial: '',
+        editRefIsbn: '',
+        editRefLugar: '',
 
-        tema_title: '',
+        temaTitle: '',
     },
 
     methods: {
        //Unidades
-       select_unidad: function(unidad) {
-            var last_unidad = document.getElementById('unidad_' + this.unidad_selected.id)
+       selectUnidad: function(unidad) {
+            var last_unidad = document.getElementById('unidad_' + this.unidadSelected.id)
             var unidad_element = document.getElementById('unidad_' + unidad.id)
 
-            if (this.unidad_selected.id == undefined) {
+            if (this.unidadSelected.id == undefined) {
                 unidad_element.className += ' unidad-selected'
-                this.unidad_selected = unidad
+                this.unidadSelected = unidad
             } else {
-                if (this.unidad_selected.id == unidad.id) {
+                if (this.unidadSelected.id == unidad.id) {
                     unidad_element.className = 'clickable unidad'
-                    this.unidad_selected = {}
+                    this.unidadSelected = {}
                 } else {
                     last_unidad.className = 'clickable unidad'
                     unidad_element.className += ' unidad-selected'
-                    this.unidad_selected = unidad
+                    this.unidadSelected = unidad
                 }
             }
-            this.semana_selected = {}
-            this.tema_selected = {}
+            this.semanaSelected = {}
+            this.temaSelected = {}
         },
-        add_unidad: function() {
-            var new_id = ++this.last_unidad_id
+        addUnidad: function() {
+            var new_id = ++this.lastUnidadId
             var len_unidades = this.unidades.length
-            if (len_unidades < this.max_unidades)
+            if (len_unidades < this.maxUnidades)
                 this.unidades.push({
                     id: new_id,
                     number: (len_unidades + 1)
@@ -79,9 +79,9 @@ var vm = new Vue(
             else
                 alert("Muchas unidades")
         },
-        delete_unidad: function(unidad) {
-            this.semanasUnidadSeledted(unidad).forEach(function(semana, index){
-                vm.delete_semana(semana)
+        deleteUnidad: function(unidad) {
+            this.semanasUnidadSelected(unidad).forEach(function(semana, index){
+                vm.deleteSemana(semana)
             })
             this.unidades.forEach(function(elemento, index, array){
                 if (elemento.id == unidad.id)
@@ -92,42 +92,42 @@ var vm = new Vue(
                 elemento.number = (index + 1)
             })
 
-            this.unidad_selected = {}
+            this.unidadSelected = {}
         },
         //Semanas
-        select_semana: function(semana) {
-            var last_semana = document.getElementById('semana_' + this.semana_selected.id)
+        selectSemana: function(semana) {
+            var last_semana = document.getElementById('semana_' + this.semanaSelected.id)
             var semana_element = document.getElementById('semana_' + semana.id)
 
-            if (this.semana_selected.id == undefined) {
+            if (this.semanaSelected.id == undefined) {
                 semana_element.className += ' semana-selected'
-                this.semana_selected = semana
+                this.semanaSelected = semana
             } else {
-                if (this.semana_selected.id == semana.id) {
+                if (this.semanaSelected.id == semana.id) {
                     semana_element.className = 'clickable semana'
-                    this.semana_selected = {}
+                    this.semanaSelected = {}
                 } else {
                     last_semana.className = 'clickable semana'
                     semana_element.className += ' semana-selected'
-                    this.semana_selected = semana
+                    this.semanaSelected = semana
                 }
             }
-            this.tema_selected = {}
+            this.temaSelected = {}
         },
-        add_semana: function() {
-            var new_id = ++this.last_semana_id
+        addSemana: function() {
+            var new_id = ++this.lastSemanaId
             var len_semanas = this.semanas.length
-            if (len_semanas < this.max_semanas) {
-                var unidad = this.unidad_selected
+            if (len_semanas < this.maxSemanas) {
+                var unidad = this.unidadSelected
                 var len_semanas_por_unidad = this.semanas.reduce(function(total,semana){
                     return semana.unidadId == unidad.id ? total+1 : total
                 }, 0)
 
-                if (len_semanas_por_unidad < this.max_semanas_por_unidad) {
+                if (len_semanas_por_unidad < this.maxSemanasPorUnidad) {
                     this.semanas.push({
                         id: new_id,
                         number: (len_semanas + 1),
-                        unidadId: this.unidad_selected.id
+                        unidadId: this.unidadSelected.id
                     })
 
                     var semanas = this.semanas
@@ -152,9 +152,9 @@ var vm = new Vue(
             else
                 alert("Muchas semanas")
         },
-        delete_semana: function(semana) {
+        deleteSemana: function(semana) {
             this.temasSemanaSelected(semana).forEach(function(tema, index){
-                vm.delete_tema(tema)
+                vm.deleteTema(tema)
             })
             this.semanas.forEach(function(elemento, index, array){
                 if (elemento.id == semana.id)
@@ -165,63 +165,63 @@ var vm = new Vue(
                 elemento.number = (index + 1)
             })
 
-            this.semana_selected = {}
+            this.semanaSelected = {}
         },
         //Temas
-        select_tema: function(tema) {
-            var last_tema = document.getElementById('tema_div_' + this.tema_selected.id)
+        selectTema: function(tema) {
+            var last_tema = document.getElementById('tema_div_' + this.temaSelected.id)
             var tema_element = document.getElementById('tema_div_' + tema.id)
 
-            if (this.tema_selected.id == undefined) {
+            if (this.temaSelected.id == undefined) {
                 tema_element.className += ' tema-selected'
-                this.tema_selected = tema
+                this.temaSelected = tema
             } else {
-                if (this.tema_selected.id == tema.id) {
+                if (this.temaSelected.id == tema.id) {
                     tema_element.className = 'clickable tema'
-                    this.tema_selected = {}
+                    this.temaSelected = {}
                 } else {
                     last_tema.className = 'clickable tema'
                     tema_element.className += ' tema-selected'
-                    this.tema_selected = tema
+                    this.temaSelected = tema
                 }
             }
         },
-        add_tema: function() {
+        addTema: function() {
             this.temas.push({
-                id: (++this.last_tema_id)+"",
-                name: this.new_tema,
-                semanaId: this.semana_selected.id+"",
-                semana: this.semana_selected.number+"",
-                unidad: this.unidad_selected.number+"",
+                id: (++this.lastTemaId)+"",
+                name: this.newTema,
+                semanaId: this.semanaSelected.id+"",
+                semana: this.semanaSelected.number+"",
+                unidad: this.unidadSelected.number+"",
                 tipoId: this.newTemaTipo+""
             });
-            this.new_tema = '';
+            this.newTema = '';
             this.newTemaTipo = '';
             document.getElementById('new-tema').focus();
         },
-        delete_tema: function(tema) {
+        deleteTema: function(tema) {
             this.temas.forEach(function(elemento, index, array){
                 if (elemento.id == tema.id)
                     array.splice(index, 1)
             })
 
-            this.tema_selected = {}
+            this.temaSelected = {}
         },
-        actualizar_tema: function(tema) {
+        actualizarTema: function(tema) {
            var tema_filtered = this.temas.filter(function(elemento){
                return tema.id == elemento.id;
            })[0];
-           tema_filtered.name = this.edit_tema;
+           tema_filtered.name = this.editTema;
            tema_filtered.tipoId = this.editTemaTipo;
-           this.edit_tema = '';
+           this.editTema = '';
            this.editTemaTipo = '';
-           this.cancelar_actualizar();
+           this.cancelarActualizar();
         },
-        cancelar_actualizar: function() {
-           this.select_tema(this.tema_selected)
-           this.tema_selected = {}
+        cancelarActualizar: function() {
+           this.selectTema(this.temaSelected)
+           this.temaSelected = {}
         },
-        semanasUnidadSeledted: function(unidad) {
+        semanasUnidadSelected: function(unidad) {
             return this.semanas.filter(function(semana){
                 return semana.unidadId == unidad.id
             })
@@ -231,14 +231,14 @@ var vm = new Vue(
                 return tema.semanaId == semana.id
             })
         },
-        add_binding: function(tema) {
+        addBinding: function(tema) {
             document.getElementById('edit-tema').dataset.id = tema.id;
-            this.select_tema(tema);
-            this.edit_tema = tema.name;
+            this.selectTema(tema);
+            this.editTema = tema.name;
             this.editTemaTipo = tema.tipoId;
         },
         //Bibliografia
-        select_ref: function(ref) {
+        selectRef: function(ref) {
             var last_ref = document.getElementById('ref_' + this.ref_selected.id)
             var ref_element = document.getElementById('ref_' + ref.id)
 
@@ -256,68 +256,68 @@ var vm = new Vue(
                 }
             }
         },
-        add_binding_ref: function(ref) {
-            this.select_ref(ref)
-            this.edit_ref_autor = ref.author
-            this.edit_ref_anio = ref.year
-            this.edit_ref_titulo = ref.title
-            this.edit_ref_editorial = ref.editorial
-            this.edit_ref_isbn = ref.isbn
-            this.edit_ref_lugar = ref.lugar
+        addBindingRef: function(ref) {
+            this.selectRef(ref)
+            this.editRefAutor = ref.author
+            this.editRefAnio = ref.year
+            this.editRefTitulo = ref.title
+            this.editRefEditorial = ref.editorial
+            this.editRefIsbn = ref.isbn
+            this.editRefLugar = ref.lugar
         },
-        add_ref_bibliografica: function() {
-            if (this.new_ref_autor != "" &&
-                this.new_ref_anio != "" &&
-                this.new_ref_anio > 1900 &&
-                this.new_ref_anio < 2016 &&
-                this.new_ref_titulo != ""
+        addRefBibliografica: function() {
+            if (this.newRefAutor != "" &&
+                this.newRefAnio != "" &&
+                this.newRefAnio > 1900 &&
+                this.newRefAnio < 2016 &&
+                this.newRefTitulo != ""
                 ) {
-                this.ref_bibliografica.push({
-                    id: (++this.last_ref_id)+"",
-                    author: this.new_ref_autor,
-                    year: this.new_ref_anio+"",
-                    title: this.new_ref_titulo,
-                    editorial: this.new_ref_editorial,
-                    isbn: this.new_ref_isbn,
-                    lugar: this.new_ref_lugar
+                this.refBibliografica.push({
+                    id: (++this.lastRefId)+"",
+                    author: this.newRefAutor,
+                    year: this.newRefAnio+"",
+                    title: this.newRefTitulo,
+                    editorial: this.newRefEditorial,
+                    isbn: this.newRefIsbn,
+                    lugar: this.newRefLugar
                 })
-                this.new_ref_autor = ''
-                this.new_ref_anio = ''
-                this.new_ref_titulo = ''
-                this.new_ref_editorial = ''
-                this.new_ref_isbn = ''
-                this.new_ref_lugar = ''
-                document.getElementById('new_ref_autor').focus();
+                this.newRefAutor = ''
+                this.newRefAnio = ''
+                this.newRefTitulo = ''
+                this.newRefEditorial = ''
+                this.newRefIsbn = ''
+                this.newRefLugar = ''
+                document.getElementById('newRefAutor').focus();
             } else {
                 alert("Ingrese campos validos")
             }
         },
-        delete_ref_bibliografica: function(ref) {
-            this.ref_bibliografica.forEach(function(elemento, index, array){
+        deleteRefBibliografica: function(ref) {
+            this.refBibliografica.forEach(function(elemento, index, array){
                 if (elemento.id == ref.id)
                     array.splice(index, 1)
             })
         },
-        actualizar_ref: function(ref) {
-            var ref_filtered = this.ref_bibliografica.filter(function(elemento){
+        actualizarRef: function(ref) {
+            var refFiltered = this.refBibliografica.filter(function(elemento){
                 return ref.id == elemento.id
             })[0]
-            ref_filtered.year = this.edit_ref_anio
-            ref_filtered.author = this.edit_ref_autor
-            ref_filtered.title = this.edit_ref_titulo
-            ref_filtered.editorial = this.edit_ref_editorial
-            ref_filtered.isbn = this.edit_ref_isbn
-            ref_filtered.lugar = this.edit_ref_lugar
-            this.edit_ref_autor = ''
-            this.edit_ref_titulo = ''
-            this.edit_ref_anio = ''
-            this.edit_ref_editorial = ''
-            this.edit_ref_isbn = ''
-            this.edit_ref_lugar = ''
-            this.cancelar_actualizar_ref()
+            refFiltered.year = this.editRefAnio
+            refFiltered.author = this.editRefAutor
+            refFiltered.title = this.editRefTitulo
+            refFiltered.editorial = this.editRefEditorial
+            refFiltered.isbn = this.editRefIsbn
+            refFiltered.lugar = this.editRefLugar
+            this.editRefAutor = ''
+            this.editRefTitulo = ''
+            this.editRefAnio = ''
+            this.editRefEditorial = ''
+            this.editRefIsbn = ''
+            this.editRefLugar = ''
+            this.cancelarActualizarRef()
         },
-        cancelar_actualizar_ref: function(ref) {
-            this.select_ref(this.ref_selected)
+        cancelarActualizarRef: function(ref) {
+            this.selectRef(this.ref_selected)
             this.ref_selected = {}
         },
         //Submit
@@ -333,7 +333,7 @@ var vm = new Vue(
               form.appendChild(input)
            })
 
-           this.ref_bibliografica.forEach(function(ref, index){
+           this.refBibliografica.forEach(function(ref, index){
               var input = document.createElement("input")
               input.type = "hidden"
               input.name = "bibliografia[]"
@@ -347,23 +347,23 @@ var vm = new Vue(
     },
 
     watch: {
-        semana_selected: function(newValue)
+        semanaSelected: function(newValue)
         {
             if (newValue.id == undefined)
-                this.tema_title = ''
+                this.temaTitle = ''
             else
-                this.tema_title = 'Temas - Unidad ' + this.unidad_selected.number + ' - Semana' + this.semana_selected.number
+                this.temaTitle = 'Temas - Unidad ' + this.unidadSelected.number + ' - Semana' + this.semanaSelected.number
         }
     },
 
     ready: function() {
        if (window.unidades.length > 0) {
           this.unidades = window.unidades;
-          this.last_unidad_id = window.lastUnidadId;
+          this.lastUnidadId = window.lastUnidadId;
           this.semanas = window.semanas;
-          this.last_semana_id = window.lastSemanaId;
+          this.lastSemanaId = window.lastSemanaId;
           this.temas = window.temas;
-          this.last_tema_id = window.lastTemaId;
+          this.lastTemaId = window.lastTemaId;
        }
     }
 });
