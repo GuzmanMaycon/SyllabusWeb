@@ -15,11 +15,11 @@ public class Periodo {
     private Integer semestre;
 
     public Periodo(
-            Integer id,
-            Integer anio,
-            Date fechaInicio,
-            Date fechaFin,
-            Integer semestre
+        Integer id,
+        Integer anio,
+        Date fechaInicio,
+        Date fechaFin,
+        Integer semestre
             )
     {
         this.id = id;
@@ -28,6 +28,8 @@ public class Periodo {
         this.fechaFin = fechaFin;
         this.semestre = semestre;
     }
+
+    public Periodo() {}
 
     public Integer getId() {
         return id;

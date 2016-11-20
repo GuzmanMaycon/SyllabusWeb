@@ -26,43 +26,41 @@
       <p>${mensajeError}</p>
     </div>
     </c:if>
+
     <form method="POST">
     <div class="row">
       <h2>Registro de avance del Curso de ${ nombreAsignatura }</h2>
     </div>
 
     <div class="row">
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Unidad</th>
-            <th>Semana</th>
-            <th>Descripcion del tema</th>
-            <th>Cumplido</th>
-          </tr>
-        </thead>
-        <tbody>
-          <c:forEach var="tema" items="${temas}">
-          <tr>
-            <td class="text-center">${tema.unidad}</td>
-            <td class="text-center">${tema.semana}</td>
-            <td class="text-center">${tema.descripcion}</td>
-            <td class="text-center">
-              <div class="checkbox">
-                <label>
-                  <input id="tema_${tema.id}"
-                         type="checkbox"
-                         value="${tema.id}"
-                         name="temas[]"
-                         data-cumplido="0"
-                       @click="selectema(${tema.id})"><span id="span_${tema.id}">No</span>
-                </label>
-              </div>
-            </td>
-          </tr>
-          </c:forEach>
-        </tbody>
-      </table>
+      <c:forEach var="semana" items="${semanas}">
+      <div class="col-sm-6 col-md-4 col-md-offset-1 col-lg-4">
+        <div class="panel panel-info">
+          <div class="panel-heading">
+            <label>Semana ${semana.key}</label>
+          </div>
+
+          <div class="panel-body">
+            <c:forEach var="registro" items="${semana.value}">
+            <c:set var="tipoClase" value="${registro.key.descripcion}"/>
+            <div class="col-xs-9">
+              ${tipoClase}
+            </div>
+            <div class="col-xs-3">
+              <c:if test="${!registro.value}">
+              <a href="${basePath}/asignatura/${asignaturaAperturadaId}/semana/${semana.key}/${tipoClase}/avance">
+                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+              </a>
+              </c:if>
+              <c:if test="${registro.value}">
+                <i class="fa fa-check" aria-hidden="true"></i>
+              </c:if>
+            </div>
+            </c:forEach>
+          </div>
+        </div>
+      </div>
+      </c:forEach>
     </div>
 
     <div class="row">

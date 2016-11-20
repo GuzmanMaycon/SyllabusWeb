@@ -1,6 +1,9 @@
 package com.junior.controller;
 
+import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,8 +15,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.junior.dao.design.IAsignaturaAperturadaDao;
+import com.junior.dao.design.IPeriodoDao;
 import com.junior.dao.design.ITemaDao;
+import com.junior.helpers.SemanaHelper;
+import com.junior.to.Periodo;
 import com.junior.to.Tema;
+import com.junior.to.TipoClase;
 
 @Controller
 @RequestMapping("/asignatura/{asignaturaAperturadaId}")
@@ -25,6 +32,9 @@ public class AvanceTemaController {
     @Autowired
     private ITemaDao temaDao;
 
+    @Autowired
+    private IPeriodoDao periodoDao;
+
     public void setAsignaturaAperturadaDao(IAsignaturaAperturadaDao asignaturaAperturadaDao)
     {
         this.asignaturaAperturadaDao = asignaturaAperturadaDao;
@@ -35,21 +45,58 @@ public class AvanceTemaController {
         this.temaDao = temaDao;
     }
 
-    @RequestMapping(value = "/avance", method = RequestMethod.GET)
-    public String create(ModelMap map, @PathVariable(value="asignaturaAperturadaId") Integer asignaturaAperturadaid)
+    public void setPeriodoDao(IPeriodoDao periodoDao)
     {
-        String nombreAsignatura = this.asignaturaAperturadaDao.obtenerNombreDeAsignaturaPorId(asignaturaAperturadaid);
-        List<Tema> temas = this.temaDao.obtenerTemasPorAsignaturaPorSemana(asignaturaAperturadaid, 1);
-
-        map.addAttribute("nombreAsignatura", nombreAsignatura);
-        map.addAttribute("temas", temas);
-
-        return "temas/registrar_avance";
+        this.periodoDao = periodoDao;
     }
 
-    @RequestMapping(value = "/avance", method = RequestMethod.POST)
+    @RequestMapping(value = "/index", method = RequestMethod.GET)
+    public String index(ModelMap map,
+        @PathVariable(value="asignaturaAperturadaId") Integer asignaturaAperturadaid,
+        Principal usuario)
+    {
+        String nombreAsignatura = this.asignaturaAperturadaDao.obtenerNombreDeAsignaturaPorId(asignaturaAperturadaid);
+
+        Map<Integer, Map<TipoClase, Boolean>> semanas = new HashMap<Integer, Map<TipoClase,Boolean>>();
+        // Obtener semanas de acuerdo a las fechas
+        Periodo periodo = this.periodoDao.obtenerPeriodoActual();
+        SemanaHelper.retornarUltimasSemanas(periodo.getFechaInicio());
+        // Obtener las clases del profesor y si registro sus temas en las sesiones de dichas semanas
+        TipoClase teoria = new TipoClase();
+        TipoClase labo = new TipoClase();
+        teoria.setDescripcion("Teoria");
+        labo.setDescripcion("Labo");
+        Map<TipoClase, Boolean> registro = new HashMap<>();
+        registro.put(teoria, true);
+        registro.put(labo, false);
+        semanas.put(1, registro);
+        semanas.put(2,new HashMap<TipoClase, Boolean>());
+
+        map.addAttribute("nombreAsignatura", nombreAsignatura);
+        map.addAttribute("semanas", semanas);
+
+        return "registrar-avance/index";
+    }
+
+    @RequestMapping(value = "/semana/{semana}/{tipoClase}/avance", method = RequestMethod.GET)
+    public String create(ModelMap map,
+        @PathVariable(value="asignaturaAperturadaId") Integer asignaturaAperturadaid,
+        @PathVariable(value="semana") Integer semana,
+        @PathVariable(value="tipoClase") String tipoClase,
+        RedirectAttributes redirectAttrs)
+    {
+        List<Tema> temas = this.temaDao.obtenerTemasPorAsignaturaPorSemana(asignaturaAperturadaid, semana);
+
+
+        return "registrar-avance/registrar";
+    }
+
+    @RequestMapping(value = "/semana/{semana}/clase/{tipoClase}/avance", method = RequestMethod.POST)
     public String store(ModelMap map,
         @RequestParam(value = "temas[]", required = false) List<Integer> temas,
+        @PathVariable(value="asignaturaAperturadaId") Integer asignaturaAperturadaid,
+        @PathVariable(value="semana") Integer semana,
+        @PathVariable(value="tipoClase") String tipoClase,
         RedirectAttributes redirectAttrs)
     {
         if(temas != null) {
@@ -61,7 +108,7 @@ public class AvanceTemaController {
         }
 
         map.addAttribute("mensajeError", "No ingreso ningun tema.");
-        return "temas/registrar_avance";
+        return "registrar-avance/registrar";
     }
 
 }
