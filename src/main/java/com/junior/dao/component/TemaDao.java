@@ -22,14 +22,12 @@ public class TemaDao implements ITemaDao {
     @Autowired
     protected IAccesoDB db;
 
-    public void setDb(IAccesoDB db)
-    {
+    public void setDb(IAccesoDB db) {
         this.db = db;
     }
 
     @Override
-    public List<Tema> obtenerTodos(Syllabus syllabus)
-    {
+    public List<Tema> obtenerTodos(Syllabus syllabus) {
 
         List<Tema> temas = new ArrayList<Tema>();
 
@@ -78,8 +76,7 @@ public class TemaDao implements ITemaDao {
     }
 
     @Override
-    public String editarTema(Tema tema, Integer idSyllabus)
-    {
+    public String editarTema(Tema tema, Integer idSyllabus) {
         String rpta = null;
         String prc_editarTema = "{CALL EDITAR_TEMA(?,?,?,?,?,?)}";
         Connection cn = db.getConnection();
@@ -113,8 +110,8 @@ public class TemaDao implements ITemaDao {
     }
 
     @Override
-    public String eliminarTema(Tema tema)
-    {
+    public String eliminarTema(Tema tema) {
+
         String rpta = null;
         String prc_eliminarTema = "{CALL ELIMINAR_TEMA(?)}";
         Connection cn = db.getConnection();
@@ -139,14 +136,13 @@ public class TemaDao implements ITemaDao {
                 }
             }
         }
-
         return rpta;
+
     }
 
     @Override
-    public List<Tema> obtenerTemasPorAsignaturaPorSemana(Integer idAsignaturaAperturada, Integer numeroSemana)
-    {
-        ArrayList<Tema> temas = new ArrayList<Tema>();
+    public List<Tema> obtenerTemasPorAsignaturaPorSemana(Integer idAsignaturaAperturada, Integer numeroSemana) {
+        List<Tema> temas = new ArrayList<Tema>();
 
         String procedimientoAlmacenado = "{ call PAC_CURSOR.TEMAS_ASIGNA_APER_x_SEMANA(?, ?, ?)}";
 
@@ -184,4 +180,49 @@ public class TemaDao implements ITemaDao {
 
         return temas;
     }
+
+    @Override
+    public List<Tema> obtenerAvancePorValidar(Integer idGrupo, Integer idAlumno) {
+        List<Tema> temasAvanzadosPorValidar = new ArrayList<Tema>();
+
+        String procedimientoAlmacenado = "{ call PAC_CURSOR.LISTAR_TEMAS_A_VALIDAR_X_GRUPO(?,?,?)}";
+
+        Connection cn = this.db.getConnection();
+
+        if (cn != null) {
+            try {
+                CallableStatement proc = cn.prepareCall(procedimientoAlmacenado);
+                proc.setInt(1, idGrupo);
+                proc.setInt(2, idAlumno);
+                proc.registerOutParameter(3, OracleTypes.CURSOR);
+
+                proc.execute();
+
+                ResultSet rs = (ResultSet) proc.getObject(3);
+
+                while (rs.next()) {
+                    Tema tema = new Tema();
+                    tema.setId(rs.getInt("ID_TEMA"));
+                    tema.setUnidad(rs.getInt("UNIDAD"));
+                    tema.setSemana(rs.getInt("SEMANA"));
+                    tema.setDescripcion(rs.getString("DESCRIPCION"));
+                    tema.setTipo(rs.getInt("ID_TIPO"));
+                    tema.setSyllabus(rs.getInt("ID_SYLLABUS"));
+
+                    temasAvanzadosPorValidar.add(tema);
+                }
+            } catch (SQLException ex) {
+                System.err.println(ex.getMessage());
+            } finally {
+                try {
+                    cn.close();
+                } catch (Exception e) {
+                    System.err.println(e.getMessage());
+                }
+            }
+        }
+
+        return temasAvanzadosPorValidar;
+    }
+
 }
