@@ -14,9 +14,24 @@
 
 	<%@ include file="/views/layout/sidebar.jsp" %>
 
+	<c:forEach items="${authorities}" var="authority" varStatus="vs">
 	<script>
 		document.getElementById("consultar-avance-link").className += " item-sidebar-active";
 	</script>
+
+	<c:if test="${ authority.authority == 'ROLE_ALUMNO' }">
+	<script>
+		document.getElementById("validar-avance-link").className += " item-sidebar-active";
+	</script>
+	</c:if>
+
+	<c:if test="${ authority.authority == 'ROLE_DOCENTE' }">
+	<script>
+		document.getElementById("registrar-avance-link").className += " item-sidebar-active";
+	</script>
+	</c:if>
+	</c:forEach>
+
 	<div class="content">
 		<c:if test="${not empty mensajeError}">
 		<div class="alert alert-danger">

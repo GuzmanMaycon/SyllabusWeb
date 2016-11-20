@@ -33,7 +33,7 @@
         <%-- FIN ROLE ALUMNO --%>
         <c:if test="${ authority.authority == 'ROLE_ALUMNO' }">
         <li>
-            <a class="sidebar-link" href="${basePath}/grupos/index">
+            <a class="sidebar-link" href="${basePath}/grupos/index" id="validar-avance-link">
                 Validar avance
             </a>
         </li>
@@ -43,7 +43,7 @@
         <%-- FIN ROLE DOCENTE --%>
         <c:if test="${ authority.authority == 'ROLE_DOCENTE' }">
         <li>
-            <a class="sidebar-link" href="${basePath}/grupos/index">
+            <a class="sidebar-link" href="${basePath}/grupos/index" id="registrar-avance-link">
                 Registrar avance
             </a>
         </li>
@@ -53,7 +53,7 @@
         <%-- INICIO ROLE COORDINADOR --%>
         <c:if test="${ authority.authority == 'ROLE_COORDINADOR' }">
         <li>
-            <a class="sidebar-link" href="${basePath}/asignaturas_del_ciclo/index">
+            <a class="sidebar-link" href="${basePath}/asignaturas_del_ciclo/index" id="gestionar-syllabus-link">
                 Gestionar syllabus
             </a>
         </li>
