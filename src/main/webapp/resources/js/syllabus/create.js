@@ -196,7 +196,7 @@ var vm = new Vue(
                 tipoId: this.newTemaTipo+""
             });
             this.newTema = '';
-            this.newTemaTipo = '';
+            this.newTemaTipo = 1;
             document.getElementById('new-tema').focus();
         },
         deleteTema: function(tema) {
@@ -365,5 +365,6 @@ var vm = new Vue(
           this.temas = window.temas;
           this.lastTemaId = window.lastTemaId;
        }
+       this.newTemaTipo = 1;
     }
 });

@@ -119,6 +119,7 @@ create or replace PROCEDURE REG_TEMA
    (DESCRIPCION		TEMA.DESCRIPCION%TYPE,
     UNIDAD			TEMA.UNIDAD%TYPE,
     SEMANA			TEMA.SEMANA%TYPE,
+    ID_TIPO     TEMA.ID_TIPO%TYPE,
     ID_SYLLABUS		TEMA.ID_SYLLABUS%TYPE) AUTHID CURRENT_USER AS
 
 BEGIN
@@ -126,11 +127,13 @@ BEGIN
 	                DESCRIPCION,
 					UNIDAD,
 					SEMANA,
+                    ID_TIPO,
 					ID_SYLLABUS)
-      VALUES (sq_tema.nextval,
+    VALUES (sq_tema.nextval,
 	        REG_TEMA.DESCRIPCION,
 			REG_TEMA.UNIDAD,
 			REG_TEMA.SEMANA,
+            REG_TEMA.ID_TIPO,
 			REG_TEMA.ID_SYLLABUS);
 
 END REG_TEMA;
@@ -139,14 +142,14 @@ END REG_TEMA;
 /*--------------------------------------------------------------------------
  * NOMBRE    : Reg_Syllabus
  * OBJETIVO  : Registrar syllabus en la base de datos
- * FECHA MOD : 03/11/2016 2:53pm
+ * FECHA MOD : 20/11/2016 11:04pm
  *--------------------------------------------------------------------------
  *     INFORMACI?:
  *     AUTOR: LUCERO DEL PILAR LIZA PUICAN
  *---------------------------------------------------------------------------*/
 create or replace PROCEDURE Reg_Syllabus
-   (p_IDAsigAperturada      IN dbsegsyl.syllabus.id_asig_aperturada%TYPE
-   ) AUTHID CURRENT_USER AS
+   (p_IDAsigAperturada      IN dbsegsyl.syllabus.id_asig_aperturada%TYPE,
+   p_ID out                dbsegsyl.syllabus.id_syllabus%TYPE) AUTHID CURRENT_USER AS
 
 BEGIN
    INSERT INTO syllabus (
@@ -155,7 +158,8 @@ BEGIN
       fecha_entrega,
       id_asig_aperturada
    )
-   VALUES (sq_syllabus.nextval, 1, SYSDATE, p_IDAsigAperturada);
+   VALUES (sq_syllabus.nextval, 1, SYSDATE, p_IDAsigAperturada)
+   RETURNING id_syllabus into p_ID;
 
 END Reg_Syllabus;
 /

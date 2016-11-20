@@ -101,9 +101,9 @@ public class SyllabusController {
         @PathVariable(value = "asignaturaAperturadaId") Integer asignaturaAperturadaid,
         RedirectAttributes redirectAttrs)
     {
-        EstadoSyllabus estadoSyllabus = this.syllabusDao.obtenerEstadoPorAsigAperturadaId(asignaturaAperturadaid);
+        String estadoSyllabus = this.syllabusDao.obtenerEstadoPorAsigAperturadaId(asignaturaAperturadaid);
 
-        if (estadoSyllabus.equals(EstadoSyllabus.N)) {
+        if (estadoSyllabus.equals(EstadoSyllabus.N.toString())) {
             // Obtener el nombre de la asignatura a partir del id de la asignatura aperturada
             String nombreAsignatura = this.asignaturaAperturadaDao.obtenerNombreDeAsignaturaPorId(asignaturaAperturadaid);
             // Verificar si la asignatura es valida
@@ -211,7 +211,7 @@ public class SyllabusController {
         @PathVariable(value = "syllabusId") Integer syllabusId,
         RedirectAttributes redirectAttrs)
     {
-    	//Obtener los atributos del Syllabus a partir del id del Syllabus
+        //Obtener los atributos del Syllabus a partir del id del Syllabus
         Syllabus syllabus = this.syllabusDao.obtenerSyllabus(syllabusId);
 
         // Obtener el nombre de la asignatura a partir del id de la asignatura aperturada
