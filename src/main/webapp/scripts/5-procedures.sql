@@ -53,21 +53,21 @@ END;
 
 /*--------------------------------------------------------------------------
  * NOMBRE    : Eliminar_Bibliografia
- * OBJETIVO  : Eliminar referencias bibliograficas                 
+ * OBJETIVO  : Eliminar referencias bibliograficas
  * FECHA MOD : 08/11/2016 8:50am
- *--------------------------------------------------------------------------                                
- *     INFORMACI?:                                                          
- *     AUTOR: LUCERO DEL PILAR LIZA PUICAN                                  
+ *--------------------------------------------------------------------------
+ *     INFORMACI?:
+ *     AUTOR: LUCERO DEL PILAR LIZA PUICAN
  *---------------------------------------------------------------------------*/
 CREATE OR REPLACE PROCEDURE dbsegsyl.Eliminar_Bibliografia(
-    p_IDReferencia       IN dbsegsyl.referencia_bibliografica.id_referencia%TYPE 
+    p_IDReferencia       IN dbsegsyl.referencia_bibliografica.id_referencia%TYPE
 )
 AUTHID CURRENT_USER
-AS 
+AS
 BEGIN
-       DELETE FROM dbsegsyl.referencia_bibliografica 
-             WHERE id_referencia = p_IDReferencia; 
-       
+       DELETE FROM dbsegsyl.referencia_bibliografica
+             WHERE id_referencia = p_IDReferencia;
+
 END Eliminar_Bibliografia;
 /
 
@@ -344,7 +344,7 @@ create or replace PACKAGE          PAC_CURSOR is
       p_id_syllabus IN syllabus.id_syllabus%TYPE,
       o_cursor IN OUT g_cursor
    );
-   
+
    procedure RET_BIBLIOGRAFIA_X_SYLLABUS(
       p_id_syllabus IN syllabus.id_syllabus%TYPE,
       O_CURSOR      IN OUT G_CURSOR
@@ -356,13 +356,19 @@ create or replace PACKAGE          PAC_CURSOR is
  * FECHA MOD : 19/11/2016 5:12am
  *--------------------------------------------------------------------------
  *     INFORMACI?:
- *     AUTOR: Lucero Liza Puican 
+ *     AUTOR: Lucero Liza Puican
  *---------------------------------------------------------------------------*/
-	PROCEDURE LISTAR_TEMAS_A_VALIDAR_X_GRUPO(
-	     p_id_grupo  IN grupo.id_grupo%TYPE,
-       p_id_usuario IN alumno.id_usuario%TYPE,
-       O_CURSOR    IN out G_CURSOR
-	);
+   PROCEDURE LISTAR_TEMAS_A_VALIDAR_X_GRUPO(
+      p_id_grupo  IN grupo.id_grupo%TYPE,
+      p_id_usuario IN alumno.id_usuario%TYPE,
+      O_CURSOR    IN out G_CURSOR
+   );
+
+   PROCEDURE TEMAS_ASIGNA_APER_x_SEMANA(
+      p_id_asignatura_aperturada IN asignatura_aperturada.id_asig_aperturada%TYPE,
+      p_numero_semana IN tema.semana%TYPE,
+      o_cursor IN OUT g_cursor
+   );
 
 end PAC_CURSOR;
 /
@@ -461,7 +467,7 @@ create or replace PACKAGE BODY PAC_CURSOR IS
                                       AND  asist.verificacion IN ('A'))
         JOIN dbsegsyl.tema t ON (t.id_tema = ts.id_tema)
        where g.id_grupo = p_id_grupo;
-       
+
     END LISTAR_TEMAS_A_VALIDAR_X_GRUPO;
 
    procedure RET_USUARIO_X_EMAIL(
@@ -538,7 +544,7 @@ create or replace PACKAGE BODY PAC_CURSOR IS
          JOIN ESTADO_SYLLABUS ON ESTADO_SYLLABUS.ID_ESTADO_SYLLABUS = SYLLABUS.ID_ESTADO
         WHERE SYLLABUS.ID_SYLLABUS = p_id_syllabus;
    END RET_SYLLABUS;
-   
+
    procedure RET_BIBLIOGRAFIA_X_SYLLABUS(
       p_id_syllabus IN syllabus.id_syllabus%TYPE,
       O_CURSOR      IN OUT G_CURSOR) IS
@@ -548,6 +554,21 @@ create or replace PACKAGE BODY PAC_CURSOR IS
            FROM dbsegsyl.referencia_bibliografica
           WHERE referencia_bibliografica.id_syllabus = p_id_syllabus;
    END RET_BIBLIOGRAFIA_X_SYLLABUS;
+
+   PROCEDURE TEMAS_ASIGNA_APER_x_SEMANA(
+      p_id_asignatura_aperturada IN asignatura_aperturada.id_asig_aperturada%TYPE,
+      p_numero_semana IN tema.semana%TYPE,
+      o_cursor IN OUT g_cursor) IS
+      BEGIN
+         OPEN o_cursor FOR
+         SELECT tema.*
+         FROM dbsegsyl.tema
+         JOIN dbsegsyl.syllabus ON dbsegsyl.tema.id_syllabus = dbsegsyl.syllabus.id_syllabus
+         JOIN dbsegsyl.asignatura_aperturada ON dbsegsyl.syllabus.id_asig_aperturada = dbsegsyl.asignatura_aperturada.id_asig_aperturada
+         JOIN dbsegsyl.asignatura ON dbsegsyl.asignatura_aperturada.id_asignatura = dbsegsyl.asignatura.id_asignatura
+         WHERE asignatura_aperturada.id_asig_aperturada = p_id_asignatura_aperturada and tema.semana = p_numero_semana;
+
+   END TEMAS_ASIGNA_APER_x_SEMANA;
 
 END PAC_CURSOR;
 /
@@ -591,7 +612,7 @@ BEGIN
     UPDATE dbsegsyl.referencia_bibliografica
        SET titulo = p_Titulo,
            autor = p_Autor,
-           anio_publicacion = p_AnioPublicacion, 
+           anio_publicacion = p_AnioPublicacion,
            lugar_publicacion = p_LugarPublicacion,
            editorial = p_Editorial,
            isbn = p_ISBN
@@ -621,7 +642,7 @@ BEGIN
     UPDATE dbsegsyl.tema
        SET DESCRIPCION = p_Descripcion,
            UNIDAD = p_Unidad,
-           SEMANA = p_Semana, 
+           SEMANA = p_Semana,
            ID_TIPO = p_IDTipo
 		WHERE  ID_TEMA = p_IDTema
       AND  ID_SYLLABUS = p_IDSyllabus;
