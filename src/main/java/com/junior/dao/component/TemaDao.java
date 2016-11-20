@@ -19,124 +19,169 @@ import oracle.jdbc.internal.OracleTypes;
 
 public class TemaDao implements ITemaDao {
 
-	@Autowired
-	protected IAccesoDB db;
+    @Autowired
+    protected IAccesoDB db;
 
-	public void setDb(IAccesoDB db) {
-		this.db = db;
-	}
+    public void setDb(IAccesoDB db)
+    {
+        this.db = db;
+    }
 
-	@Override
-	public List<Tema> obtenerTodos(Syllabus syllabus) {
+    @Override
+    public List<Tema> obtenerTodos(Syllabus syllabus)
+    {
 
-		List<Tema> temas = new ArrayList<Tema>();
+        List<Tema> temas = new ArrayList<Tema>();
 
-		String procedimientoAlmacenado = "{ call PAC_CURSOR.RET_TEMAS_X_SYLLABUS(?, ?)}";
+        String procedimientoAlmacenado = "{ call PAC_CURSOR.RET_TEMAS_X_SYLLABUS(?, ?)}";
 
-		Connection cn = this.db.getConnection();
+        Connection cn = this.db.getConnection();
 
-		if (cn != null) {
-			try {
-				CallableStatement proc = cn.prepareCall(procedimientoAlmacenado);
-				proc.registerOutParameter("O_CURSOR", OracleTypes.CURSOR);
-				// -- 1 --
-				proc.setInt("p_id_syllabus", syllabus.getId());
-				proc.execute();
+        if (cn != null) {
+            try {
+                CallableStatement proc = cn.prepareCall(procedimientoAlmacenado);
+                proc.registerOutParameter("O_CURSOR", OracleTypes.CURSOR);
+                // -- 1 --
+                proc.setInt("p_id_syllabus", syllabus.getId());
+                proc.execute();
 
-				ResultSet rs = (ResultSet) proc.getObject("O_CURSOR");
+                ResultSet rs = (ResultSet) proc.getObject("O_CURSOR");
 
-				while (rs.next()) {
-					Tema tema = new Tema();
-					tema.setDescripcion(rs.getString("DESCRIPCION"));
-					tema.setUnidad(rs.getInt("UNIDAD"));
-					tema.setSemana(rs.getInt("SEMANA"));
+                while (rs.next()) {
+                    Tema tema = new Tema();
+                    tema.setDescripcion(rs.getString("DESCRIPCION"));
+                    tema.setUnidad(rs.getInt("UNIDAD"));
+                    tema.setSemana(rs.getInt("SEMANA"));
 
-					TipoClase tipoClase = new TipoClase();
-					tipoClase.setId(rs.getInt("ID_TIPO"));
+                    TipoClase tipoClase = new TipoClase();
+                    tipoClase.setId(rs.getInt("ID_TIPO"));
 
-					Syllabus syll = new Syllabus();
-					syll.setId(rs.getInt("ID_SYLLABUS"));
+                    Syllabus syll = new Syllabus();
+                    syll.setId(rs.getInt("ID_SYLLABUS"));
 
-					temas.add(tema);
+                    temas.add(tema);
 
-				}
-			} catch (SQLException ex) {
-				System.err.println(ex.getMessage());
-			} finally {
-				try {
-					cn.close();
-				} catch (Exception e) {
-					System.err.println(e.getMessage());
-				}
-			}
-		}
+                }
+            } catch (SQLException ex) {
+                System.err.println(ex.getMessage());
+            } finally {
+                try {
+                    cn.close();
+                } catch (Exception e) {
+                    System.err.println(e.getMessage());
+                }
+            }
+        }
 
-		return temas;
+        return temas;
 
-	}
+    }
 
-	@Override
-	public String editarTema(Tema tema, Integer idSyllabus) {
-		String rpta = null;
-		String prc_editarTema = "{CALL EDITAR_TEMA(?,?,?,?,?,?)}";
-		Connection cn = db.getConnection();
+    @Override
+    public String editarTema(Tema tema, Integer idSyllabus)
+    {
+        String rpta = null;
+        String prc_editarTema = "{CALL EDITAR_TEMA(?,?,?,?,?,?)}";
+        Connection cn = db.getConnection();
 
-		if (cn != null) {
-			try {
-				CallableStatement cs = cn.prepareCall(prc_editarTema);
-				cs.setInt(1, tema.getId());
-				cs.setString(2, tema.getDescripcion());
-				cs.setInt(3, tema.getUnidad());
-				cs.setInt(4, tema.getSemana());
-				cs.setInt(5, tema.getTipo());
-				cs.setInt(6, idSyllabus);
+        if (cn != null) {
+            try {
+                CallableStatement cs = cn.prepareCall(prc_editarTema);
+                cs.setInt(1, tema.getId());
+                cs.setString(2, tema.getDescripcion());
+                cs.setInt(3, tema.getUnidad());
+                cs.setInt(4, tema.getSemana());
+                cs.setInt(5, tema.getTipo());
+                cs.setInt(6, idSyllabus);
 
-				int actualizo = cs.executeUpdate();
+                int actualizo = cs.executeUpdate();
 
-				if (actualizo == 0) {
-					rpta = "ERROR";
-				}
-			} catch (SQLException ex) {
-				rpta = ex.getMessage();
-			} finally {
-				try {
-					cn.close();
-				} catch (SQLException e) {
-					rpta = e.getMessage();
-				}
-			}
-		}
-		return rpta;
-	}
+                if (actualizo == 0) {
+                    rpta = "ERROR";
+                }
+            } catch (SQLException ex) {
+                rpta = ex.getMessage();
+            } finally {
+                try {
+                    cn.close();
+                } catch (SQLException e) {
+                    rpta = e.getMessage();
+                }
+            }
+        }
+        return rpta;
+    }
 
-	@Override
-	public String eliminarTema(Tema tema) {
-		
-		String rpta = null;
-		String prc_eliminarTema = "{CALL ELIMINAR_TEMA(?)}";
-		Connection cn = db.getConnection();
+    @Override
+    public String eliminarTema(Tema tema)
+    {
+        String rpta = null;
+        String prc_eliminarTema = "{CALL ELIMINAR_TEMA(?)}";
+        Connection cn = db.getConnection();
 
-		if (cn != null) {
-			try {
-				CallableStatement cs = cn.prepareCall(prc_eliminarTema);
-				cs.setInt(1, tema.getId());
+        if (cn != null) {
+            try {
+                CallableStatement cs = cn.prepareCall(prc_eliminarTema);
+                cs.setInt(1, tema.getId());
 
-				int actualizo = cs.executeUpdate();
+                int actualizo = cs.executeUpdate();
 
-				if (actualizo == 0) {
-					rpta = "ERROR";
-				}
-			} catch (SQLException ex) {
-				rpta = ex.getMessage();
-			} finally {
-				try {
-					cn.close();
-				} catch (SQLException e) {
-					rpta = e.getMessage();
-				}
-			}
-		}
-		return rpta;
-		
-	}
+                if (actualizo == 0) {
+                    rpta = "ERROR";
+                }
+            } catch (SQLException ex) {
+                rpta = ex.getMessage();
+            } finally {
+                try {
+                    cn.close();
+                } catch (SQLException e) {
+                    rpta = e.getMessage();
+                }
+            }
+        }
+
+        return rpta;
+    }
+
+    @Override
+    public List<Tema> obtenerTemasPorAsignaturaPorSemana(Integer idAsignaturaAperturada, Integer numeroSemana)
+    {
+        ArrayList<Tema> temas = new ArrayList<Tema>();
+
+        String procedimientoAlmacenado = "{ call PAC_CURSOR.TEMAS_ASIGNA_APER_x_SEMANA(?, ?, ?)}";
+
+        Connection cn = this.db.getConnection();
+
+        if (cn != null) {
+            try {
+                CallableStatement proc = cn.prepareCall(procedimientoAlmacenado);
+                proc.registerOutParameter("o_cursor", OracleTypes.CURSOR);
+                proc.setInt("p_id_asignatura_aperturada", idAsignaturaAperturada);
+                proc.setInt("p_numero_semana", numeroSemana);
+                proc.execute();
+
+                ResultSet rs = (ResultSet) proc.getObject("o_cursor");
+
+                while (rs.next()) {
+                    Tema tema = new Tema();
+                    tema.setId(rs.getInt("ID_TEMA"));
+                    tema.setDescripcion(rs.getString("DESCRIPCION"));
+                    tema.setSemana(rs.getInt("SEMANA"));
+                    tema.setUnidad(rs.getInt("UNIDAD"));
+
+                    temas.add(tema);
+                }
+            } catch(SQLException ex) {
+                System.err.println(ex.getMessage());
+            } finally {
+                try {
+                    cn.close();
+                } catch (Exception e) {
+                    System.err.println(e.getMessage());
+                }
+            }
+        }
+
+        return temas;
+    }
 }

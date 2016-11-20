@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.junior.dao.design.IAsignaturaAperturadaDao;
-import com.junior.dao.design.ITemasAsignaturaAperturadaPorSemanaDao;
+import com.junior.dao.design.ITemaDao;
 import com.junior.to.Tema;
 
 @Controller
@@ -23,14 +23,14 @@ public class AvanceTemaController {
     private IAsignaturaAperturadaDao asignaturaAperturadaDao; // Dao para asignaturas aperturadas
 
     @Autowired
-    private ITemasAsignaturaAperturadaPorSemanaDao temaDao;
+    private ITemaDao temaDao;
 
     public void setAsignaturaAperturadaDao(IAsignaturaAperturadaDao asignaturaAperturadaDao)
     {
         this.asignaturaAperturadaDao = asignaturaAperturadaDao;
     }
 
-    public void setTemaDao(ITemasAsignaturaAperturadaPorSemanaDao temaDao)
+    public void setTemaDao(ITemaDao temaDao)
     {
         this.temaDao = temaDao;
     }

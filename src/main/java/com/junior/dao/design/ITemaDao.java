@@ -7,7 +7,8 @@ import com.junior.to.Tema;
 
 public interface ITemaDao {
     public List<Tema> obtenerTodos(Syllabus syllabus);
-	public String editarTema(Tema tema, Integer idSyllabus);
-	public String eliminarTema(Tema tema);
+    public String editarTema(Tema tema, Integer idSyllabus);
+    public String eliminarTema(Tema tema);
+    public List<Tema> obtenerTemasPorAsignaturaPorSemana(Integer idAsignaturaAperturada,  Integer numeroSemana);
 
 }
