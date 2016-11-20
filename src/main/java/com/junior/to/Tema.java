@@ -9,23 +9,23 @@ public class Tema {
     private Integer semana;
 
     private Integer unidad;
-    
-    private Integer id_tipo;
-    
-    private Integer id_syllabus;
+
+    private Integer tipoId;
+
+    private Integer syllabusId;
 
     public Tema() {}
 
-    public Tema(Integer id, String descripcion, Integer semana, Integer unidad, Integer tipo, Integer syllabus)
+    public Tema(Integer id, String descripcion, Integer semana, Integer unidad, Integer tipoId, Integer syllabusId)
     {
         this.id = id;
         this.descripcion = descripcion;
         this.unidad = unidad;
         this.semana = semana;
-        this.id_tipo = tipo;
-        this.id_syllabus = syllabus;
+        this.tipoId = tipoId;
+        this.syllabusId = syllabusId;
     }
-    
+
     public Integer getId()
     {
         return id;
@@ -65,24 +65,24 @@ public class Tema {
     {
         this.unidad = unidad;
     }
-    
-    public Integer getTipo()
+
+    public Integer getTipoId()
     {
-        return id_tipo;
+        return tipoId;
     }
 
-    public void setTipo(Integer tipo)
+    public void setTipoId(Integer tipoId)
     {
-        this.id_tipo = tipo;
-    }   
-    
-    public Integer getSyllabus()
-    {
-        return id_syllabus;
+        this.tipoId = tipoId;
     }
 
-    public void setSyllabus(Integer syllabus)
+    public Integer getSyllabusId()
     {
-        this.id_syllabus = syllabus;
-    }   
+        return syllabusId;
+    }
+
+    public void setSyllabusId(Integer syllabusId)
+    {
+        this.syllabusId = syllabusId;
+    }
 }

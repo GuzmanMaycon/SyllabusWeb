@@ -13,7 +13,6 @@ import com.junior.conexion.IAccesoDB;
 import com.junior.dao.design.ITemaDao;
 import com.junior.to.Syllabus;
 import com.junior.to.Tema;
-import com.junior.to.TipoClase;
 
 import oracle.jdbc.internal.OracleTypes;
 
@@ -50,12 +49,8 @@ public class TemaDao implements ITemaDao {
                     tema.setDescripcion(rs.getString("DESCRIPCION"));
                     tema.setUnidad(rs.getInt("UNIDAD"));
                     tema.setSemana(rs.getInt("SEMANA"));
-
-                    TipoClase tipoClase = new TipoClase();
-                    tipoClase.setId(rs.getInt("ID_TIPO"));
-
-                    Syllabus syll = new Syllabus();
-                    syll.setId(rs.getInt("ID_SYLLABUS"));
+                    tema.setTipoId(rs.getInt("ID_TIPO"));
+                    tema.setSyllabusId(syllabus.getId());
 
                     temas.add(tema);
 
@@ -88,7 +83,7 @@ public class TemaDao implements ITemaDao {
                 cs.setString(2, tema.getDescripcion());
                 cs.setInt(3, tema.getUnidad());
                 cs.setInt(4, tema.getSemana());
-                cs.setInt(5, tema.getTipo());
+                cs.setInt(5, tema.getTipoId());
                 cs.setInt(6, idSyllabus);
 
                 int actualizo = cs.executeUpdate();
@@ -206,8 +201,8 @@ public class TemaDao implements ITemaDao {
                     tema.setUnidad(rs.getInt("UNIDAD"));
                     tema.setSemana(rs.getInt("SEMANA"));
                     tema.setDescripcion(rs.getString("DESCRIPCION"));
-                    tema.setTipo(rs.getInt("ID_TIPO"));
-                    tema.setSyllabus(rs.getInt("ID_SYLLABUS"));
+                    tema.setTipoId(rs.getInt("ID_TIPO"));
+                    tema.setSyllabusId(rs.getInt("ID_SYLLABUS"));
 
                     temasAvanzadosPorValidar.add(tema);
                 }
