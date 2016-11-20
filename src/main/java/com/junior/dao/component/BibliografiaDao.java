@@ -13,8 +13,6 @@ import com.junior.conexion.IAccesoDB;
 import com.junior.dao.design.IBibliografiaDao;
 import com.junior.to.Bibliografia;
 import com.junior.to.Syllabus;
-import com.junior.to.Tema;
-import com.junior.to.TipoClase;
 
 import oracle.jdbc.internal.OracleTypes;
 
@@ -28,57 +26,56 @@ public class BibliografiaDao implements IBibliografiaDao {
         this.db = db;
     }
 
-	@Override
-	public String editarBibliografia(Bibliografia bibliografia, Integer idSyllabus) {
-		
-		String rpta = null;
-		String procedimientoAlmacenado = "{CALL EDITAR_REF_BIBLIO(?,?,?,?,?,?,?,?)}";
-		Connection cn = db.getConnection();
-		
-		if(cn != null){
-			try{
-				CallableStatement cs = cn.prepareCall(procedimientoAlmacenado);
-				cs.setInt(1, bibliografia.getId());
-				cs.setString(2,  bibliografia.getTitulo());
-				cs.setString(3, bibliografia.getAutor());
-				cs.setInt(4, bibliografia.getAnioPublicacion());
-				cs.setString(5, bibliografia.getLugarPublicacion());
-				cs.setString(6,  bibliografia.getEditorial());
-				cs.setString(7, bibliografia.getIsbn());
-				cs.setInt(8, idSyllabus);
-				
-				int actualizo = cs.executeUpdate();
-				
-				if(actualizo == 0){
-						rpta = "ERROR";
-				}
-			}catch(SQLException ex){
-				rpta = ex.getMessage();
-			}finally{
-				try{
-					cn.close();
-				}catch(SQLException e){
-					rpta = e.getMessage();
-				}
-			}	
-		}
-		return rpta;
-	}
+    @Override
+    public String editarBibliografia(Bibliografia bibliografia, Integer idSyllabus) {
 
-	@Override
-	public List<Bibliografia> obtenerPorSyllabus(Syllabus syllabus) {
-		List<Bibliografia> bibliografia = new ArrayList<Bibliografia>();
-		
-		String procedimientoAlmacenado = "{ call PAC_CURSOR.RET_BIBLIOGRAFIA_X_SYLLABUS(?, ?)}";
-		
-		Connection cn = this.db.getConnection();
-		
+        String rpta = null;
+        String procedimientoAlmacenado = "{CALL EDITAR_REF_BIBLIO(?,?,?,?,?,?,?,?)}";
+        Connection cn = db.getConnection();
+
+        if(cn != null){
+            try{
+                CallableStatement cs = cn.prepareCall(procedimientoAlmacenado);
+                cs.setInt(1, bibliografia.getId());
+                cs.setString(2,  bibliografia.getTitulo());
+                cs.setString(3, bibliografia.getAutor());
+                cs.setInt(4, bibliografia.getAnioPublicacion());
+                cs.setString(5, bibliografia.getLugarPublicacion());
+                cs.setString(6,  bibliografia.getEditorial());
+                cs.setString(7, bibliografia.getIsbn());
+                cs.setInt(8, idSyllabus);
+
+                int actualizo = cs.executeUpdate();
+
+                if(actualizo == 0){
+                    rpta = "ERROR";
+                }
+            }catch(SQLException ex){
+                rpta = ex.getMessage();
+            }finally{
+                try{
+                    cn.close();
+                }catch(SQLException e){
+                    rpta = e.getMessage();
+                }
+            }
+        }
+        return rpta;
+    }
+
+    @Override
+    public List<Bibliografia> obtenerPorSyllabus(Syllabus syllabus) {
+        List<Bibliografia> bibliografia = new ArrayList<Bibliografia>();
+
+        String procedimientoAlmacenado = "{ call PAC_CURSOR.RET_BIBLIOGRAFIA_X_SYLLABUS(?, ?)}";
+
+        Connection cn = this.db.getConnection();
+
         if (cn != null) {
             try {
                 CallableStatement proc = cn.prepareCall(procedimientoAlmacenado);
                 proc.registerOutParameter("O_CURSOR", OracleTypes.CURSOR);
-                // -- 1 --
-                proc.setInt("p_id_syllabus", 1);
+                proc.setInt("p_id_syllabus", syllabus.getId());
                 proc.execute();
 
                 ResultSet rs = (ResultSet) proc.getObject("O_CURSOR");
@@ -92,10 +89,7 @@ public class BibliografiaDao implements IBibliografiaDao {
                     libro.setEditorial(rs.getString("EDITORIAL"));
                     libro.setIsbn(rs.getString("ISBN"));
                     libro.setId(rs.getInt("ID_REFERENCIA"));
-                    
-                    Syllabus syll = new Syllabus();                   
-                    syll.setId(rs.getInt("ID_SYLLABUS"));
-                                       
+
                     bibliografia.add(libro);
 
                 }
@@ -109,13 +103,13 @@ public class BibliografiaDao implements IBibliografiaDao {
                 }
             }
         }
-        
+
         return bibliografia;
 
-	}
+    }
 
-	@Override
-	public String eliminarBibliografia(Bibliografia bibliografia) {
+    @Override
+    public String eliminarBibliografia(Bibliografia bibliografia) {
         String rpta = null;
         Connection cn = db.getConnection();
         String procedimientoAlmacenado = "{CALL ELIMINAR_BIBLIOGRAFIA(?)}";
@@ -136,5 +130,5 @@ public class BibliografiaDao implements IBibliografiaDao {
             }
         }
         return rpta;
-	}
+    }
 }

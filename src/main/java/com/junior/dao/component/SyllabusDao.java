@@ -246,7 +246,7 @@ public class SyllabusDao implements ISyllabusDao {
                     syllabus.setFechaAprobacion(rs.getDate("FECHA_APROBACION"));
                     syllabus.setIdAsigAperturada(rs.getInt("ID_ASIG_APERTURADA"));
 
-                    syllabus.setTemas(this.temaDao.obtenerTodos(syllabus));
+                    syllabus.setTemas(this.temaDao.obtenerPorSyllabus(syllabus));
                     syllabus.setBibliografia(this.bibliografiaDao.obtenerPorSyllabus(syllabus));
                 }
 

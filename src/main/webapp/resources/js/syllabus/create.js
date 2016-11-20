@@ -364,6 +364,8 @@ var vm = new Vue(
           this.lastSemanaId = window.lastSemanaId;
           this.temas = window.temas;
           this.lastTemaId = window.lastTemaId;
+          this.lastRefId = window.lastRefId;
+          this.refBibliografica = window.bibliografia;
        }
        this.newTemaTipo = 1;
     }

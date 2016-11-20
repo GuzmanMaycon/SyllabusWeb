@@ -26,7 +26,7 @@ public class TemaDao implements ITemaDao {
     }
 
     @Override
-    public List<Tema> obtenerTodos(Syllabus syllabus) {
+    public List<Tema> obtenerPorSyllabus(Syllabus syllabus) {
 
         List<Tema> temas = new ArrayList<Tema>();
 
