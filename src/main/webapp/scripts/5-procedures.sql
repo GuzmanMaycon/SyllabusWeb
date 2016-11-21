@@ -1,4 +1,32 @@
 /*--------------------------------------------------------------------------*/
+/* NOMBRE    : VALIDA_ALUMNO_X_GRUPO                                        */
+/* OBJETIVO  : RETORNA SI UN ALUMNO PERTENECE A UN GRUPO                    */
+/* FECHA     : 20/11/2016 9:22pm
+/*---------------------------------------------------------------------------*/
+/*     INFORMACION:                                                          */
+/*     AUTOR: LUCERO LIZA PUICAN                                             */
+/*---------------------------------------------------------------------------*/
+CREATE OR REPLACE FUNCTION DBSEGSYL.VALIDA_ALUMNO_X_GRUPO(
+	p_IDAlumno 	IN alumno.id_usuario%TYPE,
+  p_IDGrupo   IN grupo.id_grupo%TYPE
+)
+RETURN NUMBER
+IS pertenece NUMBER;
+BEGIN
+    SELECT 1
+      INTO pertenece
+      FROM dbsegsyl.matricula m
+     WHERE m.id_grupo = p_IDGrupo
+       AND m.id_alumno = p_IDAlumno;
+       
+	RETURN pertenece;
+EXCEPTION
+	WHEN OTHERS THEN
+		RETURN NULL;
+END;
+/
+
+/*--------------------------------------------------------------------------*/
 /* NOMBRE    : DEVUELVE_NOMBRE_ASIG_X_GRUPO                                 */
 /* OBJETIVO  : RETORNA EL NOMBRE DE UNA ASIGNATURA POR ID_GRUPO             */
 /* FECHA MODIFICACION : 18/11/2016 7:00pm
