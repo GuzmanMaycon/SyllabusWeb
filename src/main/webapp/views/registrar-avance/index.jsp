@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,6 +21,10 @@
 
   <%@ include file="/views/layout/sidebar.jsp" %>
 
+  <script>
+    document.getElementById("registrar-avance-link").className += " item-sidebar-active";
+  </script>
+
   <div class="content">
     <c:if test="${not empty mensajeError}">
     <div class="alert alert-danger">
@@ -37,7 +42,8 @@
       <div class="col-sm-6 col-md-4 col-md-offset-1 col-lg-4">
         <div class="panel panel-info">
           <div class="panel-heading">
-            <label>Semana ${semana.key}</label>
+            <c:set var="fecha" value="${semanasFecha[semana.key]}"/>
+            <label>Semana ${semana.key} - <fmt:formatDate pattern="dd-MM-yyyy" value="${fecha}" /></label>
           </div>
 
           <div class="panel-body">
@@ -65,44 +71,12 @@
 
     <div class="row">
       <div class="text-center">
-        <div class="checkbox">
-          <label>
-            <input id="hay-tema-extra"
-                   type="checkbox"
-                   @click="hay_temas_extras = !(hay_temas_extras)">
-            <span id="hay-tema-extra">¿Se ha dictado temas adicionales que no están en el syllabus?</span>
-          </label>
-        </div>
-      </div>
-    </div>
-
-    <div class="row" v-show="hay_temas_extras">
-      <ul>
-        <li v-for="tema in temas_extras">{{ tema }}</li>
-      </ul>
-      <div class="col-xs-12">
-        <div class="form-group">
-          <input class="form-control"
-                 type="text"
-                 name="temas_extra[]"
-                 v-model="nuevo_tema_extra"
-                 placeholder="Ingrese el nuevo tema"
-                 @keydown.enter.prevent="agregar_tema_extra()">
-        </div>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="text-center">
-        <a href="#" type="button" class="btn btn-default">Regresar</a>
-        <button class="btn btn-primary">Guardar avance</button>
+        <a href="${basePath}/grupos/index" type="button" class="btn btn-default">Regresar</a>
       </div>
     </div>
 
     </form>
   </div>
 
-  <!-- Scripts -->
-  <script src="${registrarAvanceJs}"></script>
 </body>
 </html>

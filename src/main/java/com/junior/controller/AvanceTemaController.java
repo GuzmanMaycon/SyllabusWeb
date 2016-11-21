@@ -1,7 +1,8 @@
 package com.junior.controller;
 
 import java.security.Principal;
-import java.util.HashMap;
+import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -57,23 +58,26 @@ public class AvanceTemaController {
     {
         String nombreAsignatura = this.asignaturaAperturadaDao.obtenerNombreDeAsignaturaPorId(asignaturaAperturadaid);
 
-        Map<Integer, Map<TipoClase, Boolean>> semanas = new HashMap<Integer, Map<TipoClase,Boolean>>();
+        Map<Integer, Map<TipoClase, Boolean>> semanas = new LinkedHashMap<Integer, Map<TipoClase,Boolean>>();
         // Obtener semanas de acuerdo a las fechas
         Periodo periodo = this.periodoDao.obtenerPeriodoActual();
-        SemanaHelper.retornarUltimasSemanas(periodo.getFechaInicio());
+        Map<Integer, Date> semanasRecientes = SemanaHelper.retornarUltimasSemanas(periodo.getFechaInicio());
+
         // Obtener las clases del profesor y si registro sus temas en las sesiones de dichas semanas
         TipoClase teoria = new TipoClase();
         TipoClase labo = new TipoClase();
         teoria.setDescripcion("Teoria");
         labo.setDescripcion("Labo");
-        Map<TipoClase, Boolean> registro = new HashMap<>();
-        registro.put(teoria, true);
-        registro.put(labo, false);
-        semanas.put(1, registro);
-        semanas.put(2,new HashMap<TipoClase, Boolean>());
 
+        for(Map.Entry<Integer, Date> entry : semanasRecientes.entrySet()) {
+            Map<TipoClase, Boolean> registro = new LinkedHashMap<>();
+            registro.put(teoria, true);
+            registro.put(labo, false);
+            semanas.put(entry.getKey(), registro);
+        }
         map.addAttribute("nombreAsignatura", nombreAsignatura);
         map.addAttribute("semanas", semanas);
+        map.addAttribute("semanasFecha", semanasRecientes);
 
         return "registrar-avance/index";
     }
