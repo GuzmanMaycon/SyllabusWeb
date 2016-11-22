@@ -63,7 +63,7 @@
 
   <!-- Dao para Tipo Clase -->
   <bean id="tipoClaseImpl"
-        class="com.junior.dao.component.TipoClaseDao">
+        class="com.junior.dao.component.ClaseDao">
     <property name="db">
       <ref bean="accesoOracleLocalImpl"/>
     </property>

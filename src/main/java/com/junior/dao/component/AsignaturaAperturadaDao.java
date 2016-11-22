@@ -130,4 +130,10 @@ public class AsignaturaAperturadaDao implements IAsignaturaAperturadaDao{
         // TODO Auto-generated method stub
         return null;
     }
+
+    @Override
+    public AsignaturaAperturadaTO obtenerPorId(Integer id) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

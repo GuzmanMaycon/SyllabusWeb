@@ -48,13 +48,13 @@
 
           <div class="panel-body">
             <c:forEach var="registro" items="${semana.value}">
-            <c:set var="tipoClase" value="${registro.key.descripcion}"/>
+            <c:set var="tipoClase" value="${registro.key.tipo.descripcion}"/>
             <div class="col-xs-9">
               ${tipoClase}
             </div>
             <div class="col-xs-3">
               <c:if test="${!registro.value}">
-              <a href="${basePath}/asignatura/${asignaturaAperturadaId}/semana/${semana.key}/${tipoClase}/avance">
+              <a href="${basePath}/grupo/${grupoId}/semana/${semana.key}/${tipoClase}/avance">
                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
               </a>
               </c:if>

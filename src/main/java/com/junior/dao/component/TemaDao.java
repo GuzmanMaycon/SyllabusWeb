@@ -4,6 +4,7 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,12 +22,14 @@ public class TemaDao implements ITemaDao {
     @Autowired
     protected IAccesoDB db;
 
-    public void setDb(IAccesoDB db) {
+    public void setDb(IAccesoDB db)
+    {
         this.db = db;
     }
 
     @Override
-    public List<Tema> obtenerPorSyllabus(Syllabus syllabus) {
+    public List<Tema> obtenerPorSyllabus(Syllabus syllabus)
+    {
 
         List<Tema> temas = new ArrayList<Tema>();
 
@@ -71,7 +74,8 @@ public class TemaDao implements ITemaDao {
     }
 
     @Override
-    public String editarTema(Tema tema, Integer idSyllabus) {
+    public String editarTema(Tema tema, Integer idSyllabus)
+    {
         String rpta = null;
         String prc_editarTema = "{CALL EDITAR_TEMA(?,?,?,?,?,?)}";
         Connection cn = db.getConnection();
@@ -105,7 +109,8 @@ public class TemaDao implements ITemaDao {
     }
 
     @Override
-    public String eliminarTema(Tema tema) {
+    public String eliminarTema(Tema tema)
+    {
 
         String rpta = null;
         String prc_eliminarTema = "{CALL ELIMINAR_TEMA(?)}";
@@ -136,7 +141,8 @@ public class TemaDao implements ITemaDao {
     }
 
     @Override
-    public List<Tema> obtenerTemasPorAsignaturaPorSemana(Integer idAsignaturaAperturada, Integer numeroSemana) {
+    public List<Tema> obtenerTemasPorAsignaturaPorSemana(Integer idAsignaturaAperturada, Integer numeroSemana)
+    {
         List<Tema> temas = new ArrayList<Tema>();
 
         String procedimientoAlmacenado = "{ call PAC_CURSOR.TEMAS_ASIGNA_APER_x_SEMANA(?, ?, ?)}";
@@ -177,7 +183,8 @@ public class TemaDao implements ITemaDao {
     }
 
     @Override
-    public List<Tema> obtenerAvancePorValidar(Integer idGrupo, Integer idAlumno) {
+    public List<Tema> obtenerAvancePorValidar(Integer idGrupo, Integer idAlumno)
+    {
         List<Tema> temasAvanzadosPorValidar = new ArrayList<Tema>();
 
         String procedimientoAlmacenado = "{ call PAC_CURSOR.LISTAR_TEMAS_A_VALIDAR_X_GRUPO(?,?,?)}";
@@ -218,6 +225,35 @@ public class TemaDao implements ITemaDao {
         }
 
         return temasAvanzadosPorValidar;
+    }
+
+    @Override
+    public Boolean obtenerSiIngresoTemas(Integer idClase)
+    {
+        Boolean resultado = false;
+        String procedimientoAlmacenado = "{ ? = call RET_INGRESO_TEMAS(?)}";
+        Connection cn = this.db.getConnection();
+
+        if (cn != null) {
+            try {
+                CallableStatement proc = cn.prepareCall(procedimientoAlmacenado);
+                proc.registerOutParameter("v_resultado", Types.INTEGER);
+                proc.setInt("p_id_clase", idClase);
+                proc.executeQuery();
+                System.out.println(proc.getInt("v_resultado"));
+                resultado = (proc.getInt("v_resultado") == 1);
+            } catch(SQLException ex) {
+                System.err.println(ex.getMessage());
+            } finally {
+                try {
+                    cn.close();
+                } catch (Exception e) {
+                    System.err.println(e.getMessage());
+                }
+            }
+        }
+
+        return resultado;
     }
 
 }

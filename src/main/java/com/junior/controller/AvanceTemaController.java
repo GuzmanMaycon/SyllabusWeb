@@ -15,23 +15,23 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.junior.dao.design.IAsignaturaAperturadaDao;
+import com.junior.dao.design.IClaseDao;
+import com.junior.dao.design.IGrupoDao;
 import com.junior.dao.design.IPeriodoDao;
 import com.junior.dao.design.ITemaDao;
-import com.junior.dao.design.ITipoClaseDao;
 import com.junior.dao.design.IUsuarioDao;
 import com.junior.helpers.SemanaHelper;
+import com.junior.to.Clase;
 import com.junior.to.Periodo;
 import com.junior.to.Tema;
-import com.junior.to.TipoClase;
 import com.junior.to.Usuario;
 
 @Controller
-@RequestMapping("/asignatura/{asignaturaAperturadaId}")
+@RequestMapping("/grupo/{grupoId}")
 public class AvanceTemaController {
 
     @Autowired
-    private IAsignaturaAperturadaDao asignaturaAperturadaDao; // Dao para asignaturas aperturadas
+    private IGrupoDao grupoDao;
 
     @Autowired
     private ITemaDao temaDao;
@@ -40,14 +40,14 @@ public class AvanceTemaController {
     private IPeriodoDao periodoDao;
 
     @Autowired
-    private ITipoClaseDao tipoClaseDao;
+    private IClaseDao claseDao;
 
     @Autowired
     private IUsuarioDao usuarioDao;
 
-    public void setAsignaturaAperturadaDao(IAsignaturaAperturadaDao asignaturaAperturadaDao)
+    public void setGrupoDao(IGrupoDao grupoDao)
     {
-        this.asignaturaAperturadaDao = asignaturaAperturadaDao;
+        this.grupoDao = grupoDao;
     }
 
     public void setTemaDao(ITemaDao temaDao)
@@ -60,9 +60,9 @@ public class AvanceTemaController {
         this.periodoDao = periodoDao;
     }
 
-    public void setTipoClaseDao(ITipoClaseDao tipoClaseDao)
+    public void setClaseDao(IClaseDao claseDao)
     {
-        this.tipoClaseDao = tipoClaseDao;
+        this.claseDao = claseDao;
     }
 
     public void setUsuarioDao(IUsuarioDao usuarioDao)
@@ -72,24 +72,25 @@ public class AvanceTemaController {
 
     @RequestMapping(value = "/index", method = RequestMethod.GET)
     public String index(ModelMap map,
-        @PathVariable(value="asignaturaAperturadaId") Integer asignaturaAperturadaid,
+        @PathVariable(value="grupoId") Integer grupoId,
         Principal principal)
     {
-        String nombreAsignatura = this.asignaturaAperturadaDao.obtenerNombreDeAsignaturaPorId(asignaturaAperturadaid);
+        String nombreAsignatura = "";
         Usuario usuario = this.usuarioDao.obtenerUsuario(principal.getName());
 
-        Map<Integer, Map<TipoClase, Boolean>> semanas = new LinkedHashMap<Integer, Map<TipoClase,Boolean>>();
+        Map<Integer, Map<Clase, Boolean>> semanas = new LinkedHashMap<Integer, Map<Clase,Boolean>>();
         // Obtener semanas de acuerdo a las fechas
         Periodo periodo = this.periodoDao.obtenerPeriodoActual();
         Map<Integer, Date> semanasRecientes = SemanaHelper.retornarUltimasSemanas(periodo.getFechaInicio());
 
         // Obtener las clases del profesor y si registro sus temas en las sesiones de dichas semanas
-        List<TipoClase> tiposClase = this.tipoClaseDao.obtenerTipoClasesPorGrupoPorDocente(1, usuario.getId());
+        List<Clase> clases = this.claseDao.obtenerPorGrupoPorDocente(grupoId, usuario.getId());
 
         for(Map.Entry<Integer, Date> entry : semanasRecientes.entrySet()) {
-            Map<TipoClase, Boolean> registro = new LinkedHashMap<>();
-            for(TipoClase tipoClase: tiposClase) {
-                registro.put(tipoClase, false);
+            Map<Clase, Boolean> registro = new LinkedHashMap<>();
+            for(Clase clase: clases) {
+                Boolean resultado = this.temaDao.obtenerSiIngresoTemas(clase.getId());
+                registro.put(clase, resultado);
             }
             semanas.put(entry.getKey(), registro);
         }

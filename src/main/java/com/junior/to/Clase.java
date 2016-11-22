@@ -13,10 +13,10 @@ public class Clase {
     private TipoClase tipo;
 
     public Clase(
-            Integer id,
-            Date horaInicio,
-            Date horaFin,
-            TipoClase tipo
+        Integer id,
+        Date horaInicio,
+        Date horaFin,
+        TipoClase tipo
             )
     {
         this.id = id;
@@ -24,6 +24,8 @@ public class Clase {
         this.horaFin = horaFin;
         this.tipo = tipo;
     }
+
+    public Clase(){ }
 
     public Integer getId() {
         return id;

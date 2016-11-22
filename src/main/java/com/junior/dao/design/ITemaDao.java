@@ -11,4 +11,5 @@ public interface ITemaDao {
     public String eliminarTema(Tema tema);
     public List<Tema> obtenerTemasPorAsignaturaPorSemana(Integer idAsignaturaAperturada,  Integer numeroSemana);
     public List<Tema> obtenerAvancePorValidar(Integer idGrupo, Integer idAlumno);
+    public Boolean obtenerSiIngresoTemas(Integer idClase);
 }

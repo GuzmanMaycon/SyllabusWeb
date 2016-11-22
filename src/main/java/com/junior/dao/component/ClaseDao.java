@@ -10,12 +10,13 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.junior.conexion.IAccesoDB;
-import com.junior.dao.design.ITipoClaseDao;
+import com.junior.dao.design.IClaseDao;
+import com.junior.to.Clase;
 import com.junior.to.TipoClase;
 
 import oracle.jdbc.internal.OracleTypes;
 
-public class TipoClaseDao implements ITipoClaseDao {
+public class ClaseDao implements IClaseDao {
 
     @Autowired
     protected IAccesoDB db;
@@ -25,8 +26,8 @@ public class TipoClaseDao implements ITipoClaseDao {
     }
 
     @Override
-    public List<TipoClase> obtenerTipoClasesPorGrupoPorDocente(Integer grupoId, Integer docenteId) {
-        List<TipoClase> tiposClase = new ArrayList<TipoClase>();
+    public List<Clase> obtenerPorGrupoPorDocente(Integer grupoId, Integer docenteId) {
+        List<Clase> clases = new ArrayList<Clase>();
 
         String procedimientoAlmacenado = "{ call PAC_CURSOR.RET_CLASES_X_GRUPO(?, ?, ?)}";
 
@@ -47,8 +48,11 @@ public class TipoClaseDao implements ITipoClaseDao {
                     nuevoTipoClase.setDescripcion(rs.getString("DESCRIPCION"));
                     nuevoTipoClase.setId(rs.getInt("ID_TIPO"));
 
-                    tiposClase.add(nuevoTipoClase);
+                    Clase nuevaClase = new Clase();
+                    nuevaClase.setTipo(nuevoTipoClase);
+                    nuevaClase.setId(rs.getInt("ID_CLASE"));
 
+                    clases.add(nuevaClase);
                 }
             } catch (SQLException ex) {
                 System.err.println(ex.getMessage());
@@ -61,7 +65,7 @@ public class TipoClaseDao implements ITipoClaseDao {
             }
         }
 
-        return tiposClase;
+        return clases;
     }
 
 }
