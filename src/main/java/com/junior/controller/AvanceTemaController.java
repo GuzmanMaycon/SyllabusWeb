@@ -18,10 +18,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.junior.dao.design.IAsignaturaAperturadaDao;
 import com.junior.dao.design.IPeriodoDao;
 import com.junior.dao.design.ITemaDao;
+import com.junior.dao.design.ITipoClaseDao;
+import com.junior.dao.design.IUsuarioDao;
 import com.junior.helpers.SemanaHelper;
 import com.junior.to.Periodo;
 import com.junior.to.Tema;
 import com.junior.to.TipoClase;
+import com.junior.to.Usuario;
 
 @Controller
 @RequestMapping("/asignatura/{asignaturaAperturadaId}")
@@ -35,6 +38,12 @@ public class AvanceTemaController {
 
     @Autowired
     private IPeriodoDao periodoDao;
+
+    @Autowired
+    private ITipoClaseDao tipoClaseDao;
+
+    @Autowired
+    private IUsuarioDao usuarioDao;
 
     public void setAsignaturaAperturadaDao(IAsignaturaAperturadaDao asignaturaAperturadaDao)
     {
@@ -51,12 +60,23 @@ public class AvanceTemaController {
         this.periodoDao = periodoDao;
     }
 
+    public void setTipoClaseDao(ITipoClaseDao tipoClaseDao)
+    {
+        this.tipoClaseDao = tipoClaseDao;
+    }
+
+    public void setUsuarioDao(IUsuarioDao usuarioDao)
+    {
+        this.usuarioDao = usuarioDao;
+    }
+
     @RequestMapping(value = "/index", method = RequestMethod.GET)
     public String index(ModelMap map,
         @PathVariable(value="asignaturaAperturadaId") Integer asignaturaAperturadaid,
-        Principal usuario)
+        Principal principal)
     {
         String nombreAsignatura = this.asignaturaAperturadaDao.obtenerNombreDeAsignaturaPorId(asignaturaAperturadaid);
+        Usuario usuario = this.usuarioDao.obtenerUsuario(principal.getName());
 
         Map<Integer, Map<TipoClase, Boolean>> semanas = new LinkedHashMap<Integer, Map<TipoClase,Boolean>>();
         // Obtener semanas de acuerdo a las fechas
@@ -64,15 +84,13 @@ public class AvanceTemaController {
         Map<Integer, Date> semanasRecientes = SemanaHelper.retornarUltimasSemanas(periodo.getFechaInicio());
 
         // Obtener las clases del profesor y si registro sus temas en las sesiones de dichas semanas
-        TipoClase teoria = new TipoClase();
-        TipoClase labo = new TipoClase();
-        teoria.setDescripcion("Teoria");
-        labo.setDescripcion("Labo");
+        List<TipoClase> tiposClase = this.tipoClaseDao.obtenerTipoClasesPorGrupoPorDocente(1, usuario.getId());
 
         for(Map.Entry<Integer, Date> entry : semanasRecientes.entrySet()) {
             Map<TipoClase, Boolean> registro = new LinkedHashMap<>();
-            registro.put(teoria, true);
-            registro.put(labo, false);
+            for(TipoClase tipoClase: tiposClase) {
+                registro.put(tipoClase, false);
+            }
             semanas.put(entry.getKey(), registro);
         }
         map.addAttribute("nombreAsignatura", nombreAsignatura);
