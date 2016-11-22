@@ -16,9 +16,11 @@ public class Tema {
 
     public Tema() {}
 
-    public Tema(Integer id, String descripcion, Integer semana, Integer unidad, Integer tipo, Integer syllabus)
+    // Anteriormente a este constructor se le pasaba por parametro el dato Id_Tema. Pero esto no seria necesario ya que al llamar al procedure
+    // REG_TEMA genera un ID incremental.
+    public Tema(String descripcion, Integer semana, Integer unidad, Integer tipo, Integer syllabus)
     {
-        this.id = id;
+        //this.id = id;
         this.descripcion = descripcion;
         this.unidad = unidad;
         this.semana = semana;

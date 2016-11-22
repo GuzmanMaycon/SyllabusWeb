@@ -19,6 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.junior.dao.design.IAsignaturaAperturadaDao;
 import com.junior.dao.design.ISyllabusDao;
+import com.junior.dao.design.ITemaDao;
 import com.junior.parser.JsonParser;
 import com.junior.to.Bibliografia;
 import com.junior.to.EstadoSyllabus;
@@ -47,6 +48,14 @@ public class SyllabusController {
 
     private JsonParser<Bibliografia> biblioParser;// Parser para leer los libros del cuerpo del POST
 
+    @Autowired
+    public ITemaDao temaDao;
+    
+    public void setTemaDao(ITemaDao temaDao)
+    {
+        this.temaDao = temaDao;
+    }
+    
     /**
      * Asignar el dao para asignatura aperturada
      * @param asignaturaAperturadaDao dao que maneja las asignaturas aperturadas
@@ -211,8 +220,28 @@ public class SyllabusController {
         @PathVariable(value = "syllabusId") Integer syllabusId,
         RedirectAttributes redirectAttrs)
     {
+    		
         Syllabus syllabus = new Syllabus();
+    	// ****************************** PARA PROBAR EL ACTUALIZAR TEMAS *******************************
+        /**
+        ArrayList<Tema> temasL = new ArrayList<Tema>();
+        temasL.add(new Tema("Tema", 1, 1,2,1));
+        temasL.add(new Tema("Tema 2", 1, 1,2,1));
+        temasL.add(new Tema("Tema 3", 2, 1,2,1));
+        temasL.add(new Tema("Tema 4", 1, 2,2,1));        
+        syllabus.setTemas(temasL);
 
+        // Listo todos los objetos pertenecientes al Syllabus con id 1
+        this.temaDao.obtenerTodos(1);
+
+        // Tenemos la nueva lista TEMAS que servira para chancar los datos anteriores de la bd.
+        this.temaDao.actualizarTemas(temasL, 1); // (listaDeTemas, idSyllabus en el que estamos trabajando) 
+    	
+        // Listo mis nuevos datos de la bd pertenecientes al Syllabus con id 1
+        this.temaDao.obtenerTodos(1);
+    	
+    	**/
+        
         // Obtener el nombre de la asignatura a partir del id de la asignatura aperturada
         String nombreAsignatura = this.asignaturaAperturadaDao.obtenerNombreDeAsignaturaPorId(asignaturaAperturadaid);
         // Verificar si la asignatura es valida
@@ -225,11 +254,12 @@ public class SyllabusController {
         // Agregar al modelo el nombre de la asignatura
         model.addAttribute("nombreAsignatura", nombreAsignatura);
 
+        
         ArrayList<Tema> temas = new ArrayList<Tema>();
-        temas.add(new Tema(1, "Tema", 1, 1));
-        temas.add(new Tema(2, "Tema 2", 1, 1));
-        temas.add(new Tema(3, "Tema 3", 2, 1));
-        temas.add(new Tema(4, "Tema 4", 1, 2));
+        temas.add(new Tema("Tema", 1, 1,2,1));
+        temas.add(new Tema("Tema 2", 1, 1,2,1));
+        temas.add(new Tema("Tema 3", 2, 1,2,1));
+        temas.add(new Tema("Tema 4", 1, 2,2,1));
 
         syllabus.setTemas(temas);
 
