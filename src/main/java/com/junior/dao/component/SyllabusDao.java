@@ -5,7 +5,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
-
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.junior.conexion.IAccesoDB;
@@ -44,7 +43,7 @@ public class SyllabusDao implements ISyllabusDao {
     public void setBibliografiaDao(IBibliografiaDao bibliografiaDao){
         this.bibliografiaDao = bibliografiaDao;
     }
-
+    
     @Override
     /**
      * Registra un nuevo Syllabus
@@ -94,25 +93,8 @@ public class SyllabusDao implements ISyllabusDao {
                 /**
                  * Agregar la referencia bibliografia del syllabus
                  */
-                cs = cn.prepareCall(procInsertarBibliografia);
-                try {
-                    for (Bibliografia libro : syllabus.getBibliografia()) {
-                        cs.setString("AUTOR", libro.getAutor());
-                        cs.setInt("ANIO_PUBLICACION", libro.getAnioPublicacion());
-                        cs.setString("EDITORIAL", libro.getEditorial());
-                        cs.setString("ISBN", libro.getIsbn());
-                        cs.setString("TITULO", libro.getTitulo());
-                        cs.setString("LUGAR_PUBLICACION", libro.getLugarPublicacion());
-                        cs.setInt("ID_SYLLABUS", syllabus.getId());
-
-                        int inserto = cs.executeUpdate();
-                        if (inserto == 0) {
-                            return "Error al ingresar un libro";
-                        }
-                    }
-                } catch(SQLException ex) {
-                    ex.printStackTrace();
-                    return ex.getMessage();
+                for (Bibliografia libro : syllabus.getBibliografia()) {
+                        return bibliografiaDao.insertarBibliografia(libro, syllabus.getId());
                 }
             } catch (SQLException ex) {
                 ex.printStackTrace();
@@ -239,15 +221,7 @@ public class SyllabusDao implements ISyllabusDao {
                 ResultSet rs = (ResultSet) proc.getObject("O_CURSOR");
 
                 if (rs.next()) {
-                    syllabus = new Syllabus();
-                    syllabus.setId(syllabusId);
-                    syllabus.setEstado(rs.getString("ESTADO_SYLLABUS"));
-                    syllabus.setFechaEntrega(rs.getDate("FECHA_ENTREGA"));
-                    syllabus.setFechaAprobacion(rs.getDate("FECHA_APROBACION"));
-                    syllabus.setIdAsigAperturada(rs.getInt("ID_ASIG_APERTURADA"));
-
-                    syllabus.setTemas(this.temaDao.obtenerPorSyllabus(syllabus));
-                    syllabus.setBibliografia(this.bibliografiaDao.obtenerPorSyllabus(syllabus));
+                    syllabus.setBibliografia(this.bibliografiaDao.obtenerPorSyllabus(syllabusId));
                 }
 
             } catch(SQLException ex) {
