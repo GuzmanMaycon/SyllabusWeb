@@ -10,13 +10,14 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.junior.conexion.IAccesoDB;
-import com.junior.dao.design.IClaseDao;
+import com.junior.dao.design.ISesionDao;
 import com.junior.to.Clase;
+import com.junior.to.Sesion;
 import com.junior.to.TipoClase;
 
 import oracle.jdbc.internal.OracleTypes;
 
-public class ClaseDao implements IClaseDao {
+public class SesionDao implements ISesionDao {
 
     @Autowired
     protected IAccesoDB db;
@@ -26,8 +27,8 @@ public class ClaseDao implements IClaseDao {
     }
 
     @Override
-    public List<Clase> obtenerPorGrupoPorDocente(Integer grupoId, Integer docenteId) {
-        List<Clase> clases = new ArrayList<Clase>();
+    public List<Sesion> obtenerPorGrupoPorDocente(Integer grupoId, Integer docenteId) {
+        List<Sesion> sesiones = new ArrayList<Sesion>();
 
         String procedimientoAlmacenado = "{ call PAC_CURSOR.RET_CLASES_X_GRUPO(?, ?, ?)}";
 
@@ -52,7 +53,13 @@ public class ClaseDao implements IClaseDao {
                     nuevaClase.setTipo(nuevoTipoClase);
                     nuevaClase.setId(rs.getInt("ID_CLASE"));
 
-                    clases.add(nuevaClase);
+                    Sesion nuevaSesion = new Sesion();
+                    nuevaSesion.setId(rs.getInt("ID_SESION"));
+                    nuevaSesion.setEstado(rs.getString("ESTADO").charAt(0));
+                    nuevaSesion.setFecha(rs.getDate("FECHA"));
+                    nuevaSesion.setClase(nuevaClase);
+
+                    sesiones.add(nuevaSesion);
                 }
             } catch (SQLException ex) {
                 System.err.println(ex.getMessage());
@@ -65,7 +72,7 @@ public class ClaseDao implements IClaseDao {
             }
         }
 
-        return clases;
+        return sesiones;
     }
 
 }

@@ -228,7 +228,7 @@ public class TemaDao implements ITemaDao {
     }
 
     @Override
-    public Boolean obtenerSiIngresoTemas(Integer idClase)
+    public Boolean obtenerSiIngresoTemas(Integer idSesion)
     {
         Boolean resultado = false;
         String procedimientoAlmacenado = "{ ? = call RET_INGRESO_TEMAS(?)}";
@@ -238,9 +238,9 @@ public class TemaDao implements ITemaDao {
             try {
                 CallableStatement proc = cn.prepareCall(procedimientoAlmacenado);
                 proc.registerOutParameter("v_resultado", Types.INTEGER);
-                proc.setInt("p_id_clase", idClase);
+                proc.setInt("p_id_sesion", idSesion);
                 proc.executeQuery();
-                System.out.println(proc.getInt("v_resultado"));
+
                 resultado = (proc.getInt("v_resultado") == 1);
             } catch(SQLException ex) {
                 System.err.println(ex.getMessage());

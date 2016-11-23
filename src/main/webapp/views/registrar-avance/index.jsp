@@ -48,7 +48,7 @@
 
           <div class="panel-body">
             <c:forEach var="registro" items="${semana.value}">
-            <c:set var="tipoClase" value="${registro.key.tipo.descripcion}"/>
+            <c:set var="tipoClase" value="${registro.key.clase.tipo.descripcion}"/>
             <div class="col-xs-9">
               ${tipoClase}
             </div>
