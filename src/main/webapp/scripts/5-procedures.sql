@@ -609,7 +609,7 @@ create or replace PROCEDURE EDITAR_REF_BIBLIO
     p_IDSyllabus		    REFERENCIA_BIBLIOGRAFICA.ID_SYLLABUS%TYPE) AUTHID CURRENT_USER AS
 
 BEGIN
-    UPDATE dbsegsyl.referencia_bibliografica
+    UPDATE dbsegsyl.referencia_bibliograficas
        SET titulo = p_Titulo,
            autor = p_Autor,
            anio_publicacion = p_AnioPublicacion,
@@ -620,34 +620,6 @@ BEGIN
       AND  id_syllabus = p_IDSyllabus;
 
 END EDITAR_REF_BIBLIO;
-/
-
-create or replace PROCEDURE EDITAR_TEMA
-/*---------------------------------------------------------------------------*/
-/* Nombre    : EDITAR_TEMA      		                                     */
-/* Objetivo  : Edita un registro de la tabla TEMA  							 */
-/*---------------------------------------------------------------------------*/
-/*     Informacion:                                                          */
-/*     Autor: Thalia Quiroz Guzman                                           */
-/*---------------------------------------------------------------------------*/
-
-   (p_IDTema		TEMA.ID_TEMA%TYPE,
-    p_Descripcion	TEMA.DESCRIPCION%TYPE,
-    p_Unidad		TEMA.UNIDAD%TYPE,
-    p_Semana		TEMA.SEMANA%TYPE,
-    p_IDTipo		TEMA.ID_TIPO%TYPE,
-    P_IDSyllabus	TEMA.ID_SYLLABUS%TYPE) AUTHID CURRENT_USER AS
-
-BEGIN
-    UPDATE dbsegsyl.tema
-       SET DESCRIPCION = p_Descripcion,
-           UNIDAD = p_Unidad,
-           SEMANA = p_Semana,
-           ID_TIPO = p_IDTipo
-		WHERE  ID_TEMA = p_IDTema
-      AND  ID_SYLLABUS = p_IDSyllabus;
-
-END EDITAR_TEMA;
 /
 
 create or replace PROCEDURE ELIMINAR_TEMA
@@ -665,4 +637,21 @@ BEGIN
     DELETE FROM TEMA
 	WHERE ID_TEMA = p_IDTema;
 END ELIMINAR_TEMA;
+/
+
+create or replace PROCEDURE ELIMINAR_TEMA_X_SYLLABUS
+/*---------------------------------------------------------------------------*/
+/* Nombre    : ELIMINAR_TEMA_X_SYLLABUS      		                         */
+/* Objetivo  : Eliminar todos los temas pertenecientes a un Syllabus  		 */
+/*---------------------------------------------------------------------------*/
+/*     Informacion:                                                          */
+/*     Autor: Thalia Quiroz Guzman                                           */
+/*---------------------------------------------------------------------------*/
+
+   (p_IDSyllabus		TEMA.ID_SYLLABUS%TYPE) AUTHID CURRENT_USER AS
+
+BEGIN
+    DELETE FROM TEMA
+	WHERE ID_SYLLABUS = p_IDSyllabus;
+END ELIMINAR_TEMA_X_SYLLABUS;
 /
