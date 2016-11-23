@@ -14,6 +14,10 @@
 
 	<%@ include file="/views/layout/sidebar.jsp" %>
 
+	<script>
+		document.getElementById("gestionar-syllabus-link").className += " item-sidebar-active";
+	</script>
+
 	<div class="content">
 		<c:if test="${not empty mensajeError}">
 		<div class="alert alert-danger">
