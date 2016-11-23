@@ -372,14 +372,28 @@ create or replace PACKAGE          PAC_CURSOR is
 
 /*--------------------------------------------------------------------------
  * NOMBRE    : RET_PERIODO_ACTUAL
- * OBJETIVO  : Retorna los datos del periodo actual         
+ * OBJETIVO  : Retorna los datos del periodo actual
  * FECHA MOD : 02/11/2016 2:12pm
- *--------------------------------------------------------------------------                                
- *     INFORMACI?:                                                          
- *     AUTOR: LUCERO DEL PILAR LIZA PUICAN                                  
- *--------------------------------------------------------------------------*/   
+ *--------------------------------------------------------------------------
+ *     INFORMACI?:
+ *     AUTOR: LUCERO DEL PILAR LIZA PUICAN
+ *--------------------------------------------------------------------------*/
    PROCEDURE RET_PERIODO_ACTUAL(
       o_cursor IN OUT g_cursor
+   );
+
+/*--------------------------------------------------------------------------
+ * NOMBRE    : RET_TEMAS_AVANZADOS_x_SESION
+ * OBJETIVO  : Retorna los datos de los temas que el profesor ha registrado
+               como "avanzados" en el sistema.
+ * FECHA MOD : 23/11/2016 2:55pm
+ *--------------------------------------------------------------------------
+ *     INFORMACI?:
+ *     AUTOR: TAKESHI FARRO HINOSHITA
+ *--------------------------------------------------------------------------*/
+   PROCEDURE RET_TEMAS_AVANZADOS_x_SESION(
+      p_IDSesion IN sesion.id_sesion%TYPE,
+      o_cursor   IN OUT g_cursor
    );
 
 end PAC_CURSOR;
@@ -581,21 +595,35 @@ create or replace PACKAGE BODY PAC_CURSOR IS
          WHERE asignatura_aperturada.id_asig_aperturada = p_id_asignatura_aperturada and tema.semana = p_numero_semana;
 
    END TEMAS_ASIGNA_APER_x_SEMANA;
-   
+
    PROCEDURE RET_PERIODO_ACTUAL(
       o_cursor IN OUT g_cursor
-   ) AS 
+   ) IS
       vFechaActual DATE;
       BEGIN
          vFechaActual := SYSDATE;
          OPEN o_cursor FOR
-         SELECT periodo.* 
-           FROM dbsegsyl.periodo 
+         SELECT periodo.*
+           FROM dbsegsyl.periodo
           WHERE anio = TO_NUMBER( TO_CHAR(SYSDATE, 'YYYY'))
-            AND fecha_inicio <= vFechaActual 
+            AND fecha_inicio <= vFechaActual
             AND fecha_fin >= vFechaActual;
 
    END RET_PERIODO_ACTUAL;
+
+   PROCEDURE RET_TEMAS_AVANZADOS_x_SESION(
+       p_IDSesion IN sesion.id_sesion%TYPE,
+       o_cursor   IN OUT g_cursor
+   ) IS
+      BEGIN
+         OPEN o_cursor FOR
+         SELECT tema.*, tema_x_sesion.id_tema_x_sesion
+           FROM dbsegsyl.tema
+           JOIN tema_x_sesion ON tema_x_sesion.id_tema = tema.id_tema
+          WHERE tema_x_sesion.id_sesion = p_IDSesion
+          AND tema_x_sesion.cumplido = 'S';
+
+   END RET_TEMAS_AVANZADOS_x_SESION;
 
 END PAC_CURSOR;
 /
