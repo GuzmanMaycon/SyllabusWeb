@@ -12,8 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.junior.conexion.IAccesoDB;
 import com.junior.dao.design.IBibliografiaDao;
 import com.junior.to.Bibliografia;
-import com.junior.to.Syllabus;
-
 import oracle.jdbc.internal.OracleTypes;
 
 public class BibliografiaDao implements IBibliografiaDao {
@@ -64,7 +62,12 @@ public class BibliografiaDao implements IBibliografiaDao {
     }
 
     @Override
-    public List<Bibliografia> obtenerPorSyllabus(Syllabus syllabus) {
+    /**		Modificacion LPLP 20/11 8:08pm
+     * Obtiene todas las referencias bibliograficas del syllabus
+     * @param idyllabus ID del syllabus del cual se obtendran las referencias
+     * @return List<Bibliografia> lista de todas las referencias bibliograficas del syllabus
+     */
+	public List<Bibliografia> obtenerPorSyllabus(Integer idSyllabus) {
         List<Bibliografia> bibliografia = new ArrayList<Bibliografia>();
 
         String procedimientoAlmacenado = "{ call PAC_CURSOR.RET_BIBLIOGRAFIA_X_SYLLABUS(?, ?)}";
@@ -75,7 +78,7 @@ public class BibliografiaDao implements IBibliografiaDao {
             try {
                 CallableStatement proc = cn.prepareCall(procedimientoAlmacenado);
                 proc.registerOutParameter("O_CURSOR", OracleTypes.CURSOR);
-                proc.setInt("p_id_syllabus", syllabus.getId());
+                proc.setInt("p_id_syllabus", idSyllabus);
                 proc.execute();
 
                 ResultSet rs = (ResultSet) proc.getObject("O_CURSOR");
@@ -131,4 +134,67 @@ public class BibliografiaDao implements IBibliografiaDao {
         }
         return rpta;
     }
+
+	@Override
+	/**
+     * Actualiza todas las referencias bibliograficas del Syllabus (Elimina y Actualiza)
+     * @param idyllabus ID del syllabus a modificar
+     * @param List<Bibliografia> lista de todas las referencias bibliograficas del syllabus
+     * @return rpta null si es que se ha completado la operacion con exito
+     */
+	public String actualizarRefBibliograficasDelSyllabus(Integer idSyllabus, List<Bibliografia> listaBibliografiaNueva) {
+		
+		String rpta = null;
+
+		try{
+			//Eliminamos todas las referencias del syllabus
+			List<Bibliografia> listaBibliografiaActual = obtenerPorSyllabus(idSyllabus);	
+			for(Bibliografia libro : listaBibliografiaActual){
+				rpta = eliminarBibliografia(libro);
+			}
+			
+			//Insertamos las nuevas referencias
+			for(Bibliografia libro : listaBibliografiaNueva){
+				rpta = insertarBibliografia(libro, idSyllabus);
+			}
+		}catch(Exception e){
+			rpta += e.getMessage();
+		}
+		
+		return rpta;
+	}
+
+	@Override
+	/**
+     * Registra la bibliografia del syllabus en la base de datos
+     * @param idyllabus ID del syllabus del cual se registrara su referencia
+     * @param bibliografia Objeto bibliografia a registrar en el syllabus
+     * @return rpta null si es que se ha completado la operacion con exito
+     */
+	public String insertarBibliografia(Bibliografia bibliografia, Integer idSyllabus) {
+        String rpta = null;
+		Connection cn = db.getConnection();
+        String procedimientoAlmacenado = "{ call REG_REF_BIBLIO(?, ?, ?, ?, ?, ?, ?)}";
+        
+        try {
+        	CallableStatement cs = cn.prepareCall(procedimientoAlmacenado);
+            
+        	cs.setString("AUTOR", bibliografia.getAutor());
+            cs.setInt("ANIO_PUBLICACION", bibliografia.getAnioPublicacion());
+            cs.setString("EDITORIAL", bibliografia.getEditorial());
+            cs.setString("ISBN", bibliografia.getIsbn());
+            cs.setString("TITULO", bibliografia.getTitulo());
+            cs.setString("LUGAR_PUBLICACION", bibliografia.getLugarPublicacion());
+            cs.setInt("ID_SYLLABUS", idSyllabus);
+
+            int inserto = cs.executeUpdate();
+            if (inserto == 0) {
+            	rpta = "Error al ingresar un libro";
+            }
+        } catch(SQLException ex) {
+            ex.printStackTrace();
+            rpta = ex.getMessage();
+        }
+        return rpta;
+	}
 }
