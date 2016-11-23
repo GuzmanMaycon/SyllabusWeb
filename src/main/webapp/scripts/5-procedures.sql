@@ -370,6 +370,18 @@ create or replace PACKAGE          PAC_CURSOR is
       o_cursor IN OUT g_cursor
    );
 
+/*--------------------------------------------------------------------------
+ * NOMBRE    : RET_PERIODO_ACTUAL
+ * OBJETIVO  : Retorna los datos del periodo actual         
+ * FECHA MOD : 02/11/2016 2:12pm
+ *--------------------------------------------------------------------------                                
+ *     INFORMACI?:                                                          
+ *     AUTOR: LUCERO DEL PILAR LIZA PUICAN                                  
+ *--------------------------------------------------------------------------*/   
+   PROCEDURE RET_PERIODO_ACTUAL(
+      o_cursor IN OUT g_cursor
+   );
+
 end PAC_CURSOR;
 /
 create or replace PACKAGE BODY PAC_CURSOR IS
@@ -569,6 +581,21 @@ create or replace PACKAGE BODY PAC_CURSOR IS
          WHERE asignatura_aperturada.id_asig_aperturada = p_id_asignatura_aperturada and tema.semana = p_numero_semana;
 
    END TEMAS_ASIGNA_APER_x_SEMANA;
+   
+   PROCEDURE RET_PERIODO_ACTUAL(
+      o_cursor IN OUT g_cursor
+   ) AS 
+      vFechaActual DATE;
+      BEGIN
+         vFechaActual := SYSDATE;
+         OPEN o_cursor FOR
+         SELECT periodo.* 
+           FROM dbsegsyl.periodo 
+          WHERE anio = TO_NUMBER( TO_CHAR(SYSDATE, 'YYYY'))
+            AND fecha_inicio <= vFechaActual 
+            AND fecha_fin >= vFechaActual;
+
+   END RET_PERIODO_ACTUAL;
 
 END PAC_CURSOR;
 /
