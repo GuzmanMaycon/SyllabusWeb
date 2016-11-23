@@ -220,28 +220,9 @@ public class SyllabusController {
         @PathVariable(value = "syllabusId") Integer syllabusId,
         RedirectAttributes redirectAttrs)
     {
-    		
-        Syllabus syllabus = new Syllabus();
-    	// ****************************** PARA PROBAR EL ACTUALIZAR TEMAS *******************************
-        /**
-        ArrayList<Tema> temasL = new ArrayList<Tema>();
-        temasL.add(new Tema("Tema", 1, 1,2,1));
-        temasL.add(new Tema("Tema 2", 1, 1,2,1));
-        temasL.add(new Tema("Tema 3", 2, 1,2,1));
-        temasL.add(new Tema("Tema 4", 1, 2,2,1));        
-        syllabus.setTemas(temasL);
+    	//Obtener los atributos del Syllabus a partir del id del Syllabus
+        Syllabus syllabus = this.syllabusDao.obtenerSyllabus(syllabusId);
 
-        // Listo todos los objetos pertenecientes al Syllabus con id 1
-        this.temaDao.obtenerTodos(1);
-
-        // Tenemos la nueva lista TEMAS que servira para chancar los datos anteriores de la bd.
-        this.temaDao.actualizarTemas(temasL, 1); // (listaDeTemas, idSyllabus en el que estamos trabajando) 
-    	
-        // Listo mis nuevos datos de la bd pertenecientes al Syllabus con id 1
-        this.temaDao.obtenerTodos(1);
-    	
-    	**/
-        
         // Obtener el nombre de la asignatura a partir del id de la asignatura aperturada
         String nombreAsignatura = this.asignaturaAperturadaDao.obtenerNombreDeAsignaturaPorId(asignaturaAperturadaid);
         // Verificar si la asignatura es valida
@@ -253,15 +234,6 @@ public class SyllabusController {
         }
         // Agregar al modelo el nombre de la asignatura
         model.addAttribute("nombreAsignatura", nombreAsignatura);
-
-        
-        ArrayList<Tema> temas = new ArrayList<Tema>();
-        temas.add(new Tema("Tema", 1, 1,2,1));
-        temas.add(new Tema("Tema 2", 1, 1,2,1));
-        temas.add(new Tema("Tema 3", 2, 1,2,1));
-        temas.add(new Tema("Tema 4", 1, 2,2,1));
-
-        syllabus.setTemas(temas);
 
         /**
          * El Key es la unidad y el Value son las semanas de dicha unidad
