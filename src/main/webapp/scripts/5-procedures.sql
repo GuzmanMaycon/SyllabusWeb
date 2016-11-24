@@ -18,7 +18,7 @@ BEGIN
       FROM dbsegsyl.matricula m
      WHERE m.id_grupo = p_IDGrupo
        AND m.id_alumno = p_IDAlumno;
-       
+
 	RETURN pertenece;
 EXCEPTION
 	WHEN OTHERS THEN
@@ -363,10 +363,10 @@ create or replace PACKAGE          PAC_CURSOR is
  *     INFORMACI?:
  *     AUTOR: GIANCARLOS CLAUDIO ZAVALETA
  *---------------------------------------------------------------------------*/
-	procedure RET_ROLES_X_USUARIO(
-	   p_id_usuario IN usuario.id_usuario%TYPE,
+   procedure RET_ROLES_X_USUARIO(
+      p_id_usuario IN usuario.id_usuario%TYPE,
        o_cursor    in out g_cursor
-	);
+   );
 
    PROCEDURE RET_SYLLABUS(
       p_id_syllabus IN syllabus.id_syllabus%TYPE,
@@ -422,6 +422,20 @@ create or replace PACKAGE          PAC_CURSOR is
    PROCEDURE RET_TEMAS_AVANZADOS_x_SESION(
       p_IDSesion IN sesion.id_sesion%TYPE,
       o_cursor   IN OUT g_cursor
+   );
+
+/*--------------------------------------------------------------------------
+ * NOMBRE    : RET_CLASES_X_GRUPO
+ * OBJETIVO  : Retorna las clases del grupo
+ * FECHA MOD : 23/11/2016 8:00pm
+ *--------------------------------------------------------------------------
+ *     INFORMACI?:
+ *     AUTOR: GIANCARLOS CLAUDIO ZAVALETA
+ *--------------------------------------------------------------------------*/
+   PROCEDURE RET_CLASES_X_GRUPO(
+      p_id_grupo IN GRUPO.ID_GRUPO%TYPE,
+      p_id_docente IN DOCENTE.ID_USUARIO%TYPE,
+      o_cursor IN OUT g_cursor
    );
 
 end PAC_CURSOR;
@@ -653,6 +667,21 @@ create or replace PACKAGE BODY PAC_CURSOR IS
 
    END RET_TEMAS_AVANZADOS_x_SESION;
 
+   PROCEDURE RET_CLASES_X_GRUPO(
+      p_id_grupo IN GRUPO.ID_GRUPO%TYPE,
+      p_id_docente IN DOCENTE.ID_USUARIO%TYPE,
+      o_cursor IN OUT g_cursor
+   ) IS
+      BEGIN
+         OPEN o_cursor FOR
+         SELECT SESION.*, TIPO_CLASE.DESCRIPCION, TIPO_CLASE.ID_TIPO_CLASE
+           FROM SESION
+           JOIN CLASE ON SESION.ID_CLASE = CLASE.ID_CLASE
+           JOIN TIPO_CLASE ON CLASE.ID_TIPO = TIPO_CLASE.ID_TIPO_CLASE
+          WHERE CLASE.ID_GRUPO = p_id_grupo
+            AND CLASE.ID_DOCENTE = p_id_docente;
+   END RET_CLASES_X_GRUPO;
+
 END PAC_CURSOR;
 /
 
@@ -745,7 +774,29 @@ create or replace PROCEDURE ELIMINAR_TEMA
    (p_IDTema		TEMA.ID_TEMA%TYPE) AUTHID CURRENT_USER AS
 
 BEGIN
-    DELETE FROM TEMA
-	WHERE ID_TEMA = p_IDTema;
+   DELETE FROM TEMA
+   WHERE ID_TEMA = p_IDTema;
 END ELIMINAR_TEMA;
 /
+
+/*--------------------------------------------------------------------------
+ * NOMBRE    : REG_VALIDACION_ALUMNO
+ * OBJETIVO  : Registrar validacion del alumno correspondiente al syllabus
+ * FECHA MOD : 11/11/2016 3:18pm
+ *--------------------------------------------------------------------------
+ *     INFORMACI?:
+ *     AUTOR: LUCERO DEL PILAR LIZA PUICAN
+ *---------------------------------------------------------------------------*/
+CREATE OR REPLACE PROCEDURE REG_VALIDACION_ALUMNO(
+   p_Cumplido         IN dbsegsyl.validacion_alumno.cumplido%TYPE,
+   p_Comentario       IN dbsegsyl.validacion_alumno.comentario%TYPE,
+   p_IDAlumno         IN dbsegsyl.validacion_alumno.id_alumno%TYPE,
+   p_IDTema_x_Sesion  IN dbsegsyl.validacion_alumno.id_tema_x_sesion%TYPE
+)
+AUTHID CURRENT_USER
+AS
+BEGIN
+      INSERT
+      INTO dbsegsyl.validacion_alumno (id_validacion, cumplido, comentario, id_alumno, id_tema_x_sesion)
+      VALUES (sq_val_alumno.NEXTVAL, p_Cumplido, p_Comentario, p_IDAlumno, p_IDTema_x_Sesion);
+END REG_VALIDACION_ALUMNO;
