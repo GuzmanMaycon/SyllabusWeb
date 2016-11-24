@@ -14,6 +14,7 @@ import com.junior.conexion.IAccesoDB;
 import com.junior.dao.design.IAsignaturaAperturadaDao;
 import com.junior.to.Asignatura;
 import com.junior.to.AsignaturaAperturadaTO;
+import com.junior.to.Periodo;
 import com.junior.to.PlanDeEstudio;
 import com.junior.to.Syllabus;
 
@@ -75,7 +76,6 @@ public class AsignaturaAperturadaDao implements IAsignaturaAperturadaDao{
      */
     @Override
     public List<AsignaturaAperturadaTO> obtenerPorCoordinador(Integer coordinadorId) {
-        // TODO Auto-generated method stub
         ArrayList<AsignaturaAperturadaTO> asignaturas = new ArrayList<AsignaturaAperturadaTO>();
 
         String procedimientoAlmacenado = "{ call PAC_CURSOR.LISTAR_ASIG_X_COORD(?, ?, ?)}";
@@ -125,9 +125,68 @@ public class AsignaturaAperturadaDao implements IAsignaturaAperturadaDao{
         return asignaturas;
     }
 
-    @Override
-    public List<AsignaturaAperturadaTO> obtenerPorDirector(Integer escuelaId) {
-        // TODO Auto-generated method stub
-        return null;
-    }
+    /**
+     * Obtener el nombre de las asignaturas que coincidan con una cadena pasada por parametro
+     * @param coordinadorId Id del coordinador
+     * @return List<AsignaturaAperturadaTO> asignaturas del profesor donde es coordinador
+     */
+	@Override
+	public List<AsignaturaAperturadaTO> buscarCoincidencias(String cadena) {
+		List<AsignaturaAperturadaTO> coincidencias = new ArrayList<AsignaturaAperturadaTO>();
+
+        String procedimientoAlmacenado = "{ call PAC_CURSOR.BUSCAR_ASIGNATURA_X_CADENA(?,?)}";
+
+        Connection cn = this.db.getConnection();
+
+        if (cn != null) {
+            try {
+                CallableStatement proc = cn.prepareCall(procedimientoAlmacenado);
+                proc.registerOutParameter("o_cursor", OracleTypes.CURSOR);
+                proc.setString("p_cadena", cadena);
+                proc.execute();
+
+                ResultSet rs = (ResultSet) proc.getObject("o_cursor");
+
+                while (rs.next()) {
+                    AsignaturaAperturadaTO aperturada = new AsignaturaAperturadaTO();
+                    Asignatura asignatura = new Asignatura();
+                    asignatura.setId(rs.getInt("ID_ASIGNATURA"));
+                    asignatura.setCodigo(rs.getString("CODIGO_ASIG"));
+                    asignatura.setNombre(rs.getString("NOMBRE_ASIG"));
+                    asignatura.setCreditaje(rs.getInt("CREDIT_ASIG"));
+                    asignatura.setCiclo(rs.getInt("CICLO_ASIG"));
+                    
+                    PlanDeEstudio plan = new PlanDeEstudio();
+                    plan.setId(rs.getInt("ID_PLAN_ESTUDIO"));
+                    
+                    asignatura.setPlan(plan);
+                    asignatura.setRegimen(rs.getString("REGIMEN"));
+                    
+                    aperturada.setAsignatura(asignatura);
+                    
+                    Periodo periodo = new Periodo(rs.getInt("ID_PERIODO"),null, null, null, null);
+                    
+                    aperturada.setPeriodo(periodo);
+                    aperturada.setId(rs.getInt("ID_ASIG_APERT"));
+                    
+                    coincidencias.add(aperturada);
+                }
+            } catch(SQLException ex) {
+                System.err.println(ex.getMessage());
+            } finally {
+                try {
+                    cn.close();
+                } catch (Exception e) {
+                    System.err.println(e.getMessage());
+                }
+            }
+        }
+        return coincidencias;
+	}
+
+	@Override
+	public List<AsignaturaAperturadaTO> obtenerPorDirector(Integer escuelaId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

@@ -391,6 +391,19 @@ create or replace PACKAGE          PAC_CURSOR is
       p_id_usuario IN alumno.id_usuario%TYPE,
       O_CURSOR    IN out G_CURSOR
    );
+   
+/*--------------------------------------------------------------------------
+ * NOMBRE    : BUSCAR_ASIGNATURA_X_CADENA
+ * OBJETIVO  : Lista las asignaturas por coincidencias con una cadena ingresada como parametro
+ * FECHA MOD : 23/11/2016 2:10am
+ *--------------------------------------------------------------------------
+ *     INFORMACI?:
+ *     AUTOR: Lucero Liza Puican
+ *---------------------------------------------------------------------------*/
+   PROCEDURE BUSCAR_ASIGNATURA_X_CADENA(
+      p_cadena    IN VARCHAR2,
+      O_CURSOR    IN out G_CURSOR
+   );
 
    PROCEDURE TEMAS_ASIGNA_APER_x_SEMANA(
       p_id_asignatura_aperturada IN asignatura_aperturada.id_asig_aperturada%TYPE,
@@ -401,6 +414,29 @@ create or replace PACKAGE          PAC_CURSOR is
 end PAC_CURSOR;
 /
 create or replace PACKAGE BODY PAC_CURSOR IS
+
+  PROCEDURE BUSCAR_ASIGNATURA_X_CADENA(
+    p_cadena        IN VARCHAR2,
+    o_cursor        IN OUT g_cursor) IS
+
+    BEGIN
+      --Opening the cursor to return matched rows
+      OPEN o_cursor FOR
+       SELECT asig.id_asignatura    AS id_asignatura,
+              asig.codigo           AS codigo_asig,
+              asig.nombre           AS nombre_asig,
+              asig.creditaje        AS credit_asig,
+              asig.ciclo            AS ciclo_asig,
+              asig.id_plan_estudio  AS id_plan_estudio,
+              asig.id_regimen       AS regimen, 
+              ap.id_periodo         AS id_periodo,
+              ap.id_asig_aperturada AS id_asig_apert
+         FROM dbsegsyl.asignatura_aperturada ap 
+         JOIN dbsegsyl.asignatura asig ON (asig.id_asignatura = ap.id_asignatura) 
+          AND ap.id_periodo   = devuelve_idPeriodo_actual()
+          AND asig.nombre     LIKE '%'||p_cadena||'%';
+  END BUSCAR_ASIGNATURA_X_CADENA;
+
   PROCEDURE LISTAR_ASIG_X_COORD(
     p_IDCoordinador IN docente.id_usuario%TYPE,
     p_IDPeriodo     IN periodo.id_periodo%TYPE,

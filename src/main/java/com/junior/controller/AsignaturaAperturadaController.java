@@ -1,5 +1,6 @@
 package com.junior.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,16 @@ public class AsignaturaAperturadaController {
     {
         List<AsignaturaAperturadaTO> asignaturas = this.asignaturaAperturadaDao.obtenerPorCoordinador(4);
         map.addAttribute("lista", asignaturas);
-
+        
+        //Ejemplo de uso de buscarCoincidencias de nombres de asignatura
+        /*
+        List<AsignaturaAperturadaTO> coincidencia = new ArrayList<AsignaturaAperturadaTO>();
+        coincidencia = this.asignaturaAperturadaDao.buscarCoincidencias("INTRODUCCION");
+        
+        for(AsignaturaAperturadaTO asignatura: coincidencia){
+        	System.out.println("Aignatura "+ asignatura.getAsignatura().getNombre());
+        }
+        */
         return "asignatura_aperturada/index";
     }
 }
