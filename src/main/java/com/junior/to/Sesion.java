@@ -10,10 +10,14 @@ public class Sesion {
 
     private Date fecha;
 
+    private Clase clase;
+
+    public Sesion() { }
+
     public Sesion(
-            Integer id,
-            Character estado,
-            Date fecha
+        Integer id,
+        Character estado,
+        Date fecha
             )
     {
         this.id = id;
@@ -21,11 +25,13 @@ public class Sesion {
         this.fecha = fecha;
     }
 
-    public Integer getId() {
+    public Integer getId()
+    {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Integer id)
+    {
         this.id = id;
     }
 
@@ -47,5 +53,15 @@ public class Sesion {
     public void setFecha(Date fecha)
     {
         this.fecha = fecha;
+    }
+
+    public Clase getClase()
+    {
+        return clase;
+    }
+
+    public void setClase(Clase clase)
+    {
+        this.clase = clase;
     }
 }

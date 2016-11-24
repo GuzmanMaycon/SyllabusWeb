@@ -9,4 +9,5 @@ public interface IAsignaturaAperturadaDao {
     public List<AsignaturaAperturadaTO> obtenerPorCoordinador(Integer coordinadorId);
     public List<AsignaturaAperturadaTO> obtenerPorDirector(Integer escuelaId);
     public List<AsignaturaAperturadaTO> buscarCoincidencias(String cadena);
+    public AsignaturaAperturadaTO obtenerPorId(Integer id);
 }

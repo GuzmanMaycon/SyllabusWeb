@@ -130,9 +130,9 @@ public class AsignaturaAperturadaDao implements IAsignaturaAperturadaDao{
      * @param coordinadorId Id del coordinador
      * @return List<AsignaturaAperturadaTO> asignaturas del profesor donde es coordinador
      */
-	@Override
-	public List<AsignaturaAperturadaTO> buscarCoincidencias(String cadena) {
-		List<AsignaturaAperturadaTO> coincidencias = new ArrayList<AsignaturaAperturadaTO>();
+    @Override
+    public List<AsignaturaAperturadaTO> buscarCoincidencias(String cadena) {
+        List<AsignaturaAperturadaTO> coincidencias = new ArrayList<AsignaturaAperturadaTO>();
 
         String procedimientoAlmacenado = "{ call PAC_CURSOR.BUSCAR_ASIGNATURA_X_CADENA(?,?)}";
 
@@ -155,20 +155,20 @@ public class AsignaturaAperturadaDao implements IAsignaturaAperturadaDao{
                     asignatura.setNombre(rs.getString("NOMBRE_ASIG"));
                     asignatura.setCreditaje(rs.getInt("CREDIT_ASIG"));
                     asignatura.setCiclo(rs.getInt("CICLO_ASIG"));
-                    
+
                     PlanDeEstudio plan = new PlanDeEstudio();
                     plan.setId(rs.getInt("ID_PLAN_ESTUDIO"));
-                    
+
                     asignatura.setPlan(plan);
                     asignatura.setRegimen(rs.getString("REGIMEN"));
-                    
+
                     aperturada.setAsignatura(asignatura);
-                    
+
                     Periodo periodo = new Periodo(rs.getInt("ID_PERIODO"),null, null, null, null);
-                    
+
                     aperturada.setPeriodo(periodo);
                     aperturada.setId(rs.getInt("ID_ASIG_APERT"));
-                    
+
                     coincidencias.add(aperturada);
                 }
             } catch(SQLException ex) {
@@ -182,11 +182,18 @@ public class AsignaturaAperturadaDao implements IAsignaturaAperturadaDao{
             }
         }
         return coincidencias;
-	}
+    }
 
-	@Override
-	public List<AsignaturaAperturadaTO> obtenerPorDirector(Integer escuelaId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public List<AsignaturaAperturadaTO> obtenerPorDirector(Integer escuelaId) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public AsignaturaAperturadaTO obtenerPorId(Integer id) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }

@@ -67,7 +67,7 @@
 						<td class="text-center">
 							<c:forEach items="${authorities}" var="authority" varStatus="vs">
 							<c:if test="${ authority.authority == 'ROLE_DOCENTE' }">
-								<a href="${basePath}/asignatura/${row.id}/avance" class="btn btn-primary">Registrar Avance</a>
+								<a href="${basePath}/grupo/${row.id}/index" class="btn btn-primary">Registrar Avance</a>
 							</c:if>
 							<c:if test="${ authority.authority == 'ROLE_ALUMNO' }">
 								<a href="${basePath}/grupo/${row.id}/valida" class="btn btn-primary">Validar Avance</a>
