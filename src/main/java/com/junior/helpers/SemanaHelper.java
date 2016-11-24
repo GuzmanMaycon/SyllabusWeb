@@ -3,8 +3,10 @@ package com.junior.helpers;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 public class SemanaHelper {
 
@@ -12,7 +14,7 @@ public class SemanaHelper {
      *
      * @return Map<Integer, Date> El key es la semana y el value es la fecha de inicio de la semana
      */
-    public static Map<Integer, Date> retornarUltimasSemanas(Date fechaInicioPeriodo)
+    public Map<Integer, Date> retornarUltimasSemanas(Date fechaInicioPeriodo)
     {
         Map<Integer, Date> semanas = new LinkedHashMap<Integer, Date>();
 
@@ -42,5 +44,37 @@ public class SemanaHelper {
         }
 
         return semanas;
+    }
+
+    public Date obtenerFechaInicio(Map<Integer, Date> fechas)
+    {
+        return fechas.entrySet().iterator().next().getValue();
+    }
+
+    public Integer obtenerSemanaInicio(Map<Integer, Date> fechas)
+    {
+        return fechas.entrySet().iterator().next().getKey();
+    }
+
+    public Date obtenerFechaFin(Map<Integer, Date> fechas)
+    {
+        Date fechaFin = this.obtenerFechaInicio(fechas);
+        Iterator<Entry<Integer, Date>> iterator = fechas.entrySet().iterator();
+        while (iterator.hasNext()) {
+            fechaFin = iterator.next().getValue();
+        }
+
+        return fechaFin;
+    }
+
+    public Integer obtenerSemanaFin(Map<Integer, Date> fechas)
+    {
+        Integer ultimaSemana = this.obtenerSemanaInicio(fechas);
+        Iterator<Entry<Integer, Date>> iterator = fechas.entrySet().iterator();
+        while (iterator.hasNext()) {
+            ultimaSemana = iterator.next().getKey();
+        }
+
+        return ultimaSemana;
     }
 }

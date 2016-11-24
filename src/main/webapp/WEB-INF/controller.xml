@@ -12,6 +12,8 @@
   <!-- Importar parser -->
   <import resource="parser.xml"/>
 
+  <bean id="semanaHelper" class="com.junior.helpers.SemanaHelper"></bean>
+
   <!-- Controller -->
   <bean id="syllabusController" class="com.junior.controller.SyllabusController">
     <property name="asignaturaAperturadaDao">
@@ -31,4 +33,5 @@
     </property>
 
   </bean>
+
 </beans>

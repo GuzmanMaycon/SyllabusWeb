@@ -2,11 +2,9 @@ package com.junior.controller;
 
 import java.security.Principal;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -47,6 +45,9 @@ public class AvanceTemaController {
     @Autowired
     private IUsuarioDao usuarioDao;
 
+    @Autowired
+    private SemanaHelper semanaHelper;
+
     public void setGrupoDao(IGrupoDao grupoDao)
     {
         this.grupoDao = grupoDao;
@@ -72,6 +73,11 @@ public class AvanceTemaController {
         this.usuarioDao = usuarioDao;
     }
 
+    public void setSemanaHelper(SemanaHelper semanaHelper)
+    {
+        this.semanaHelper = semanaHelper;
+    }
+
     @RequestMapping(value = "/index", method = RequestMethod.GET)
     public String index(ModelMap map,
         @PathVariable(value="grupoId") Integer grupoId,
@@ -84,13 +90,9 @@ public class AvanceTemaController {
         List<Sesion> sesiones = this.sesionDao.obtenerPorGrupoPorDocente(grupoId, usuario.getId());
 
         Periodo periodo = this.periodoDao.obtenerPeriodoActual();
-        Map<Integer, Date> semanasRecientes = SemanaHelper.retornarUltimasSemanas(periodo.getFechaInicio());
-        Date fechaInicio = semanasRecientes.entrySet().iterator().next().getValue();
-        Date fechaFin = fechaInicio;
-        Iterator<Entry<Integer, Date>> iterator = semanasRecientes.entrySet().iterator();
-        while (iterator.hasNext()) {
-            fechaFin = iterator.next().getValue();
-        }
+        Map<Integer, Date> semanasRecientes = this.semanaHelper.retornarUltimasSemanas(periodo.getFechaInicio());
+        Date fechaInicio = this.semanaHelper.obtenerFechaInicio(semanasRecientes);
+        Date fechaFin = this.semanaHelper.obtenerFechaFin(semanasRecientes);
 
         Map<Sesion, Boolean> registros = new LinkedHashMap<Sesion, Boolean>();
         for (Sesion sesion: sesiones) {
@@ -118,12 +120,14 @@ public class AvanceTemaController {
         //List<Tema> temas = this.temaDao.obtenerTemasPorAsignaturaPorSemana(asignaturaAperturadaid, semana);
         // Obtener semanas de acuerdo a las fechas
         Periodo periodo = this.periodoDao.obtenerPeriodoActual();
-        Map<Integer, Date> semanasRecientes = SemanaHelper.retornarUltimasSemanas(periodo.getFechaInicio());
-        for (Map.Entry<Integer, Date> entry : semanasRecientes.entrySet()) {
-            List<Tema> nuevosTemas = this.temaDao.obtenerTemasPorGrupo(grupoId);
-        }
+        Map<Integer, Date> semanasRecientes = this.semanaHelper.retornarUltimasSemanas(periodo.getFechaInicio());
+        Integer semanaInicio = this.semanaHelper.obtenerSemanaInicio(semanasRecientes);
+        Integer semanaFin = this.semanaHelper.obtenerSemanaFin(semanasRecientes);
+
+        List<Tema> temas = this.temaDao.obtenerTemasPorGrupo(grupoId, semanaInicio, semanaFin);
 
         map.addAttribute("semanasFecha", semanasRecientes);
+        map.addAttribute("temas", temas);
 
         return "registrar-avance/registrar";
     }

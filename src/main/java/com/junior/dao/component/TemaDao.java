@@ -141,11 +141,11 @@ public class TemaDao implements ITemaDao {
     }
 
     @Override
-    public List<Tema> obtenerTemasPorGrupo(Integer idGrupo)
+    public List<Tema> obtenerTemasPorGrupo(Integer idGrupo, Integer semanaInicio, Integer semanaFin)
     {
         List<Tema> temas = new ArrayList<Tema>();
 
-        String procedimientoAlmacenado = "{ call PAC_CURSOR.LISTAR_TEMAS_X_GRUPO(?, ?)}";
+        String procedimientoAlmacenado = "{ call PAC_CURSOR.LISTAR_TEMAS_X_GRUPO(?, ?, ?, ?)}";
 
         Connection cn = this.db.getConnection();
 
@@ -153,7 +153,9 @@ public class TemaDao implements ITemaDao {
             try {
                 CallableStatement proc = cn.prepareCall(procedimientoAlmacenado);
                 proc.registerOutParameter("o_cursor", OracleTypes.CURSOR);
-                proc.setInt("p_id_sesion", idGrupo);
+                proc.setInt("grupo_id", idGrupo);
+                proc.setInt("p_sem_inicio", semanaInicio);
+                proc.setInt("p_sem_fin", semanaFin);
                 proc.execute();
 
                 ResultSet rs = (ResultSet) proc.getObject("o_cursor");
