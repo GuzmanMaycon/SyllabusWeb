@@ -338,3 +338,45 @@ BEGIN
       VALUES (sq_val_alumno.NEXTVAL, p_Cumplido, p_Comentario, p_IDAlumno, p_IDTema_x_Sesion);
 END REG_VALIDACION_ALUMNO;
 /
+
+/*--------------------------------------------------------------------------
+ * NOMBRE    : REG_TEMA_X_SESION
+ * OBJETIVO  : Registrar el tema avanzado en clases
+ * FECHA MOD : 07/11/2016 2:30pm
+ *--------------------------------------------------------------------------
+ *     INFORMACI?:
+ *     AUTOR: LUCERO DEL PILAR LIZA PUICAN
+ *---------------------------------------------------------------------------*/
+CREATE OR REPLACE PROCEDURE dbsegsyl.REG_TEMA_X_SESION(
+    p_IDTemaXSesion         IN dbsegsyl.tema_x_sesion.id_tema_x_sesion%TYPE,
+    p_IDTema                IN dbsegsyl.tema_x_sesion.id_tema%TYPE,
+    p_IDSesion              IN dbsegsyl.tema_x_sesion.id_sesion%TYPE
+)
+AUTHID CURRENT_USER
+AS
+BEGIN
+       INSERT INTO dbsegsyl.tema_x_sesion(id_tema_x_sesion, cumplido, id_tema, id_sesion)
+                             VALUES (p_IDTemaXSesion, 'N', p_IDTema, p_IDSesion);
+END REG_TEMA_X_SESION;
+/
+
+/*--------------------------------------------------------------------------
+ * NOMBRE    : REG_COORDINADOR_X_ASIG_APERTURADA
+ * OBJETIVO  : Registrar un coordinador para una asignatura aperturada
+ * FECHA MOD : 23/11/2016 2:30pm
+ *--------------------------------------------------------------------------
+ *     INFORMACI?:
+ *     AUTOR: TAKESHI FARRO HINOSHITA
+ *---------------------------------------------------------------------------*/
+CREATE OR REPLACE PROCEDURE dbsegsyl.REG_COORDINADOR_X_ASIG_APER(
+    p_IDDocente        IN dbsegsyl.docente.id_usuario%TYPE,
+    p_IDAsigAperturada IN dbsegsyl.asignatura_aperturada.id_asig_aperturada%TYPE
+)
+AUTHID CURRENT_USER
+AS
+BEGIN
+      UPDATE dbsegsyl.asignatura_aperturada
+      SET id_coordinador = p_IDDocente
+      WHERE id_asig_aperturada = p_IDAsigAperturada;
+END REG_COORDINADOR_X_ASIG_APER;
+/
