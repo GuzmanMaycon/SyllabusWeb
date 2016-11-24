@@ -18,7 +18,7 @@ BEGIN
       FROM dbsegsyl.matricula m
      WHERE m.id_grupo = p_IDGrupo
        AND m.id_alumno = p_IDAlumno;
-       
+
 	RETURN pertenece;
 EXCEPTION
 	WHEN OTHERS THEN
@@ -223,421 +223,6 @@ BEGIN
 END;
 /
 
-create or replace PACKAGE          PAC_CURSOR is
-  --Creating REF CURSOR type
-  type g_cursor is ref cursor;
-
-  --Procedure that return the cursor
-  /*--------------------------------------------------------------------------
-   * NOMBRE    : LISTAR_ASIG_X_COORD
-   * OBJETIVO  : Lista asignaturas aperturadas de acuerdo al periodo actual
-   * FECHA MOD : 11/11/2016 2:53pm
-   *--------------------------------------------------------------------------
-   *     INFORMACI?:
-   *     AUTOR: TAKESHI FARRO HINOSHITA
-   *---------------------------------------------------------------------------*/
-  procedure LISTAR_ASIG_X_COORD(
-    p_IDCoordinador     in     docente.id_usuario%type,
-    p_IDPeriodo in periodo.id_periodo%type,
-    o_cursor in out g_cursor); -- Our cursor
-
-/*--------------------------------------------------------------------------
-   * NOMBRE    : LISTAR_TEMAS_X_ASIG_APER
-   * OBJETIVO  : Lista temas por asignatura aperturada
-   * FECHA MOD : 13/11/2016 10:30pm
-   *--------------------------------------------------------------------------
-   *     INFORMACI?:
-   *     AUTOR: GIANCARLOS CLAUDIO ZAVALETA
-   *---------------------------------------------------------------------------*/
-
-  procedure LISTAR_TEMAS_X_ASIG_APER(
-    ASIG_APER_ID     in ASIGNATURA_APERTURADA.ID_ASIG_APERTURADA%TYPE,
-    SEM              in TEMA.SEMANA%TYPE,
-    O_CURSOR         in out g_cursor
-  );
-
-/*--------------------------------------------------------------------------
-   * NOMBRE    : RET_ASIG_X_ASIG_APER
-   * OBJETIVO  : Retorna el ID y nombre de la Asignatura aperturada
-   * FECHA MOD : 13/11/2016 10:30pm
-   *--------------------------------------------------------------------------
-   *     INFORMACI?:
-   *     AUTOR: GIANCARLOS CLAUDIO ZAVALETA
-   *---------------------------------------------------------------------------*/
-
-  procedure RET_ASIG_X_ASIG_APER(
-    ASIG_APER_ID in ASIGNATURA_APERTURADA.ID_ASIG_APERTURADA%TYPE,
-    O_CURSOR         in out g_cursor
-  );
-
- /*--------------------------------------------------------------------------
-   * NOMBRE    : LISTAR_ASIG_AP_X_ALUMNO
-   * OBJETIVO  : Retorna las asignaturas aperturadas en las que se encuentra
-                 matriculado el alumno
-   * FECHA MOD : 13/11/2016 10:30pm
-   *--------------------------------------------------------------------------
-   *     INFORMACI?:
-   *     AUTOR: GIANCARLOS CLAUDIO ZAVALETA
-   *---------------------------------------------------------------------------*/
-
-  procedure LISTAR_ASIG_AP_X_ALUMNO(
-    ID_ALUM  IN     ALUMNO.ID_USUARIO%TYPE,
-    PERIOD   IN     PERIODO.ID_PERIODO%TYPE,
-    O_CURSOR IN OUT G_CURSOR
-  );
-
-/*--------------------------------------------------------------------------
- * NOMBRE    : LISTAR_GRUPOS
- * OBJETIVO  : Lista grupos del periodo actual
- * FECHA MOD : 11/11/2016 2:53pm
- *--------------------------------------------------------------------------
- *     INFORMACI?:
- *     AUTOR: TAKESHI FARRO HINOSHITA
- *---------------------------------------------------------------------------*/
-
-  procedure LISTAR_GRUPOS(
-     p_IDPeriodo IN periodo.id_periodo%TYPE,
-     o_cursor    IN OUT g_cursor
-  );
-
-/*--------------------------------------------------------------------------
- * NOMBRE    : RET_USUARIO_X_EMAIL
- * OBJETIVO  : Retorna la informacion del Usuario de acuerdo a su email
- * FECHA MOD : 11/11/2016 2:53pm
- *--------------------------------------------------------------------------
- *     INFORMACI?:
- *     AUTOR: GIANCARLOS CLAUDIO ZAVALETA
- *---------------------------------------------------------------------------*/
-
-  procedure RET_USUARIO_X_EMAIL(
-    EMAIL    IN     USUARIO.CORREO%TYPE,
-    O_CURSOR IN OUT G_CURSOR
-  );
-
-/*--------------------------------------------------------------------------
- * NOMBRE    : RET_TEMAS_X_SYLLABUS
- * OBJETIVO  : Retorna los temas del syllabus
- * FECHA MOD : 18/11/2016 4:30pm
- *--------------------------------------------------------------------------
- *     INFORMACI?:
- *     AUTOR: TAKESHI FARRO HINOSHITA
- *---------------------------------------------------------------------------*/
-   procedure RET_TEMAS_X_SYLLABUS(
-      p_id_syllabus IN syllabus.id_syllabus%TYPE,
-      O_CURSOR      IN OUT G_CURSOR
-   );
-
-/*--------------------------------------------------------------------------
- * NOMBRE    : LISTAR_GRUPOS_X_ALUMNO
- * OBJETIVO  : Lista los grupos en los que se encuentra matriculado el alumno
- * FECHA MOD : 11/11/2016 2:53pm
- *--------------------------------------------------------------------------
- *     INFORMACI?:
- *     AUTOR: GIANCARLOS CLAUDIO ZAVALETA
- *---------------------------------------------------------------------------*/
-   procedure LISTAR_GRUPOS_X_ALUMNO(
-      p_IDPeriodo in periodo.id_periodo%type,
-      cod         in matricula.id_alumno%type,
-      o_cursor    in out g_cursor
-	);
-
-/*--------------------------------------------------------------------------
- * NOMBRE    : LISTAR_GRUPOS_X_DOCENTE
- * OBJETIVO  : Lista los grupos asignados al docente
- * FECHA MOD : 18/11/2016 5:55pm
- *--------------------------------------------------------------------------
- *     INFORMACI?:
- *     AUTOR: LUCERO LIZA PUICAN
- *---------------------------------------------------------------------------*/
-   procedure LISTAR_GRUPOS_X_DOCENTE(
-      p_IDPeriodo in periodo.id_periodo%type,
-      cod         in docente.id_usuario%type,
-      o_cursor    in out g_cursor
-	);
-
-/*--------------------------------------------------------------------------
- * NOMBRE    : RET_ROLES_X_USUARIO
- * OBJETIVO  : Retornar roles del usuario
- * FECHA MOD : 18/11/2016 6:07pm
- *--------------------------------------------------------------------------
- *     INFORMACI?:
- *     AUTOR: GIANCARLOS CLAUDIO ZAVALETA
- *---------------------------------------------------------------------------*/
-	procedure RET_ROLES_X_USUARIO(
-	   p_id_usuario IN usuario.id_usuario%TYPE,
-       o_cursor    in out g_cursor
-	);
-
-   PROCEDURE RET_SYLLABUS(
-      p_id_syllabus IN syllabus.id_syllabus%TYPE,
-      o_cursor IN OUT g_cursor
-   );
-
-   procedure RET_BIBLIOGRAFIA_X_SYLLABUS(
-      p_id_syllabus IN syllabus.id_syllabus%TYPE,
-      O_CURSOR      IN OUT G_CURSOR
-   );
-
-/*--------------------------------------------------------------------------
- * NOMBRE    : LISTAR_TEMAS_A_VALIDAR_X_GRUPO
- * OBJETIVO  : Lista los temas a validar del grupo en el que esta matriculado el alumno
- * FECHA MOD : 19/11/2016 5:12am
- *--------------------------------------------------------------------------
- *     INFORMACI?:
- *     AUTOR: Lucero Liza Puican
- *---------------------------------------------------------------------------*/
-   PROCEDURE LISTAR_TEMAS_A_VALIDAR_X_GRUPO(
-      p_id_grupo  IN grupo.id_grupo%TYPE,
-      p_id_usuario IN alumno.id_usuario%TYPE,
-      O_CURSOR    IN out G_CURSOR
-   );
-   
-/*--------------------------------------------------------------------------
- * NOMBRE    : BUSCAR_ASIGNATURA_X_CADENA
- * OBJETIVO  : Lista las asignaturas por coincidencias con una cadena ingresada como parametro
- * FECHA MOD : 23/11/2016 2:10am
- *--------------------------------------------------------------------------
- *     INFORMACI?:
- *     AUTOR: Lucero Liza Puican
- *---------------------------------------------------------------------------*/
-   PROCEDURE BUSCAR_ASIGNATURA_X_CADENA(
-      p_cadena    IN VARCHAR2,
-      O_CURSOR    IN out G_CURSOR
-   );
-
-   PROCEDURE TEMAS_ASIGNA_APER_x_SEMANA(
-      p_id_asignatura_aperturada IN asignatura_aperturada.id_asig_aperturada%TYPE,
-      p_numero_semana IN tema.semana%TYPE,
-      o_cursor IN OUT g_cursor
-   );
-
-end PAC_CURSOR;
-/
-create or replace PACKAGE BODY PAC_CURSOR IS
-
-  PROCEDURE BUSCAR_ASIGNATURA_X_CADENA(
-    p_cadena        IN VARCHAR2,
-    o_cursor        IN OUT g_cursor) IS
-
-    BEGIN
-      --Opening the cursor to return matched rows
-      OPEN o_cursor FOR
-       SELECT asig.id_asignatura    AS id_asignatura,
-              asig.codigo           AS codigo_asig,
-              asig.nombre           AS nombre_asig,
-              asig.creditaje        AS credit_asig,
-              asig.ciclo            AS ciclo_asig,
-              asig.id_plan_estudio  AS id_plan_estudio,
-              asig.id_regimen       AS regimen, 
-              ap.id_periodo         AS id_periodo,
-              ap.id_asig_aperturada AS id_asig_apert
-         FROM dbsegsyl.asignatura_aperturada ap 
-         JOIN dbsegsyl.asignatura asig ON (asig.id_asignatura = ap.id_asignatura) 
-          AND ap.id_periodo   = devuelve_idPeriodo_actual()
-          AND asig.nombre     LIKE '%'||p_cadena||'%';
-  END BUSCAR_ASIGNATURA_X_CADENA;
-
-  PROCEDURE LISTAR_ASIG_X_COORD(
-    p_IDCoordinador IN docente.id_usuario%TYPE,
-    p_IDPeriodo     IN periodo.id_periodo%TYPE,
-    o_cursor        IN OUT g_cursor) IS
-
-    BEGIN
-      --Opening the cursor to return matched rows
-      OPEN o_cursor FOR
-        SELECT asignatura_aperturada.id_asig_aperturada,
-               asignatura.nombre AS asig_nombre,
-               plan_de_estudio.nombre AS plan_nombre,
-               NVL(estado_syllabus.descripcion, 'NO ENTREGADO') AS estado_syllabus,
-			   syllabus.id_syllabus AS id_syllabus
-        FROM asignatura_aperturada
-        JOIN dbsegsyl.asignatura ON ( asignatura.ID_ASIGNATURA = asignatura_aperturada.ID_ASIGNATURA)
-        JOIN dbsegsyl.plan_de_estudio ON ( plan_de_estudio.ID_PLAN_ESTUDIO = asignatura.ID_PLAN_ESTUDIO)
-        LEFT JOIN dbsegsyl.syllabus ON (syllabus.id_asig_aperturada = asignatura_aperturada.id_asig_aperturada)
-        LEFT JOIN dbsegsyl.estado_syllabus ON (estado_syllabus.id_estado_syllabus = syllabus.id_estado)
-        WHERE id_coordinador = p_idcoordinador
-        AND id_periodo     = p_idperiodo
-        ORDER BY asignatura.codigo;
-
-  END LISTAR_ASIG_X_COORD;
-
-  PROCEDURE LISTAR_TEMAS_X_ASIG_APER(
-    ASIG_APER_ID     in ASIGNATURA_APERTURADA.ID_ASIG_APERTURADA%TYPE,
-    SEM              in TEMA.SEMANA%TYPE,
-    O_CURSOR         in out g_cursor) IS
-
-  BEGIN
-    OPEN o_cursor FOR
-      SELECT TEMA.ID_TEMA, TEMA.DESCRIPCION
-      FROM TEMA
-      JOIN SYLLABUS ON TEMA.ID_SYLLABUS = SYLLABUS.ID_SYLLABUS
-      WHERE SYLLABUS.ID_ASIG_APERTURADA = ASIG_APER_ID
-      AND TEMA.SEMANA = SEM;
-
-  END LISTAR_TEMAS_X_ASIG_APER;
-
-  PROCEDURE RET_ASIG_X_ASIG_APER(
-    ASIG_APER_ID     in ASIGNATURA_APERTURADA.ID_ASIG_APERTURADA%TYPE,
-    O_CURSOR         in out g_cursor) IS
-  BEGIN
-    OPEN o_cursor FOR
-      SELECT ASIGNATURA.ID_ASIGNATURA, ASIGNATURA.NOMBRE
-      FROM ASIGNATURA
-      JOIN ASIGNATURA_APERTURADA ON ASIGNATURA.ID_ASIGNATURA = ASIGNATURA_APERTURADA.ID_ASIGNATURA
-      WHERE ASIGNATURA_APERTURADA.ID_ASIG_APERTURADA = ASIG_APER_ID;
-  END RET_ASIG_X_ASIG_APER;
-
-  procedure LISTAR_ASIG_AP_X_ALUMNO(
-    ID_ALUM  IN     ALUMNO.ID_USUARIO%TYPE,
-    PERIOD   IN     PERIODO.ID_PERIODO%TYPE,
-    O_CURSOR IN OUT G_CURSOR) IS
-  BEGIN
-    OPEN O_CURSOR FOR
-      SELECT ASIGNATURA_APERTURADA.ID_ASIG_APERTURADA, ASIGNATURA.NOMBRE AS ASIG_NOMBRE
-      FROM ASIGNATURA_APERTURADA
-      JOIN ASIGNATURA ON ASIGNATURA.ID_ASIGNATURA = ASIGNATURA_APERTURADA.ID_ASIGNATURA
-      JOIN GRUPO ON GRUPO.ID_ASIG_APERTURADA = ASIGNATURA_APERTURADA.ID_ASIG_APERTURADA
-      JOIN MATRICULA ON GRUPO.ID_GRUPO = MATRICULA.ID_GRUPO
-      WHERE MATRICULA.ID_ALUMNO = ID_ALUM AND ASIGNATURA_APERTURADA.ID_PERIODO = PERIOD;
-  END LISTAR_ASIG_AP_X_ALUMNO;
-
-  procedure LISTAR_GRUPOS(
-     p_IDPeriodo IN periodo.id_periodo%TYPE,
-     o_cursor IN OUT g_cursor) IS
-     BEGIN
-        OPEN o_cursor FOR
-        SELECT grupo.id_grupo AS id_grupo, grupo.numero AS grupo_numero, asignatura.nombre AS asig_nombre
-        FROM grupo
-        JOIN dbsegsyl.asignatura_aperturada ON ( asignatura_aperturada.ID_ASIG_APERTURADA = grupo.ID_ASIG_APERTURADA)
-        JOIN dbsegsyl.asignatura ON ( asignatura.ID_ASIGNATURA = asignatura_aperturada.ID_ASIGNATURA)
-        WHERE id_periodo = p_idperiodo;
-
-    END LISTAR_GRUPOS;
-
-  PROCEDURE LISTAR_TEMAS_A_VALIDAR_X_GRUPO(
-     p_id_grupo IN grupo.id_grupo%TYPE,
-     p_id_usuario IN alumno.id_usuario%TYPE,
-     O_CURSOR IN OUT G_CURSOR) IS
-     BEGIN
-        OPEN O_CURSOR FOR
-      SELECT t.id_tema, t.unidad, t.semana, t.descripcion, t.id_tipo, t.id_syllabus
-        FROM dbsegsyl.grupo g
-        JOIN dbsegsyl.clase c  ON (c.id_grupo = g.id_grupo)
-        JOIN dbsegsyl.sesion s ON (s.id_clase = c.id_clase)
-        JOIN dbsegsyl.tema_x_sesion ts ON (ts.id_sesion = s.id_sesion
-                                       AND ts.cumplido  IN ('S'))
-        JOIN dbsegsyl.asistencia asist ON (asist.id_sesion = ts.id_sesion
-                                      AND  asist.id_usuario = p_id_usuario
-                                      AND  asist.verificacion IN ('A'))
-        JOIN dbsegsyl.tema t ON (t.id_tema = ts.id_tema)
-       where g.id_grupo = p_id_grupo;
-
-    END LISTAR_TEMAS_A_VALIDAR_X_GRUPO;
-
-   procedure RET_USUARIO_X_EMAIL(
-      EMAIL    IN     USUARIO.CORREO%TYPE,
-      O_CURSOR IN OUT G_CURSOR) IS
-      BEGIN
-         OPEN O_CURSOR FOR
-         SELECT * FROM USUARIO WHERE USUARIO.CORREO = EMAIL;
-   END RET_USUARIO_X_EMAIL;
-
-   procedure RET_TEMAS_X_SYLLABUS(
-      p_id_syllabus IN syllabus.id_syllabus%TYPE,
-      O_CURSOR      IN OUT G_CURSOR) IS
-      BEGIN
-         OPEN O_CURSOR FOR
-         SELECT *
-         FROM tema
-         WHERE tema.id_syllabus = p_id_syllabus;
-   END RET_TEMAS_X_SYLLABUS;
-
-   procedure LISTAR_GRUPOS_X_ALUMNO(
-      p_IDPeriodo in periodo.id_periodo%type,
-      cod      in matricula.id_alumno%type,
-      o_cursor in out g_cursor) is
-      begin
-         OPEN O_CURSOR FOR
-         SELECT GRUPO.ID_GRUPO AS ID_GRUPO, GRUPO.NUMERO AS GRUPO_NUMERO, ASIGNATURA.NOMBRE AS ASIG_NOMBRE
-         FROM GRUPO
-         JOIN ASIGNATURA_APERTURADA ON ASIGNATURA_APERTURADA.ID_ASIG_APERTURADA = GRUPO.ID_ASIG_APERTURADA
-         JOIN ASIGNATURA ON ASIGNATURA.ID_ASIGNATURA = ASIGNATURA_APERTURADA.ID_ASIGNATURA
-         JOIN MATRICULA ON MATRICULA.ID_GRUPO = GRUPO.ID_GRUPO
-         WHERE ASIGNATURA_APERTURADA.ID_PERIODO = p_IDPeriodo AND MATRICULA.ID_ALUMNO = cod;
-
-   END LISTAR_GRUPOS_X_ALUMNO;
-
-   procedure LISTAR_GRUPOS_X_DOCENTE(
-      p_IDPeriodo in periodo.id_periodo%type,
-      cod         in docente.id_usuario%type,
-      o_cursor    in out g_cursor) is
-      begin
-         OPEN O_CURSOR FOR
-         SELECT DISTINCT GRUPO.ID_GRUPO AS ID_GRUPO, GRUPO.NUMERO AS GRUPO_NUMERO, ASIGNATURA.NOMBRE AS ASIG_NOMBRE
-           FROM DBSEGSYL.GRUPO
-           JOIN DBSEGSYL.ASIGNATURA_APERTURADA ON ASIGNATURA_APERTURADA.ID_ASIG_APERTURADA = GRUPO.ID_ASIG_APERTURADA
-           JOIN DBSEGSYL.ASIGNATURA ON ASIGNATURA.ID_ASIGNATURA = ASIGNATURA_APERTURADA.ID_ASIGNATURA
-           JOIN DBSEGSYL.CLASE ON CLASE.ID_GRUPO = GRUPO.ID_GRUPO
-           JOIN DBSEGSYL.DOCENTE ON DOCENTE.ID_USUARIO = CLASE.ID_DOCENTE
-          WHERE DOCENTE.ID_USUARIO = cod
-            AND ASIGNATURA_APERTURADA.ID_PERIODO = p_IDPeriodo;
-
-   END LISTAR_GRUPOS_X_DOCENTE;
-
-   PROCEDURE RET_ROLES_X_USUARIO(
-      p_id_usuario IN usuario.id_usuario%TYPE,
-      o_cursor IN OUT g_cursor) IS
-   BEGIN
-      OPEN O_CURSOR FOR
-      SELECT ROL_X_USUARIO.ID_ROL AS ID_ROL, ROL.NOMBRE AS NOMBRE_ROL
-      FROM ROL_X_USUARIO
-      JOIN ROL ON ROL.ID_ROL = ROL_X_USUARIO.ID_ROL
-      WHERE ROL_X_USUARIO.ID_USUARIO = p_id_usuario;
-   END RET_ROLES_X_USUARIO;
-
-   PROCEDURE RET_SYLLABUS(
-      p_id_syllabus IN syllabus.id_syllabus%TYPE,
-      o_cursor IN OUT g_cursor) IS
-      BEGIN
-         OPEN O_CURSOR FOR
-         SELECT SYLLABUS.FECHA_ENTREGA AS FECHA_ENTREGA,
-                SYLLABUS.FECHA_APROBACION AS FECHA_APROBACION,
-                SYLLABUS.ID_ASIG_APERTURADA AS ID_ASIG_APERTURADA,
-                NVL(ESTADO_SYLLABUS.DESCRIPCION, 'NO ENTREGADO') AS ESTADO_SYLLABUS
-         FROM SYLLABUS
-         JOIN ESTADO_SYLLABUS ON ESTADO_SYLLABUS.ID_ESTADO_SYLLABUS = SYLLABUS.ID_ESTADO
-        WHERE SYLLABUS.ID_SYLLABUS = p_id_syllabus;
-   END RET_SYLLABUS;
-
-   procedure RET_BIBLIOGRAFIA_X_SYLLABUS(
-      p_id_syllabus IN syllabus.id_syllabus%TYPE,
-      O_CURSOR      IN OUT G_CURSOR) IS
-      BEGIN
-         OPEN O_CURSOR FOR
-         SELECT *
-           FROM dbsegsyl.referencia_bibliografica
-          WHERE referencia_bibliografica.id_syllabus = p_id_syllabus;
-   END RET_BIBLIOGRAFIA_X_SYLLABUS;
-
-   PROCEDURE TEMAS_ASIGNA_APER_x_SEMANA(
-      p_id_asignatura_aperturada IN asignatura_aperturada.id_asig_aperturada%TYPE,
-      p_numero_semana IN tema.semana%TYPE,
-      o_cursor IN OUT g_cursor) IS
-      BEGIN
-         OPEN o_cursor FOR
-         SELECT tema.*
-         FROM dbsegsyl.tema
-         JOIN dbsegsyl.syllabus ON dbsegsyl.tema.id_syllabus = dbsegsyl.syllabus.id_syllabus
-         JOIN dbsegsyl.asignatura_aperturada ON dbsegsyl.syllabus.id_asig_aperturada = dbsegsyl.asignatura_aperturada.id_asig_aperturada
-         JOIN dbsegsyl.asignatura ON dbsegsyl.asignatura_aperturada.id_asignatura = dbsegsyl.asignatura.id_asignatura
-         WHERE asignatura_aperturada.id_asig_aperturada = p_id_asignatura_aperturada and tema.semana = p_numero_semana;
-
-   END TEMAS_ASIGNA_APER_x_SEMANA;
-
-END PAC_CURSOR;
-/
-
---FUNCIONES
 create or replace FUNCTION RET_ESTADO_SYLLABUS_X_APER
 (
   ASIG_APER_ID IN ASIGNATURA_APERTURADA.ID_ASIG_APERTURADA%TYPE
@@ -726,7 +311,72 @@ create or replace PROCEDURE ELIMINAR_TEMA
    (p_IDTema		TEMA.ID_TEMA%TYPE) AUTHID CURRENT_USER AS
 
 BEGIN
-    DELETE FROM TEMA
-	WHERE ID_TEMA = p_IDTema;
+   DELETE FROM TEMA
+   WHERE ID_TEMA = p_IDTema;
 END ELIMINAR_TEMA;
+/
+
+/*--------------------------------------------------------------------------
+ * NOMBRE    : REG_VALIDACION_ALUMNO
+ * OBJETIVO  : Registrar validacion del alumno correspondiente al syllabus
+ * FECHA MOD : 11/11/2016 3:18pm
+ *--------------------------------------------------------------------------
+ *     INFORMACI?:
+ *     AUTOR: LUCERO DEL PILAR LIZA PUICAN
+ *---------------------------------------------------------------------------*/
+CREATE OR REPLACE PROCEDURE REG_VALIDACION_ALUMNO(
+   p_Cumplido         IN dbsegsyl.validacion_alumno.cumplido%TYPE,
+   p_Comentario       IN dbsegsyl.validacion_alumno.comentario%TYPE,
+   p_IDAlumno         IN dbsegsyl.validacion_alumno.id_alumno%TYPE,
+   p_IDTema_x_Sesion  IN dbsegsyl.validacion_alumno.id_tema_x_sesion%TYPE
+)
+AUTHID CURRENT_USER
+AS
+BEGIN
+      INSERT
+      INTO dbsegsyl.validacion_alumno (id_validacion, cumplido, comentario, id_alumno, id_tema_x_sesion)
+      VALUES (sq_val_alumno.NEXTVAL, p_Cumplido, p_Comentario, p_IDAlumno, p_IDTema_x_Sesion);
+END REG_VALIDACION_ALUMNO;
+/
+
+/*--------------------------------------------------------------------------
+ * NOMBRE    : REG_TEMA_X_SESION
+ * OBJETIVO  : Registrar el tema avanzado en clases
+ * FECHA MOD : 07/11/2016 2:30pm
+ *--------------------------------------------------------------------------
+ *     INFORMACI?:
+ *     AUTOR: LUCERO DEL PILAR LIZA PUICAN
+ *---------------------------------------------------------------------------*/
+CREATE OR REPLACE PROCEDURE dbsegsyl.REG_TEMA_X_SESION(
+    p_IDTemaXSesion         IN dbsegsyl.tema_x_sesion.id_tema_x_sesion%TYPE,
+    p_IDTema                IN dbsegsyl.tema_x_sesion.id_tema%TYPE,
+    p_IDSesion              IN dbsegsyl.tema_x_sesion.id_sesion%TYPE
+)
+AUTHID CURRENT_USER
+AS
+BEGIN
+       INSERT INTO dbsegsyl.tema_x_sesion(id_tema_x_sesion, cumplido, id_tema, id_sesion)
+                             VALUES (p_IDTemaXSesion, 'N', p_IDTema, p_IDSesion);
+END REG_TEMA_X_SESION;
+/
+
+/*--------------------------------------------------------------------------
+ * NOMBRE    : REG_COORDINADOR_X_ASIG_APERTURADA
+ * OBJETIVO  : Registrar un coordinador para una asignatura aperturada
+ * FECHA MOD : 23/11/2016 2:30pm
+ *--------------------------------------------------------------------------
+ *     INFORMACI?:
+ *     AUTOR: TAKESHI FARRO HINOSHITA
+ *---------------------------------------------------------------------------*/
+CREATE OR REPLACE PROCEDURE dbsegsyl.REG_COORDINADOR_X_ASIG_APER(
+    p_IDDocente        IN dbsegsyl.docente.id_usuario%TYPE,
+    p_IDAsigAperturada IN dbsegsyl.asignatura_aperturada.id_asig_aperturada%TYPE
+)
+AUTHID CURRENT_USER
+AS
+BEGIN
+      UPDATE dbsegsyl.asignatura_aperturada
+      SET id_coordinador = p_IDDocente
+      WHERE id_asig_aperturada = p_IDAsigAperturada;
+END REG_COORDINADOR_X_ASIG_APER;
 /
