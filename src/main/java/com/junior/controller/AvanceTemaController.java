@@ -2,9 +2,11 @@ package com.junior.controller;
 
 import java.security.Principal;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -81,10 +83,24 @@ public class AvanceTemaController {
         // Obtener las clases del profesor y si registro sus temas en las sesiones de dichas semanas
         List<Sesion> sesiones = this.sesionDao.obtenerPorGrupoPorDocente(grupoId, usuario.getId());
 
+        Periodo periodo = this.periodoDao.obtenerPeriodoActual();
+        Map<Integer, Date> semanasRecientes = SemanaHelper.retornarUltimasSemanas(periodo.getFechaInicio());
+        Date fechaInicio = semanasRecientes.entrySet().iterator().next().getValue();
+        Date fechaFin = fechaInicio;
+        Iterator<Entry<Integer, Date>> iterator = semanasRecientes.entrySet().iterator();
+        while (iterator.hasNext()) {
+            fechaFin = iterator.next().getValue();
+        }
+
         Map<Sesion, Boolean> registros = new LinkedHashMap<Sesion, Boolean>();
         for (Sesion sesion: sesiones) {
-            Boolean resultado = this.temaDao.obtenerSiIngresoTemas(sesion.getId());
-            registros.put(sesion, resultado);
+            Date fecha = sesion.getFecha();
+            // Si la fecha inicio es antes que la fecha de la sesion
+            // Y si la fecha fin es despues que la fecha de la sesion
+            if (fechaInicio.compareTo(fecha) <= 0  && fechaFin.compareTo(fecha) >= 0) {
+                Boolean resultado = this.temaDao.obtenerSiIngresoTemas(sesion.getId());
+                registros.put(sesion, resultado);
+            }
         }
 
         map.addAttribute("nombreAsignatura", nombreAsignatura);
