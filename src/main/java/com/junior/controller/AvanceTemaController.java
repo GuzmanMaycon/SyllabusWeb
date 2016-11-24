@@ -21,7 +21,6 @@ import com.junior.dao.design.ISesionDao;
 import com.junior.dao.design.ITemaDao;
 import com.junior.dao.design.IUsuarioDao;
 import com.junior.helpers.SemanaHelper;
-import com.junior.to.Clase;
 import com.junior.to.Periodo;
 import com.junior.to.Sesion;
 import com.junior.to.Tema;
@@ -79,38 +78,36 @@ public class AvanceTemaController {
         String nombreAsignatura = "";
         Usuario usuario = this.usuarioDao.obtenerUsuario(principal.getName());
 
-        Map<Integer, Map<Sesion, Boolean>> semanas = new LinkedHashMap<Integer, Map<Sesion,Boolean>>();
-        // Obtener semanas de acuerdo a las fechas
-        Periodo periodo = this.periodoDao.obtenerPeriodoActual();
-        Map<Integer, Date> semanasRecientes = SemanaHelper.retornarUltimasSemanas(periodo.getFechaInicio());
-
         // Obtener las clases del profesor y si registro sus temas en las sesiones de dichas semanas
         List<Sesion> sesiones = this.sesionDao.obtenerPorGrupoPorDocente(grupoId, usuario.getId());
 
-        for(Map.Entry<Integer, Date> entry : semanasRecientes.entrySet()) {
-            Map<Sesion, Boolean> registro = new LinkedHashMap<>();
-            for(Sesion sesion: sesiones) {
-                Boolean resultado = this.temaDao.obtenerSiIngresoTemas(sesion.getId());
-                registro.put(sesion, resultado);
-            }
-            semanas.put(entry.getKey(), registro);
+        Map<Sesion, Boolean> registros = new LinkedHashMap<Sesion, Boolean>();
+        for (Sesion sesion: sesiones) {
+            Boolean resultado = this.temaDao.obtenerSiIngresoTemas(sesion.getId());
+            registros.put(sesion, resultado);
         }
+
         map.addAttribute("nombreAsignatura", nombreAsignatura);
-        map.addAttribute("semanas", semanas);
-        map.addAttribute("semanasFecha", semanasRecientes);
+        map.addAttribute("registros", registros);
 
         return "registrar-avance/index";
     }
 
-    @RequestMapping(value = "/semana/{semana}/{tipoClase}/avance", method = RequestMethod.GET)
+    @RequestMapping(value = "/sesion/{sesionId}/avance", method = RequestMethod.GET)
     public String create(ModelMap map,
-        @PathVariable(value="asignaturaAperturadaId") Integer asignaturaAperturadaid,
-        @PathVariable(value="semana") Integer semana,
-        @PathVariable(value="tipoClase") String tipoClase,
+        @PathVariable(value="grupoId") Integer grupoId,
+        @PathVariable(value="sesionId") Integer sesionId,
         RedirectAttributes redirectAttrs)
     {
-        List<Tema> temas = this.temaDao.obtenerTemasPorAsignaturaPorSemana(asignaturaAperturadaid, semana);
+        //List<Tema> temas = this.temaDao.obtenerTemasPorAsignaturaPorSemana(asignaturaAperturadaid, semana);
+        // Obtener semanas de acuerdo a las fechas
+        Periodo periodo = this.periodoDao.obtenerPeriodoActual();
+        Map<Integer, Date> semanasRecientes = SemanaHelper.retornarUltimasSemanas(periodo.getFechaInicio());
+        for (Map.Entry<Integer, Date> entry : semanasRecientes.entrySet()) {
+            List<Tema> nuevosTemas = this.temaDao.obtenerTemasPorGrupo(grupoId);
+        }
 
+        map.addAttribute("semanasFecha", semanasRecientes);
 
         return "registrar-avance/registrar";
     }

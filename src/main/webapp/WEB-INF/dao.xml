@@ -61,8 +61,8 @@
     </property>
   </bean>
 
-  <!-- Dao para Tipo Clase -->
-  <bean id="tipoClaseImpl"
+  <!-- Dao para Sesion -->
+    <bean id="sesionDaoImpl"
         class="com.junior.dao.component.SesionDao">
     <property name="db">
       <ref bean="accesoOracleLocalImpl"/>

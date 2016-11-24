@@ -2,6 +2,7 @@
     pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -38,31 +39,30 @@
     </div>
 
     <div class="row">
-      <c:forEach var="semana" items="${semanas}">
+      <c:forEach var="registro" items="${registros}">
+      <c:set var="sesion" value="${registro.key}" />
+      <c:set var="tipoClase" value="${fn:toLowerCase(sesion.clase.tipo.descripcion)}" />
       <div class="col-sm-6 col-md-4 col-md-offset-1 col-lg-4">
         <div class="panel panel-info">
           <div class="panel-heading">
-            <c:set var="fecha" value="${semanasFecha[semana.key]}"/>
-            <label>Semana ${semana.key} - <fmt:formatDate pattern="dd-MM-yyyy" value="${fecha}" /></label>
+            <label class="text-capitalize">${tipoClase} - <fmt:formatDate pattern="dd/MM/yyyy" value="${sesion.fecha}" /></label>
           </div>
 
           <div class="panel-body">
-            <c:forEach var="registro" items="${semana.value}">
-            <c:set var="tipoClase" value="${registro.key.clase.tipo.descripcion}"/>
-            <div class="col-xs-9">
-              ${tipoClase}
-            </div>
-            <div class="col-xs-3">
-              <c:if test="${!registro.value}">
-              <a href="${basePath}/grupo/${grupoId}/semana/${semana.key}/${tipoClase}/avance">
-                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+            <div class="text-center">
+              <c:choose>
+                <c:when test="${registro.value}">
+                <a class="btn disabled">
+                  <i class="fa fa-check fa-fw" aria-hidden="true"></i>&nbsp;<span>Entregado</span>
               </a>
-              </c:if>
-              <c:if test="${registro.value}">
-                <i class="fa fa-check" aria-hidden="true"></i>
-              </c:if>
+                </c:when>
+                <c:otherwise>
+              <a class="btn" href="${basePath}/grupo/${grupoId}/sesion/${sesion.id}/avance">
+                  <i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i>&nbsp;<span>Por Entregar</span>
+              </a>
+                </c:otherwise>
+              </c:choose>
             </div>
-            </c:forEach>
           </div>
         </div>
       </div>

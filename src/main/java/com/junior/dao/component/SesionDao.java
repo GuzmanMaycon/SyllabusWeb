@@ -47,7 +47,7 @@ public class SesionDao implements ISesionDao {
                 while (rs.next()) {
                     TipoClase nuevoTipoClase = new TipoClase();
                     nuevoTipoClase.setDescripcion(rs.getString("DESCRIPCION"));
-                    nuevoTipoClase.setId(rs.getInt("ID_TIPO"));
+                    nuevoTipoClase.setId(rs.getInt("ID_TIPO_CLASE"));
 
                     Clase nuevaClase = new Clase();
                     nuevaClase.setTipo(nuevoTipoClase);
