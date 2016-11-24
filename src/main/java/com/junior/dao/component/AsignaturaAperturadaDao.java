@@ -189,4 +189,59 @@ public class AsignaturaAperturadaDao implements IAsignaturaAperturadaDao{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public List<AsignaturaAperturadaTO> obtenerPorCicloEapNombre(Integer IDEap, Integer ciclo, String nombre) {
+		List<AsignaturaAperturadaTO> aperturadas = new ArrayList<AsignaturaAperturadaTO>();
+		String procedimientoAlmacenado = "{ call PAC_CURSOR.LISTAR_ASIG_X_CICLO_EAP_NOMBRE(?,?,?,?)}";
+
+        Connection cn = this.db.getConnection();
+
+        if (cn != null) {
+            try {
+                CallableStatement proc = cn.prepareCall(procedimientoAlmacenado);
+                proc.registerOutParameter("o_cursor", OracleTypes.CURSOR);
+                proc.setInt("p_eap", IDEap);
+                proc.setInt("p_ciclo", ciclo);
+                proc.setString("p_nombre", nombre);
+                proc.execute();
+
+                ResultSet rs = (ResultSet) proc.getObject("o_cursor");
+
+                while (rs.next()) {
+                    AsignaturaAperturadaTO aperturada = new AsignaturaAperturadaTO();
+                    Asignatura asignatura = new Asignatura();
+                    asignatura.setId(rs.getInt("ID_ASIGNATURA"));
+                    asignatura.setCodigo(rs.getString("CODIGO"));
+                    asignatura.setNombre(rs.getString("NOMBRE"));
+                    asignatura.setCreditaje(rs.getInt("CREDITAJE"));
+                    asignatura.setCiclo(rs.getInt("CICLO"));
+                    
+                    PlanDeEstudio plan = new PlanDeEstudio();
+                    plan.setId(rs.getInt("ID_PLAN_ESTUDIO"));
+                    
+                    asignatura.setPlan(plan);
+                    asignatura.setRegimen(rs.getString("REGIMEN"));
+                    
+                    aperturada.setAsignatura(asignatura);
+                    
+                    Periodo periodo = new Periodo(rs.getInt("ID_PERIODO"),null, null, null, null);
+                    
+                    aperturada.setPeriodo(periodo);
+                    aperturada.setId(rs.getInt("ID_ASIG_APERTURADA"));
+                    
+                    aperturadas.add(aperturada);
+                }
+            } catch(SQLException ex) {
+                System.err.println(ex.getMessage());
+            } finally {
+                try {
+                    cn.close();
+                } catch (Exception e) {
+                    System.err.println(e.getMessage());
+                }
+            }
+        }
+        return aperturadas;
+	}
 }

@@ -241,6 +241,21 @@ create or replace PACKAGE          PAC_CURSOR is
     p_IDPeriodo in periodo.id_periodo%type,
     o_cursor in out g_cursor); -- Our cursor
 
+ /*--------------------------------------------------------------------------
+   * NOMBRE    : LISTAR_ASIG_AP_X_CICLO_EAP_NOMBRE
+   * OBJETIVO  : Retorna las asignaturas aperturadas por escuela, ciclo y nombre 
+   * FECHA MOD : 24/11/2016 01:07am
+   *--------------------------------------------------------------------------
+   *     INFORMACION:
+   *     AUTOR: Lucero Liza Puican
+   *---------------------------------------------------------------------------*/
+  PROCEDURE LISTAR_ASIG_X_CICLO_EAP_NOMBRE(
+    p_eap    IN     dbsegsyl.eap.id_eap%TYPE,
+    p_ciclo  IN     dbsegsyl.asignatura.ciclo%TYPE,
+    p_nombre IN     VARCHAR2,
+    O_CURSOR IN OUT G_CURSOR
+  );
+
 /*--------------------------------------------------------------------------
    * NOMBRE    : LISTAR_TEMAS_X_ASIG_APER
    * OBJETIVO  : Lista temas por asignatura aperturada
@@ -414,6 +429,25 @@ create or replace PACKAGE          PAC_CURSOR is
 end PAC_CURSOR;
 /
 create or replace PACKAGE BODY PAC_CURSOR IS
+
+ PROCEDURE LISTAR_ASIG_X_CICLO_EAP_NOMBRE(
+    p_eap    IN     dbsegsyl.eap.id_eap%TYPE,
+    p_ciclo  IN     dbsegsyl.asignatura.ciclo%TYPE,
+    p_nombre IN     VARCHAR2,
+    O_CURSOR IN OUT G_CURSOR) IS 
+  BEGIN 
+      OPEN o_cursor FOR
+    SELECT ap.id_asig_aperturada, ap.id_periodo, 
+           asig.id_asignatura, asig.codigo, asig.nombre, asig.creditaje, asig.ciclo, asig.id_plan_estudio, asig.id_regimen 
+      FROM dbsegsyl.asignatura_aperturada ap 
+      JOIN dbsegsyl.asignatura asig ON (asig.id_asignatura = ap.id_asignatura)
+      JOIN dbsegsyl.plan_de_estudio plan_est ON (plan_est.id_plan_estudio = asig.id_plan_estudio)
+     WHERE ap.id_periodo = devuelve_IDPeriodo_actual()
+       AND asig.ciclo = p_ciclo 
+       AND plan_est.id_eap = p_eap
+       AND asig.nombre like '%'||p_nombre||'%';
+       
+  END LISTAR_ASIG_X_CICLO_EAP_NOMBRE;
 
   PROCEDURE BUSCAR_ASIGNATURA_X_CADENA(
     p_cadena        IN VARCHAR2,
