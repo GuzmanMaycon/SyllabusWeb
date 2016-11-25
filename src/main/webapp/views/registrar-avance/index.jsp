@@ -54,12 +54,12 @@
                 <c:when test="${registro.value}">
                 <a class="btn disabled">
                   <i class="fa fa-check fa-fw" aria-hidden="true"></i>&nbsp;<span>Entregado</span>
-              </a>
+                </a>
                 </c:when>
                 <c:otherwise>
-              <a class="btn" href="${basePath}/grupo/${grupoId}/sesion/${sesion.id}/avance">
+                <a class="btn" href="${basePath}/grupo/${grupoId}/sesion/${sesion.id}/avance">
                   <i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i>&nbsp;<span>Por Entregar</span>
-              </a>
+                </a>
                 </c:otherwise>
               </c:choose>
             </div>

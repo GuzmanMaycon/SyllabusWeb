@@ -100,6 +100,7 @@ public class AvanceTemaController {
             // Si la fecha inicio es antes que la fecha de la sesion
             // Y si la fecha fin es despues que la fecha de la sesion
             if (fechaInicio.compareTo(fecha) <= 0  && fechaFin.compareTo(fecha) >= 0) {
+                System.out.println(this.temaDao.obtenerSiIngresoTemas(sesion.getId()));
                 Boolean resultado = this.temaDao.obtenerSiIngresoTemas(sesion.getId());
                 registros.put(sesion, resultado);
             }
@@ -132,17 +133,15 @@ public class AvanceTemaController {
         return "registrar-avance/registrar";
     }
 
-    @RequestMapping(value = "/semana/{semana}/clase/{tipoClase}/avance", method = RequestMethod.POST)
+    @RequestMapping(value = "/sesion/{sesionId}/avance", method = RequestMethod.POST)
     public String store(ModelMap map,
         @RequestParam(value = "temas[]", required = false) List<Integer> temas,
-        @PathVariable(value="asignaturaAperturadaId") Integer asignaturaAperturadaid,
-        @PathVariable(value="semana") Integer semana,
-        @PathVariable(value="tipoClase") String tipoClase,
+        @PathVariable(value="grupoId") Integer grupoId,
+        @PathVariable(value="sesionId") Integer sesionId,
         RedirectAttributes redirectAttrs)
     {
-        if(temas != null) {
-            for(Object t: temas)
-                System.out.println(t);
+        if (temas != null) {
+            this.temaDao.insertarAvanceDeTemas(temas, sesionId);
 
             redirectAttrs.addFlashAttribute("mensajeOk", "Avance de temas registrados");
             return "redirect:/grupos/index";

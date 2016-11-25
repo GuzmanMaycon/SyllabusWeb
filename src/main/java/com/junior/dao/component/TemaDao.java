@@ -257,4 +257,32 @@ public class TemaDao implements ITemaDao {
         return resultado;
     }
 
+    @Override
+    public String insertarAvanceDeTemas(List<Integer> temasId, Integer sesionId)
+    {
+        String procedimientoAlmacenado = "{ call REG_TEMA_X_SESION(?, ?)}";
+        Connection cn = this.db.getConnection();
+
+        if (cn != null) {
+            try {
+                for (Integer temaId : temasId) {
+                    CallableStatement proc = cn.prepareCall(procedimientoAlmacenado);
+                    proc.setInt("p_id_tema", temaId);
+                    proc.setInt("p_id_sesion", sesionId);
+                    proc.executeQuery();
+                }
+            } catch(SQLException ex) {
+                System.err.println(ex.getMessage());
+            } finally {
+                try {
+                    cn.close();
+                } catch (Exception e) {
+                    System.err.println(e.getMessage());
+                }
+            }
+        }
+
+        return "OK";
+    }
+
 }
