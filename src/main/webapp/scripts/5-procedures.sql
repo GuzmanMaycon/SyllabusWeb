@@ -383,3 +383,24 @@ BEGIN
       WHERE id_asig_aperturada = p_IDAsigAperturada;
 END REG_COORDINADOR_X_ASIG_APER;
 /
+
+/*--------------------------------------------------------------------------
+ * NOMBRE    : REG_TEMA_ADICIONAL
+ * OBJETIVO  : Registrar un tema adicional en la base de datos
+ * FECHA MOD : 07/11/2016 2:20pm
+ *--------------------------------------------------------------------------
+ *     INFORMACI?:
+ *     AUTOR: LUCERO DEL PILAR LIZA PUICAN
+ *---------------------------------------------------------------------------*/
+CREATE OR REPLACE PROCEDURE dbsegsyl.REG_TEMA_ADICIONAL(
+    p_Descripcion           IN dbsegsyl.tema_adicional.descripcion%TYPE,
+    p_IDSesion              IN dbsegsyl.tema_adicional.id_sesion%TYPE
+)
+AUTHID CURRENT_USER
+AS
+BEGIN
+       INSERT INTO dbsegsyl.tema_adicional(id_tema_adicional, descripcion, id_sesion)
+                                   VALUES (sq_tema_adicional.nextval, p_Descripcion, p_IDSesion);
+
+END REG_TEMA_ADICIONAL;
+/
