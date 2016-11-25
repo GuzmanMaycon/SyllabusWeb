@@ -222,10 +222,23 @@ create or replace PACKAGE          PAC_CURSOR is
  *     AUTOR: GIANCARLOS CLAUDIO ZAVALETA
  *--------------------------------------------------------------------------*/
    PROCEDURE LISTAR_TEMAS_X_GRUPO(
-    GRUPO_ID     in GRUPO.ID_GRUPO%TYPE,
-    O_CURSOR     in out g_cursor,
-    p_sem_inicio in TEMA.SEMANA%TYPE,
-    p_sem_fin    in TEMA.SEMANA%TYPE
-  );
+      GRUPO_ID     in GRUPO.ID_GRUPO%TYPE,
+      O_CURSOR     in out g_cursor,
+      p_sem_inicio in TEMA.SEMANA%TYPE,
+      p_sem_fin    in TEMA.SEMANA%TYPE
+   );
+
+/*--------------------------------------------------------------------------
+ * NOMBRE    : RET_DOCENTES_X_ASIG_APERTURADA
+ * OBJETIVO  : Retorna los docentes que dictan una asignatura aperturada
+ * FECHA MOD : 23/11/2016 8:00pm
+ *--------------------------------------------------------------------------
+ *     INFORMACI?:
+ *     AUTOR: TAKESHI FARRO HINOSHITA
+ *--------------------------------------------------------------------------*/
+   PROCEDURE RET_DOCENTES_X_ASIG_APERTURADA(
+      p_id_asig_aperturda in ASIGNATURA_APERTURADA.ID_ASIG_APERTURADA%TYPE,
+      o_cursor            in out g_cursor
+   );
 
 end PAC_CURSOR;

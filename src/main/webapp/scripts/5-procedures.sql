@@ -35,21 +35,21 @@ END;
 /*     AUTOR: LUCERO LIZA PUICAN                                             */
 /*---------------------------------------------------------------------------*/
 CREATE OR REPLACE FUNCTION DBSEGSYL.DEVUELVE_NOMBRE_ASIG_X_GRUPO(
-	COD 	IN VARCHAR2
+   p_id_grupo IN grupo.id_grupo%TYPE
 )
 RETURN VARCHAR2 IS vnombre VARCHAR2(200);
 BEGIN
-		SELECT A.NOMBRE AS asig_nombre
+      SELECT A.NOMBRE AS asig_nombre
       into vnombre
       FROM dbsegsyl.grupo g
       JOIN dbsegsyl.asignatura_aperturada ap ON (ap.ID_ASIG_APERTURADA = g.ID_ASIG_APERTURADA)
       JOIN dbsegsyl.asignatura A ON (A.ID_ASIGNATURA = ap.ID_ASIGNATURA)
-     WHERE g.ID_GRUPO = cod;
+     WHERE g.ID_GRUPO = p_id_grupo;
 
-	RETURN vnombre;
+   RETURN vnombre;
 EXCEPTION
-	WHEN OTHERS THEN
-		RETURN NULL;
+   WHEN OTHERS THEN
+      RETURN NULL;
 END;
 /
 

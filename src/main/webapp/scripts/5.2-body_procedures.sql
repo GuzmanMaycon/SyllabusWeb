@@ -257,4 +257,23 @@ create or replace PACKAGE BODY PAC_CURSOR IS
 
   END LISTAR_TEMAS_X_GRUPO;
 
+   PROCEDURE RET_DOCENTES_X_ASIG_APERTURADA(
+      p_id_asig_aperturda in ASIGNATURA_APERTURADA.ID_ASIG_APERTURADA%TYPE,
+      o_cursor            in out g_cursor
+   ) IS
+      BEGIN
+         OPEN o_cursor FOR
+         SELECT docente.id_usuario AS id_docente,
+                docente.grado AS grado_docente,
+                usuario.nombre AS nombre_docente,
+                usuario.apellido AS apellido_docente
+           FROM dbsegsyl.docente
+           JOIN usuario ON usuario.id_usuario = docente.id_usuario
+           JOIN clase ON clase.id_docente = docente.id_usuario
+           JOIN grupo ON grupo.id_grupo = clase.id_grupo
+           JOIN asignatura_aperturada ON asignatura_aperturada.id_asig_aperturada = grupo.id_asig_aperturada
+          WHERE asignatura_aperturada.id_asig_aperturada = p_id_asig_aperturda;
+
+   END RET_DOCENTES_X_ASIG_APERTURADA;
+
 END PAC_CURSOR;
