@@ -35,21 +35,21 @@ END;
 /*     AUTOR: LUCERO LIZA PUICAN                                             */
 /*---------------------------------------------------------------------------*/
 CREATE OR REPLACE FUNCTION DBSEGSYL.DEVUELVE_NOMBRE_ASIG_X_GRUPO(
-	COD 	IN VARCHAR2
+   p_id_grupo IN grupo.id_grupo%TYPE
 )
 RETURN VARCHAR2 IS vnombre VARCHAR2(200);
 BEGIN
-		SELECT A.NOMBRE AS asig_nombre
+      SELECT A.NOMBRE AS asig_nombre
       into vnombre
       FROM dbsegsyl.grupo g
       JOIN dbsegsyl.asignatura_aperturada ap ON (ap.ID_ASIG_APERTURADA = g.ID_ASIG_APERTURADA)
       JOIN dbsegsyl.asignatura A ON (A.ID_ASIGNATURA = ap.ID_ASIGNATURA)
-     WHERE g.ID_GRUPO = cod;
+     WHERE g.ID_GRUPO = p_id_grupo;
 
-	RETURN vnombre;
+   RETURN vnombre;
 EXCEPTION
-	WHEN OTHERS THEN
-		RETURN NULL;
+   WHEN OTHERS THEN
+      RETURN NULL;
 END;
 /
 
@@ -348,15 +348,18 @@ END REG_VALIDACION_ALUMNO;
  *     AUTOR: LUCERO DEL PILAR LIZA PUICAN
  *---------------------------------------------------------------------------*/
 CREATE OR REPLACE PROCEDURE dbsegsyl.REG_TEMA_X_SESION(
-    p_IDTemaXSesion         IN dbsegsyl.tema_x_sesion.id_tema_x_sesion%TYPE,
-    p_IDTema                IN dbsegsyl.tema_x_sesion.id_tema%TYPE,
-    p_IDSesion              IN dbsegsyl.tema_x_sesion.id_sesion%TYPE
+   p_id_tema   IN dbsegsyl.tema.id_tema%TYPE,
+   p_id_sesion IN dbsegsyl.sesion.id_sesion%TYPE
 )
-AUTHID CURRENT_USER
 AS
 BEGIN
-       INSERT INTO dbsegsyl.tema_x_sesion(id_tema_x_sesion, cumplido, id_tema, id_sesion)
-                             VALUES (p_IDTemaXSesion, 'N', p_IDTema, p_IDSesion);
+   INSERT INTO TEMA_X_SESION (
+      ID_TEMA_X_SESION,
+      CUMPLIDO,
+      TEMA_X_SESION.ID_TEMA,
+      TEMA_X_SESION.ID_SESION
+   )
+   VALUES (sq_tema_x_sesion.nextval, 'A', p_id_tema, p_id_sesion);
 END REG_TEMA_X_SESION;
 /
 
@@ -379,4 +382,25 @@ BEGIN
       SET id_coordinador = p_IDDocente
       WHERE id_asig_aperturada = p_IDAsigAperturada;
 END REG_COORDINADOR_X_ASIG_APER;
+/
+
+/*--------------------------------------------------------------------------
+ * NOMBRE    : REG_TEMA_ADICIONAL
+ * OBJETIVO  : Registrar un tema adicional en la base de datos
+ * FECHA MOD : 07/11/2016 2:20pm
+ *--------------------------------------------------------------------------
+ *     INFORMACI?:
+ *     AUTOR: LUCERO DEL PILAR LIZA PUICAN
+ *---------------------------------------------------------------------------*/
+CREATE OR REPLACE PROCEDURE dbsegsyl.REG_TEMA_ADICIONAL(
+    p_Descripcion           IN dbsegsyl.tema_adicional.descripcion%TYPE,
+    p_IDSesion              IN dbsegsyl.tema_adicional.id_sesion%TYPE
+)
+AUTHID CURRENT_USER
+AS
+BEGIN
+       INSERT INTO dbsegsyl.tema_adicional(id_tema_adicional, descripcion, id_sesion)
+                                   VALUES (sq_tema_adicional.nextval, p_Descripcion, p_IDSesion);
+
+END REG_TEMA_ADICIONAL;
 /
