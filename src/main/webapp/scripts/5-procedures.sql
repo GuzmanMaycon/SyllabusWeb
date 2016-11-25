@@ -404,3 +404,26 @@ BEGIN
 
 END REG_TEMA_ADICIONAL;
 /
+
+/*--------------------------------------------------------------------------
+ * NOMBRE    : RET_INGRESO_TEMAS
+ * OBJETIVO  : Retorna la cantidad de temas que ha registrado el docente
+               sin tener en cuenta los temas adicionales.
+ * FECHA MOD : 25/11/2016 2:00pm
+ *--------------------------------------------------------------------------
+ *     INFORMACI?:
+ *     AUTOR: GIANCARLOS CLAUDIO ZAVALETA
+ *---------------------------------------------------------------------------*/
+CREATE OR REPLACE FUNCTION RET_INGRESO_TEMAS(
+   p_id_sesion IN sesion.id_sesion%TYPE
+)
+RETURN VARCHAR2 IS v_resultado INTEGER;
+BEGIN
+   SELECT (COUNT(TEMA_X_SESION.ID_TEMA_X_SESION))
+      INTO v_resultado
+      FROM TEMA_X_SESION
+      WHERE ID_SESION = p_id_sesion;
+   RETURN v_resultado;
+
+END RET_INGRESO_TEMAS;
+/
