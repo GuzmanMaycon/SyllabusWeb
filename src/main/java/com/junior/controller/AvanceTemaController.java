@@ -83,7 +83,7 @@ public class AvanceTemaController {
         @PathVariable(value="grupoId") Integer grupoId,
         Principal principal)
     {
-        String nombreAsignatura = "";
+        String nombreAsignatura = this.grupoDao.obtenerNombreAsignatura(grupoId);
         Usuario usuario = this.usuarioDao.obtenerUsuario(principal.getName());
 
         // Obtener las clases del profesor y si registro sus temas en las sesiones de dichas semanas

@@ -6,7 +6,7 @@ import com.junior.to.Grupo;;
 
 public interface IGrupoDao {
     public List<Grupo> obtenerTodos();
-
     public List<Grupo> obtenerPorAlumno(Integer codigo);
     public List<Grupo> obtenerPorDocente(Integer codigo);
+    public String obtenerNombreAsignatura(Integer grupoId);
 }

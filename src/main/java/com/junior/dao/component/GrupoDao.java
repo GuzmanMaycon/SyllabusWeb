@@ -4,6 +4,7 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -118,7 +119,7 @@ public class GrupoDao implements IGrupoDao {
 
         return grupos;
     }
-    
+
 
     @Override
     public List<Grupo> obtenerPorDocente(Integer codigo) {
@@ -165,6 +166,34 @@ public class GrupoDao implements IGrupoDao {
 
         return grupos;
     }
-    
 
+    @Override
+    public String obtenerNombreAsignatura(Integer grupoId)
+    {
+        String nombre = null;
+
+        String procedimientoAlmacenado = "{ ? = call DEVUELVE_NOMBRE_ASIG_X_GRUPO(?)}";
+        Connection cn = this.db.getConnection();
+
+        if (cn != null) {
+            try {
+                CallableStatement proc = cn.prepareCall(procedimientoAlmacenado);
+                proc.registerOutParameter(1, Types.VARCHAR);
+                proc.setInt(2, grupoId);
+                proc.executeQuery();
+
+                nombre = proc.getString(1);
+            } catch(SQLException ex) {
+                System.err.println(ex.getMessage());
+            } finally {
+                try {
+                    cn.close();
+                } catch (Exception e) {
+                    System.err.println(e.getMessage());
+                }
+            }
+        }
+
+        return nombre;
+    }
 }
