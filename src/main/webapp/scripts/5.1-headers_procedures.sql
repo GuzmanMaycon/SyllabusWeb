@@ -213,4 +213,19 @@ create or replace PACKAGE          PAC_CURSOR is
       o_cursor IN OUT g_cursor
    );
 
+/*--------------------------------------------------------------------------
+ * NOMBRE    : LISTAR_TEMAS_X_GRUPO
+ * OBJETIVO  : Retorna los temas del grupo
+ * FECHA MOD : 23/11/2016 8:00pm
+ *--------------------------------------------------------------------------
+ *     INFORMACI?:
+ *     AUTOR: GIANCARLOS CLAUDIO ZAVALETA
+ *--------------------------------------------------------------------------*/
+   PROCEDURE LISTAR_TEMAS_X_GRUPO(
+    GRUPO_ID     in GRUPO.ID_GRUPO%TYPE,
+    O_CURSOR     in out g_cursor,
+    p_sem_inicio in TEMA.SEMANA%TYPE,
+    p_sem_fin    in TEMA.SEMANA%TYPE
+  );
+
 end PAC_CURSOR;

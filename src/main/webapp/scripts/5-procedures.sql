@@ -348,15 +348,18 @@ END REG_VALIDACION_ALUMNO;
  *     AUTOR: LUCERO DEL PILAR LIZA PUICAN
  *---------------------------------------------------------------------------*/
 CREATE OR REPLACE PROCEDURE dbsegsyl.REG_TEMA_X_SESION(
-    p_IDTemaXSesion         IN dbsegsyl.tema_x_sesion.id_tema_x_sesion%TYPE,
-    p_IDTema                IN dbsegsyl.tema_x_sesion.id_tema%TYPE,
-    p_IDSesion              IN dbsegsyl.tema_x_sesion.id_sesion%TYPE
+   p_id_tema   IN dbsegsyl.tema.id_tema%TYPE,
+   p_id_sesion IN dbsegsyl.sesion.id_sesion%TYPE
 )
-AUTHID CURRENT_USER
 AS
 BEGIN
-       INSERT INTO dbsegsyl.tema_x_sesion(id_tema_x_sesion, cumplido, id_tema, id_sesion)
-                             VALUES (p_IDTemaXSesion, 'N', p_IDTema, p_IDSesion);
+   INSERT INTO TEMA_X_SESION (
+      ID_TEMA_X_SESION,
+      CUMPLIDO,
+      TEMA_X_SESION.ID_TEMA,
+      TEMA_X_SESION.ID_SESION
+   )
+   VALUES (sq_tema_x_sesion.nextval, 'A', p_id_tema, p_id_sesion);
 END REG_TEMA_X_SESION;
 /
 
