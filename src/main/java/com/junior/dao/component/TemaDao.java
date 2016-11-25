@@ -242,7 +242,7 @@ public class TemaDao implements ITemaDao {
                 proc.setInt("p_id_sesion", idSesion);
                 proc.executeQuery();
 
-                resultado = (proc.getInt("v_resultado") == 1);
+                resultado = (proc.getInt("v_resultado") > 0);
             } catch(SQLException ex) {
                 System.err.println(ex.getMessage());
             } finally {
@@ -272,12 +272,42 @@ public class TemaDao implements ITemaDao {
                     proc.executeQuery();
                 }
             } catch(SQLException ex) {
-                System.err.println(ex.getMessage());
+                return ex.getMessage();
             } finally {
                 try {
                     cn.close();
                 } catch (Exception e) {
-                    System.err.println(e.getMessage());
+                    return e.getMessage();
+                }
+            }
+        }
+
+        return "OK";
+    }
+
+    @Override
+    public String insertarTemasExtras(List<String> temasExtras, Integer sesionId)
+    {
+        String procedimientoAlmacenado = "{ call REG_TEMA_ADICIONAL(?, ?)}";
+        Connection cn = this.db.getConnection();
+
+        if (cn != null) {
+            try {
+                for (String tema : temasExtras) {
+                    CallableStatement proc = cn.prepareCall(procedimientoAlmacenado);
+                    proc.setString("p_Descripcion", tema);
+                    proc.setInt("p_IDSesion", sesionId);
+                    proc.executeQuery();
+                }
+            } catch(SQLException ex) {
+                ex.printStackTrace();
+                return ex.getMessage();
+            } finally {
+                try {
+                    cn.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return e.getMessage();
                 }
             }
         }

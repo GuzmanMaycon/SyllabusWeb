@@ -25,7 +25,7 @@
       <p>${mensajeError}</p>
     </div>
     </c:if>
-    <form method="POST">
+    <form method="POST" id="avanceForm" v-on:submit.prevent="onSubmit()">
     <div class="row">
       <h2>Registro de avance del Curso de ${ nombreAsignatura }</h2>
     </div>
@@ -85,7 +85,6 @@
         <div class="form-group">
           <input class="form-control"
                type="text"
-               name="temas_extra[]"
                v-model="nuevoTemaExtra"
                placeholder="Ingrese el nuevo tema"
                @keydown.enter.prevent="agregarTemaExtra()">
@@ -96,7 +95,7 @@
     <div class="row">
       <div class="text-center">
         <a href="#" type="button" class="btn btn-default">Regresar</a>
-        <button class="btn btn-primary">Guardar avance</button>
+        <button type="submit" class="btn btn-primary">Guardar avance</button>
       </div>
     </div>
 

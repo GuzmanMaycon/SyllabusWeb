@@ -13,4 +13,5 @@ public interface ITemaDao {
     public List<Tema> obtenerAvancePorValidar(Integer idGrupo, Integer idAlumno);
     public Boolean obtenerSiIngresoTemas(Integer idClase);
     public String insertarAvanceDeTemas(List<Integer> temasId, Integer idSesion);
+    public String insertarTemasExtras(List<String> temasExtras, Integer sesionId);
 }

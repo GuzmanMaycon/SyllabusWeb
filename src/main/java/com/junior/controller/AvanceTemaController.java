@@ -100,7 +100,6 @@ public class AvanceTemaController {
             // Si la fecha inicio es antes que la fecha de la sesion
             // Y si la fecha fin es despues que la fecha de la sesion
             if (fechaInicio.compareTo(fecha) <= 0  && fechaFin.compareTo(fecha) >= 0) {
-                System.out.println(this.temaDao.obtenerSiIngresoTemas(sesion.getId()));
                 Boolean resultado = this.temaDao.obtenerSiIngresoTemas(sesion.getId());
                 registros.put(sesion, resultado);
             }
@@ -118,7 +117,6 @@ public class AvanceTemaController {
         @PathVariable(value="sesionId") Integer sesionId,
         RedirectAttributes redirectAttrs)
     {
-        //List<Tema> temas = this.temaDao.obtenerTemasPorAsignaturaPorSemana(asignaturaAperturadaid, semana);
         // Obtener semanas de acuerdo a las fechas
         Periodo periodo = this.periodoDao.obtenerPeriodoActual();
         Map<Integer, Date> semanasRecientes = this.semanaHelper.retornarUltimasSemanas(periodo.getFechaInicio());
@@ -136,18 +134,37 @@ public class AvanceTemaController {
     @RequestMapping(value = "/sesion/{sesionId}/avance", method = RequestMethod.POST)
     public String store(ModelMap map,
         @RequestParam(value = "temas[]", required = false) List<Integer> temas,
+        @RequestParam(value = "temas_extra[]", required = false) List<String> temasExtras,
         @PathVariable(value="grupoId") Integer grupoId,
         @PathVariable(value="sesionId") Integer sesionId,
         RedirectAttributes redirectAttrs)
     {
-        if (temas != null) {
-            this.temaDao.insertarAvanceDeTemas(temas, sesionId);
+        String mensajeOk = "Avance de temas registrados";
+        String mensajeError = "";
 
-            redirectAttrs.addFlashAttribute("mensajeOk", "Avance de temas registrados");
-            return "redirect:/grupos/index";
+        if (temas != null) {
+            String resultadoInsercionTemas = this.temaDao.insertarAvanceDeTemas(temas, sesionId);
+
+            if (resultadoInsercionTemas.equals("OK")) {
+                if (temasExtras != null) {
+                    String resultadoInsercionTemasExtras = this.temaDao.insertarTemasExtras(temasExtras, sesionId);
+                    if (!resultadoInsercionTemasExtras.equals("OK")) {
+                        mensajeError = "Ocurrio un problema en el sistema.";
+                    }
+                }
+
+                if (mensajeError.isEmpty()) {
+                    redirectAttrs.addFlashAttribute("mensajeOk", mensajeOk);
+                    return "redirect:/grupos/index";
+                }
+            } else {
+                mensajeError = "Ocurrio un problema en el sistema.";
+            }
+        } else {
+            mensajeError = "No ingreso ningun tema.";
         }
 
-        map.addAttribute("mensajeError", "No ingreso ningun tema.");
+        redirectAttrs.addFlashAttribute("mensajeError", mensajeError);
         return "registrar-avance/registrar";
     }
 
