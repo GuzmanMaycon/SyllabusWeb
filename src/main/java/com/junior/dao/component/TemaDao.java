@@ -315,4 +315,33 @@ public class TemaDao implements ITemaDao {
         return "OK";
     }
 
+    @Override
+    public Boolean obtenerSiValidoTemas(Integer idSesion, Integer idAlumno) {
+        Boolean resultado = false;
+        String procedimientoAlmacenado = "{ ? = call RET_VALIDO_TEMAS(?, ?)}";
+        Connection cn = this.db.getConnection();
+
+        if (cn != null) {
+            try {
+                CallableStatement proc = cn.prepareCall(procedimientoAlmacenado);
+                proc.registerOutParameter("v_resultado", Types.INTEGER);
+                proc.setInt("p_id_sesion", idSesion);
+                proc.setInt("p_id_alumno", idAlumno);
+                proc.executeQuery();
+
+                resultado = (proc.getInt("v_resultado") > 0);
+            } catch(SQLException ex) {
+                System.err.println(ex.getMessage());
+            } finally {
+                try {
+                    cn.close();
+                } catch (Exception e) {
+                    System.err.println(e.getMessage());
+                }
+            }
+        }
+
+        return resultado;
+    }
+
 }
