@@ -28,6 +28,7 @@ public class TemaDao implements ITemaDao {
     }
 
     @Override
+
     public List<Tema> obtenerPorSyllabus(Syllabus syllabus)
     {
 
@@ -41,7 +42,6 @@ public class TemaDao implements ITemaDao {
             try {
                 CallableStatement proc = cn.prepareCall(procedimientoAlmacenado);
                 proc.registerOutParameter("O_CURSOR", OracleTypes.CURSOR);
-                // -- 1 --
                 proc.setInt("p_id_syllabus", syllabus.getId());
                 proc.execute();
 
@@ -331,6 +331,7 @@ public class TemaDao implements ITemaDao {
 
                 resultado = (proc.getInt("v_resultado") > 0);
             } catch(SQLException ex) {
+
                 System.err.println(ex.getMessage());
             } finally {
                 try {
