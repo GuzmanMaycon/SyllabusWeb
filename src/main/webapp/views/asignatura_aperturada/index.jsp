@@ -51,13 +51,13 @@
 						<td>
 						<c:choose>
 						<c:when test='${row.syllabus.estado == "NO ENTREGADO"}'>
-							<a class="btn btn-primary" href="${pageContext.request.contextPath}/asignatura/${row.id}/syllabus/registrar">Entregar Syllabus</a>
+							<a style="width:100%" class="btn btn-primary" href="${pageContext.request.contextPath}/asignatura/${row.id}/syllabus/registrar">Entregar Syllabus</a>
 						</c:when>
 						<c:when test='${row.syllabus.estado == "ACEPTADO"}'>
 							<i class="fa fa-check" aria-hidden="true"></i>
 						</c:when>
 						<c:otherwise>
-							<a class="btn btn-default" href="${pageContext.request.contextPath}/asignatura/${row.id}/syllabus/editar/${row.syllabus.id}" >Editar Syllabus</a>
+							<a style="width:100%" class="btn btn-default" href="${pageContext.request.contextPath}/asignatura/${row.id}/syllabus/editar/${row.syllabus.id}" >Editar Syllabus</a>
 						</c:otherwise>
 						</c:choose>
 					</tr>
