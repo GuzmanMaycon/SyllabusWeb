@@ -11,4 +11,5 @@ public interface IAsignaturaAperturadaDao {
     public List<AsignaturaAperturadaTO> buscarCoincidencias(String cadena);
     public AsignaturaAperturadaTO obtenerPorId(Integer id);
     public List<AsignaturaAperturadaTO> obtenerPorCicloEapNombre(Integer IDEap,Integer ciclo,String nombre);
+    public String asignarCoordinador(Integer asigAperturadaId, Integer docenteId);
 }

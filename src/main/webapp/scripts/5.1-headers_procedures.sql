@@ -247,4 +247,9 @@ create or replace PACKAGE          PAC_CURSOR is
       o_cursor IN OUT g_cursor
    );
 
+   PROCEDURE RET_ASIG_APERT_X_PERIODO(
+      p_id_periodo IN PERIODO.ID_PERIODO%TYPE,
+      o_cursor     IN OUT g_cursor
+   );
+
 end PAC_CURSOR;

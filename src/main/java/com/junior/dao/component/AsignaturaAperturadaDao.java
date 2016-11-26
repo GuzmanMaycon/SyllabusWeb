@@ -14,9 +14,11 @@ import com.junior.conexion.IAccesoDB;
 import com.junior.dao.design.IAsignaturaAperturadaDao;
 import com.junior.to.Asignatura;
 import com.junior.to.AsignaturaAperturadaTO;
+import com.junior.to.Bibliografia;
 import com.junior.to.Periodo;
 import com.junior.to.PlanDeEstudio;
 import com.junior.to.Syllabus;
+import com.junior.to.Tema;
 
 import oracle.jdbc.internal.OracleTypes;
 
@@ -250,4 +252,36 @@ public class AsignaturaAperturadaDao implements IAsignaturaAperturadaDao{
         }
         return aperturadas;
     }
+
+	@Override
+	public String asignarCoordinador(Integer asigAperturadaId, Integer docenteId) {
+		String procRegCoordinador = "{ call REG_COORDINADOR_X_ASIG_APER(?, ?)}";
+
+        Connection cn = this.db.getConnection();
+
+        if (cn != null) {
+            try {
+                /**
+                 * Agregar id del coordinador a la tabla Asignatura aperturada 
+                 */
+                CallableStatement cs = cn.prepareCall(procRegCoordinador);
+                cs.setInt("p_IDDocente", docenteId);
+                cs.setInt("p_IDAsigAperturada", asigAperturadaId);
+                cs.execute();
+
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+                return ex.getMessage();
+            } finally {
+                try {
+                    cn.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                    return ex.getMessage();
+                }
+            }
+        }
+
+        return "OK";
+	}
 }
