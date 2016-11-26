@@ -427,3 +427,25 @@ BEGIN
 
 END RET_INGRESO_TEMAS;
 /
+
+/*--------------------------------------------------------------------------
+ * NOMBRE    : RET_VALIDO_TEMAS
+ * OBJETIVO  : Retorna temas validos.
+ * FECHA MOD : 25/11/2016 4:00pm
+ *--------------------------------------------------------------------------
+ *     INFORMACI?:
+ *     AUTOR: GIANCARLOS CLAUDIO ZAVALETA
+ *---------------------------------------------------------------------------*/
+CREATE OR REPLACE FUNCTION RET_VALIDO_TEMAS(
+   p_id_sesion IN sesion.id_sesion%TYPE,
+   p_id_alumno IN alumno.id_usuario%TYPE
+) RETURN VARCHAR2 IS v_resultado INTEGER;
+BEGIN
+   SELECT (COUNT(VALIDACION_ALUMNO.ID_VALIDACION))
+      INTO v_resultado
+      FROM TEMA_X_SESION
+      JOIN VALIDACION_ALUMNO ON VALIDACION_ALUMNO.ID_TEMA_X_SESION = TEMA_X_SESION.ID_TEMA_X_SESION
+     WHERE TEMA_X_SESION.ID_SESION = p_id_sesion AND VALIDACION_ALUMNO.ID_ALUMNO = p_id_alumno;
+
+   RETURN v_resultado;
+END RET_VALIDO_TEMAS;
