@@ -69,4 +69,11 @@
     </property>
   </bean>
 
+  <!-- Dao para Asignatura -->
+  <bean id="asignaturaDaoImpl"
+        class="com.junior.dao.component.AsignaturaDao">
+    <property name="db">
+      <ref bean="accesoOracleLocalImpl"/>
+    </property>
+  </bean>
 </beans>

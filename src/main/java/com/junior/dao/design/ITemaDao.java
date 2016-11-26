@@ -11,7 +11,10 @@ public interface ITemaDao {
     public String eliminarTema(Tema tema);
     public List<Tema> obtenerTemasPorGrupo(Integer idGrupo, Integer semanaInicio, Integer semanaFin);
     public List<Tema> obtenerAvancePorValidar(Integer idGrupo, Integer idAlumno);
-    public Boolean obtenerSiIngresoTemas(Integer idClase);
+
+    public Boolean obtenerSiIngresoTemas(Integer idSesion);
+    public Boolean obtenerSiValidoTemas(Integer idSesion, Integer idAlumno);
+
     public String insertarAvanceDeTemas(List<Integer> temasId, Integer idSesion);
     public String insertarTemasExtras(List<String> temasExtras, Integer sesionId);
 }

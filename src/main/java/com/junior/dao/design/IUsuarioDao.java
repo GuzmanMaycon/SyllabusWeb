@@ -6,4 +6,6 @@ import com.junior.to.Usuario;
 
 public interface IUsuarioDao extends UserDetailsService {
     public Usuario obtenerUsuario(String correo);
+
+    public Boolean autenticar(String username, String password);
 }

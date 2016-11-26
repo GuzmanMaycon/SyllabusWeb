@@ -75,4 +75,53 @@ public class SesionDao implements ISesionDao {
         return sesiones;
     }
 
+    @Override
+    public List<Sesion> obtenerPorGrupoPorAlumno(Integer grupoId, Integer alumnoId) {
+        List<Sesion> sesiones = new ArrayList<Sesion>();
+
+        String procedimientoAlmacenado = "{ call PAC_CURSOR.CLASES_DEL_ALUMNO(?, ?, ?)}";
+
+        Connection cn = this.db.getConnection();
+
+        if (cn != null) {
+            try {
+                CallableStatement proc = cn.prepareCall(procedimientoAlmacenado);
+                proc.registerOutParameter("O_CURSOR", OracleTypes.CURSOR);
+                proc.setInt("p_id_grupo", grupoId);
+                proc.setInt("p_id_alumno", alumnoId);
+                proc.execute();
+
+                ResultSet rs = (ResultSet) proc.getObject("O_CURSOR");
+
+                while (rs.next()) {
+                    TipoClase nuevoTipoClase = new TipoClase();
+                    nuevoTipoClase.setDescripcion(rs.getString("DESCRIPCION"));
+                    nuevoTipoClase.setId(rs.getInt("ID_TIPO_CLASE"));
+
+                    Clase nuevaClase = new Clase();
+                    nuevaClase.setTipo(nuevoTipoClase);
+                    nuevaClase.setId(rs.getInt("ID_CLASE"));
+
+                    Sesion nuevaSesion = new Sesion();
+                    nuevaSesion.setId(rs.getInt("ID_SESION"));
+                    nuevaSesion.setEstado(rs.getString("ESTADO").charAt(0));
+                    nuevaSesion.setFecha(rs.getDate("FECHA"));
+                    nuevaSesion.setClase(nuevaClase);
+
+                    sesiones.add(nuevaSesion);
+                }
+            } catch (SQLException ex) {
+                System.err.println(ex.getMessage());
+            } finally {
+                try {
+                    cn.close();
+                } catch (Exception e) {
+                    System.err.println(e.getMessage());
+                }
+            }
+        }
+
+        return sesiones;
+    }
+
 }
