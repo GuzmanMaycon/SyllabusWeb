@@ -64,7 +64,18 @@ public class SemanaHelper {
             fechaFin = iterator.next().getValue();
         }
 
-        return fechaFin;
+        Calendar fecha = Calendar.getInstance();
+        fecha.set(Calendar.HOUR_OF_DAY, 0); // ! clear would not reset the hour of day !
+        fecha.clear(Calendar.MINUTE);
+        fecha.clear(Calendar.SECOND);
+        fecha.clear(Calendar.MILLISECOND);
+        fecha.setTime(fechaFin);
+
+        // Añadir dias hasta antes de una semana
+        fecha.add(Calendar.WEEK_OF_YEAR, 1);
+        fecha.add(Calendar.DAY_OF_WEEK,-1);
+
+        return fecha.getTime();
     }
 
     public Integer obtenerSemanaFin(Map<Integer, Date> fechas)

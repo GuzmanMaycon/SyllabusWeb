@@ -8,6 +8,10 @@ public class AsignaturaValidada {
 
     private Boolean validado;
 
+    private String fechaInicio;
+
+    private String fechaFin;
+
     public Integer getGrupoId()
     {
         return grupoId;
@@ -36,5 +40,25 @@ public class AsignaturaValidada {
     public void setValidado(Boolean validado)
     {
         this.validado = validado;
+    }
+
+    public String getFechaInicio()
+    {
+        return fechaInicio;
+    }
+
+    public void setFechaInicio(String fechaInicio)
+    {
+        this.fechaInicio = fechaInicio;
+    }
+
+    public String getFechaFin()
+    {
+        return fechaFin;
+    }
+
+    public void setFechaFin(String fechaFin)
+    {
+        this.fechaFin = fechaFin;
     }
 }

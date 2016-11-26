@@ -71,8 +71,6 @@ public class AsignaturasPorSemanaApiController {
         AsignaturasPorSemanaWrapper response = new AsignaturasPorSemanaWrapper();
 
         List<SemanaWrapper> semanas = new ArrayList<SemanaWrapper>();
-        SemanaWrapper semanaWrapper = new SemanaWrapper();
-        List<AsignaturaValidada> asignaturasValidadas = new ArrayList<AsignaturaValidada>();
 
         Usuario usuario = this.usuarioDao.obtenerUsuario(correo);
         List<Grupo> grupos = this.grupoDao.obtenerPorAlumno(usuario.getId());
@@ -83,13 +81,16 @@ public class AsignaturasPorSemanaApiController {
         for (Grupo grupo : grupos) {
             List<Sesion> sesiones = this.sesionDao.obtenerPorGrupoPorAlumno(grupo.getId(), usuario.getId());
 
+            SemanaWrapper semanaWrapper = new SemanaWrapper();
             for (Sesion sesion: sesiones) {
+
                 Date fechaSesion = sesion.getFecha();
                 // Obtener semana actual y si se puede ver registros de hace 2 semanas
+
+                List<AsignaturaValidada> asignaturasValidadas = new ArrayList<AsignaturaValidada>();
+
                 for (Map.Entry<Integer, Date> entry: semanasRecientes.entrySet()) {
                     Date fechaInicio = entry.getValue();
-                    semanaWrapper.setFechaInicio(sdf.format(fechaInicio));
-
                     // Hacer el objeto Calendar con la fecha de inicio
                     Calendar fecha = Calendar.getInstance();
                     fecha.set(Calendar.HOUR_OF_DAY, 0); // ! clear would not reset the hour of day !
@@ -102,24 +103,31 @@ public class AsignaturasPorSemanaApiController {
                     fecha.add(Calendar.WEEK_OF_YEAR, 1);
                     fecha.add(Calendar.DAY_OF_WEEK,-1);
                     Date fechaFin = fecha.getTime();
-                    semanaWrapper.setFechaFin(sdf.format(fechaFin));
+
+                    String fechaInicioFormateada = sdf.format(fechaInicio);
+                    String fechaFinFormateada = sdf.format(fechaFin);
+
+                    semanaWrapper.setFechaInicio(fechaInicioFormateada);
+                    semanaWrapper.setFechaFin(fechaFinFormateada);
                     semanaWrapper.setNumero(entry.getKey());
 
+                    AsignaturaValidada asignatura = new AsignaturaValidada();
                     if (fechaInicio.compareTo(fechaSesion) <= 0  && fechaFin.compareTo(fechaSesion) >= 0) {
                         Boolean resultado = this.temaDao.obtenerSiValidoTemas(sesion.getId(), usuario.getId());
-
-                        AsignaturaValidada asignatura = new AsignaturaValidada();
                         asignatura.setGrupoId(grupo.getId());
                         asignatura.setAsignaturaNombre(grupo.getAsignaturaAperturada().getAsignatura().getNombre());
                         asignatura.setValidado(resultado);
+                        asignatura.setFechaInicio(fechaInicioFormateada);
+                        asignatura.setFechaFin(fechaFinFormateada);
                         asignaturasValidadas.add(asignatura);
+
                         semanaWrapper.setAsignaturas(asignaturasValidadas);
+                        semanas.add(semanaWrapper);
                     }
                 }
             }
         }
 
-        semanas.add(semanaWrapper);
         response.setSemanas(semanas);
 
         return response;
