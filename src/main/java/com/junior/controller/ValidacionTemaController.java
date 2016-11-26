@@ -91,9 +91,6 @@ public class ValidacionTemaController {
         //IDUsuario del alumno que ingresa a la página
         Usuario usuario = this.usuarioDao.obtenerUsuario(principal.getName());
 
-        //Prueba del DAO pasando como parametro el alumnoId para validar su asistencia con los temas a validar
-        List<Tema> temas = this.temaDao.obtenerAvancePorValidar(grupoId, usuario.getId());
-
         List<Sesion> sesiones = this.sesionDao.obtenerPorGrupoPorAlumno(grupoId, usuario.getId());
 
         Periodo periodo = this.periodoDao.obtenerPeriodoActual();
@@ -113,7 +110,6 @@ public class ValidacionTemaController {
         }
 
         map.addAttribute("nombreAsignatura", nombreAsignatura);
-        map.addAttribute("temas", temas);
         map.addAttribute("registros", registros);
 
         return "validar-avance/index";
@@ -123,9 +119,17 @@ public class ValidacionTemaController {
     public String create(ModelMap map,
         @PathVariable(value="grupoId") Integer grupoId,
         @PathVariable(value="sesionId") Integer sesionId,
-        RedirectAttributes redirectAttrs)
+        RedirectAttributes redirectAttrs,
+        Principal principal)
     {
-        return "";
+        String nombreAsignatura = this.grupoDao.obtenerNombreAsignatura(grupoId);
+        Usuario usuario = this.usuarioDao.obtenerUsuario(principal.getName());
+        List<Tema> temas = this.temaDao.obtenerAvancePorValidar(grupoId, usuario.getId());
+
+        map.addAttribute("temas", temas);
+        map.addAttribute("nombreAsignatura", nombreAsignatura);
+
+        return "validar-avance/validar";
     }
 
     @RequestMapping(value = "/sesion/{sesionId}/valida", method = RequestMethod.POST)
