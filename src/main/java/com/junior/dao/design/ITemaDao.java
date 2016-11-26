@@ -17,4 +17,5 @@ public interface ITemaDao {
 
     public String insertarAvanceDeTemas(List<Integer> temasId, Integer idSesion);
     public String insertarTemasExtras(List<String> temasExtras, Integer sesionId);
+    public String insertarValidacionDeTemas(List<Integer> temasId, Integer idSesion, Integer idAlumno);
 }

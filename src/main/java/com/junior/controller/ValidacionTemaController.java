@@ -12,6 +12,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.junior.dao.design.IGrupoDao;
@@ -136,8 +137,22 @@ public class ValidacionTemaController {
     public String store(ModelMap map,
         @PathVariable(value="grupoId") Integer grupoId,
         @PathVariable(value="sesionId") Integer sesionId,
-        RedirectAttributes redirectAttrs)
+        @RequestParam(value = "temas[]", required = false) List<Integer> temas,
+        RedirectAttributes redirectAttrs,
+        Principal principal)
     {
-        return "";
+        Usuario usuario = this.usuarioDao.obtenerUsuario(principal.getName());
+        String mensajeOk = "Validación de temas registrados";
+        String mensajeError = "";
+
+        if ( this.temaDao.insertarValidacionDeTemas(temas, sesionId, usuario.getId()).equals("OK") ) {
+            redirectAttrs.addFlashAttribute("mensajeOk", mensajeOk);
+            return "redirect:/grupos/index";
+        } else {
+            mensajeError = "Ocurrio un problema en el sistema";
+        }
+
+        redirectAttrs.addFlashAttribute("mensajeError", mensajeError);
+        return "validar-avance/validar";
     }
 }

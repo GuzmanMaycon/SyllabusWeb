@@ -345,4 +345,43 @@ public class TemaDao implements ITemaDao {
         return resultado;
     }
 
+    @Override
+    public String insertarValidacionDeTemas(List<Integer> temasId, Integer idSesion, Integer idAlumno)
+    {
+        String procObtenerTemaSesionId = "{ ? = call RET_TEMA_SESION_ID(?, ?) }";
+
+        String procedimientoAlmacenado = "{ call REG_VALIDACION_TEMA(?, ?)}";
+        Connection cn = this.db.getConnection();
+
+        if (cn != null) {
+            try {
+                for (Integer temaId : temasId) {
+                    CallableStatement procTemaSesion = cn.prepareCall(procObtenerTemaSesionId);
+                    procTemaSesion.registerOutParameter("v_resultado", Types.INTEGER);
+                    procTemaSesion.setInt("p_id_sesion", idSesion);
+                    procTemaSesion.setInt("p_id_tema", temaId);
+                    procTemaSesion.executeQuery();
+                    Integer temaSesionId = procTemaSesion.getInt("v_resultado");
+
+                    CallableStatement proc = cn.prepareCall(procedimientoAlmacenado);
+                    proc.setInt("p_tema_sesion_id", temaSesionId);
+                    proc.setInt("p_alumno_id", idAlumno);
+                    proc.executeQuery();
+                }
+            } catch(SQLException ex) {
+                ex.printStackTrace();
+                return ex.getMessage();
+            } finally {
+                try {
+                    cn.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return e.getMessage();
+                }
+            }
+        }
+
+        return "OK";
+    }
+
 }
