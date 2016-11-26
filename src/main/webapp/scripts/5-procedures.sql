@@ -449,3 +449,40 @@ BEGIN
 
    RETURN v_resultado;
 END RET_VALIDO_TEMAS;
+/
+
+/*--------------------------------------------------------------------------
+ * NOMBRE    : VALIDAR_SYLLABUS
+ * OBJETIVO  : Actualizar la tabla syllabus para cambiar el estado a ACEPTADO
+ * FECHA MOD : 25/11/2016 2:50pm
+ *--------------------------------------------------------------------------
+ *     INFORMACI?:
+ *     AUTOR: Lucero Liza Puican
+ *---------------------------------------------------------------------------*/
+CREATE OR REPLACE PROCEDURE dbsegsyl.validar_Syllabus(
+    p_IDSyllabus            IN dbsegsyl.syllabus.id_syllabus%TYPE,
+    p_IDEstado              IN dbsegsyl.estado_syllabus.id_estado_syllabus%TYPE
+)
+AUTHID CURRENT_USER
+AS
+BEGIN
+       UPDATE dbsegsyl.syllabus
+          SET id_estado = p_IDEstado
+        WHERE id_syllabus = p_IDSyllabus;
+END validar_Syllabus;
+/
+
+CREATE OR REPLACE FUNCTION AUTENTICAR
+(
+  p_username IN VARCHAR2,
+  p_password IN VARCHAR2
+) RETURN NUMBER IS v_resultado NUMBER;
+BEGIN
+  SELECT COUNT(*)
+  INTO v_resultado
+  FROM USUARIO
+  WHERE CORREO = p_username AND password = p_password;
+
+  RETURN v_resultado;
+END AUTENTICAR;
+/
