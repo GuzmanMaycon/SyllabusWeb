@@ -28,13 +28,7 @@ public class LoginApiController {
         @RequestParam("password") String password)
     {
         LoginWrapper response = new LoginWrapper();
-
-        if (usuarioDao.autenticar(username, password)) {
-            response.setResponse("yes");
-        } else {
-            response.setResponse("no");
-        }
-
+        response.setResponse(usuarioDao.autenticar(username, password) ? "YES" : "NO");
         return response;
     }
 }
