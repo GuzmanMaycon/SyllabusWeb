@@ -284,4 +284,10 @@ public class AsignaturaAperturadaDao implements IAsignaturaAperturadaDao{
 
         return "OK";
 	}
+
+	@Override
+	public List<AsignaturaAperturadaTO> obtenerPorPeriodo(Integer IDPeriodo) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
