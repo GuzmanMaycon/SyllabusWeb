@@ -61,8 +61,6 @@
             </div>
           </div>
 
-         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-
           <button class="btn btn-primary col-xs-12">Ingresar</button>
 
           </form>

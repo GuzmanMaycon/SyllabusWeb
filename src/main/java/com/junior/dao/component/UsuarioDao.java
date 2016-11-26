@@ -4,6 +4,7 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -108,6 +109,37 @@ public class UsuarioDao implements IUsuarioDao {
                 true,
                 accesos
                 );
+    }
+
+    @Override
+    public Boolean autenticar(String username, String password)
+    {
+        Boolean resultado = false;
+
+        String procedimientoAlmacenado = "{ ? = call AUTENTICAR(?, ?)}";
+
+        Connection cn = this.db.getConnection();
+
+        if (cn != null) {
+            try {
+                CallableStatement proc = cn.prepareCall(procedimientoAlmacenado);
+                proc.registerOutParameter(1, Types.NUMERIC);
+                proc.setString(2, username);
+                proc.setString(3, password);
+                proc.executeQuery();
+                resultado = (proc.getInt(1) > 0);
+            } catch(SQLException ex) {
+                System.err.println(ex.getMessage());
+            } finally {
+                try {
+                    cn.close();
+                } catch (Exception e) {
+                    System.err.println(e.getMessage());
+                }
+            }
+        }
+
+        return resultado;
     }
 
 
