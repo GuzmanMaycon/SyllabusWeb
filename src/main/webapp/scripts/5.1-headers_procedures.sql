@@ -241,4 +241,10 @@ create or replace PACKAGE          PAC_CURSOR is
       o_cursor            in out g_cursor
    );
 
+   PROCEDURE CLASES_DEL_ALUMNO(
+      p_id_grupo IN GRUPO.ID_GRUPO%TYPE,
+      p_id_alumno IN ALUMNO.ID_USUARIO%TYPE,
+      o_cursor IN OUT g_cursor
+   );
+
 end PAC_CURSOR;
